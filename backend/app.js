@@ -10,6 +10,23 @@ require('dotenv').config()
 
 // Connexion à la base de données
 
+
+const { Sequelize } = require('sequelize');
+
+/*const sequelize = new Sequelize('groupomania', 'jonathan', 'jonathan', {
+  dialect: 'sqlite',
+  storage: 'path/to/database.sqlite'
+});
+
+try {
+  await sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
+*/
+
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
