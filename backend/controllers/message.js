@@ -1,62 +1,62 @@
-const Post = require('../models/post');
+const Message = require('../models/message');
 const fs = require('fs');
 
-exports.createPost = (req, res, next) => {
-  const postObject = JSON.parse(req.body.post);
-  delete postObject._id;
-  const post = new Post({
-    ...postObject,
+exports.createMessage = (req, res, next) => {
+  const messageObject = JSON.parse(req.body.message);
+  delete messageObject._id;
+  const message = new Message({
+    ...messageObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
-  post.save()
-    .then(() => res.status(201).json({ message: ' Post published !' }))
+  message.save()
+    .then(() => res.status(201).json({ message: ' Message published !' }))
     .catch(error => res.status(400).json({ error }));
 };
 
-exports.getOnePost = (req, res, next) => {
-  Post.findOne({
+exports.getOneMessage = (req, res, next) => {
+  Message.findOne({
     _id: req.params.id
-  }).then((post) => { res.status(200).json(post); }
+  }).then((message) => { res.status(200).json(message); }
   ).catch((error) => { res.status(404).json({ error: error }) });
 };
 
-exports.modifyPost = (req, res, next) => {
-  const postObject = req.file ?
+exports.modifyMessage = (req, res, next) => {
+  const messageObject = req.file ?
     {
-      ...JSON.parse(req.body.post),
+      ...JSON.parse(req.body.message),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Post modify !' }))
+  Message.updateOne({ _id: req.params.id }, { ...messageObject, _id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Message modify !' }))
     .catch(error => res.status(400).json({ error }));
 };
 
-exports.deletePost = (req, res, next) => {
-  Post.findOne({ _id: req.params.id })
-    .then(post => {
-      const filename = post.imageUrl.split('/images/')[1];
+exports.deleteMessage = (req, res, next) => {
+  Message.findOne({ _id: req.params.id })
+    .then(message => {
+      const filename = message.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
-        Post.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Post delete !' }))
+        Message.deleteOne({ _id: req.params.id })
+          .then(() => res.status(200).json({ message: 'Message delete !' }))
           .catch(error => res.status(400).json({ error }));
       });
     })
     .catch(error => res.status(500).json({ error }));
 };
 
-exports.getAllPost = (req, res, next) => {
-  Post.find()
-    .then((post) => { res.status(200).json(post); })
+exports.getAllMessage = (req, res, next) => {
+  Message.find()
+    .then((message) => { res.status(200).json(message); })
     .catch((error) => { res.status(400).json({ error: error }) });
 };
 
 exports.like = (req, res, next) => {
   switch (req.body.like) {
     case 0:
-      Post.findOne({ _id: req.params.id })
-        .then((post) => {
-          if (post.usersLiked.find(user => user === req.body.userId)) {
-            Post.updateOne({ _id: req.params.id }, {
+      Message.findOne({ _id: req.params.id })
+        .then((message) => {
+          if (message.usersLiked.find(user => user === req.body.userId)) {
+            Message.updateOne({ _id: req.params.id }, {
               $inc: { likes: -1 }, 
               $pull: { usersLiked: req.body.userId }, 
               _id: req.params.id
@@ -64,8 +64,8 @@ exports.like = (req, res, next) => {
               .then(() => { res.status(201).json({ message: 'recorded like !' }); })
               .catch((error) => { res.status(400).json({ error: error }); });
 
-          } if (post.usersDisliked.find(user => user === req.body.userId)) {
-            Post.updateOne({ _id: req.params.id }, {
+          } if (message.usersDisliked.find(user => user === req.body.userId)) {
+            message.updateOne({ _id: req.params.id }, {
               $inc: { dislikes: -1 },
               $pull: { usersDisliked: req.body.userId },
               _id: req.params.id
@@ -77,7 +77,7 @@ exports.like = (req, res, next) => {
         .catch((error) => { res.status(404).json({ error: error }); });
       break;
     case 1:
-      Post.updateOne({ _id: req.params.id }, {
+      Message.updateOne({ _id: req.params.id }, {
         $inc: { likes: 1 },
         $push: { usersLiked: req.body.userId },
         _id: req.params.id
@@ -86,7 +86,7 @@ exports.like = (req, res, next) => {
         .catch((error) => { res.status(400).json({ error: error }); });
       break;
     case -1:
-      Post.updateOne({ _id: req.params.id }, {
+      Message.updateOne({ _id: req.params.id }, {
         $inc: { dislikes: 1 },
         $push: { usersDisliked: req.body.userId },
         _id: req.params.id

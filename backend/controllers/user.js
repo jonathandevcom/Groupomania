@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken') 
-// Problème sur mongoose page controllers/user
-//const User = require('../models/user');  
+const User = require('../models/user');  
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 
@@ -17,7 +16,11 @@ if (schema.validate(req.body.password)){
     .then(hash => {
       const user = new User({
         email: req.body.email,
-        password: hash
+        username: req.body.username,
+        password: hash,
+        bio: req.body.bio,
+        isAdmin: 0,
+        photo: image.Url
       });
       user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))

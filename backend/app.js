@@ -1,9 +1,8 @@
-
 const express = require('express'); 
 const app = express(); 
 const bodyParser = require('body-parser'); 
 const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+const messageRoutes = require('./routes/message');
 const path = require('path');
 const helmet = require("helmet");
 require('dotenv').config()
@@ -13,19 +12,23 @@ require('dotenv').config()
 
 const { Sequelize } = require('sequelize');
 
-/*const sequelize = new Sequelize('groupomania', 'jonathan', 'jonathan', {
-  dialect: 'sqlite',
-  storage: 'path/to/database.sqlite'
-});
+const sequelize = new Sequelize('database_development', 'root', process.env.RootPassword, {
+  host: 'localhost',
+  dialect: 'mysql'
+}); 
 
+
+
+
+/*
 try {
   await sequelize.authenticate();
   console.log('Connection has been established successfully.');
 } catch (error) {
   console.error('Unable to connect to the database:', error);
 }
-*/
 
+*/
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,7 +38,7 @@ app.use((req, res, next) => {
   });
  
   app.use('/images', express.static(path.join(__dirname, 'images')));
-  app.use('/api/post', postRoutes);
+  app.use('/api/message', messageRoutes);
   app.use('/api/auth', userRoutes);
 
 module.exports = app;

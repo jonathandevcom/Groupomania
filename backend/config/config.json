@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": "OMmars06130",
+    "password": "process.env.RootPassword",
     "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "OMmars06130",
+    "password": "process.env.RootPassword",
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "OMmars06130",
+    "password": "process.env.RootPassword",
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
