@@ -17,9 +17,15 @@ const sequelize = new Sequelize('database_development', 'root', process.env.Root
   dialect: 'mysql'
 }); 
 
+sequelize.authenticate()
+ .then(() => {
+  console.info('INFO - Database connected.')
+ })
+ .catch(err => {
+  console.error('ERROR - Unable to connect to the database:', err)
+ })
 
-
-
+ 
 /*
 try {
   await sequelize.authenticate();
