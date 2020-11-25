@@ -9,7 +9,7 @@ Pour accéder au mon projet, il faut :
 
 3. Sur la partie frond end : 
 * 
-* lancer : ng serve
+* lancer : npm run serve
 
 4. Sur la partie backend :
 * installer toutes les dépendances npm présentes sur le package.json

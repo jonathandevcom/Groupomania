@@ -1,30 +1,28 @@
 <template>
-  <div id="nav">
-    <router-link to="/inscription">Inscription</router-link> |
-    <router-link to="/connexion">Connexion</router-link>
-  </div>
-  
+<div>
+  <Header></Header>
+  <Main></Main>
+  <Footer></Footer>
+</div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Header from '@/components/Header';
+import Main from '@/components/Main';
+import Footer from '@/components/Footer';
 
-#nav {
-  padding: 30px;
+export default {
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  components : {
+    Header, 
+    Main,
+    Footer,
   }
 }
+</script>
+
+
+<style lang="scss">
 </style>
+
+
