@@ -1,28 +1,25 @@
 <template>
-<div>
-  <Header></Header>
-  <Main></Main>
-  <Footer></Footer>
+<div id="app">
+    <header-top></header-top>
+    <router-view></router-view>
+    <footer-bottom></footer-bottom>
 </div>
 </template>
 
 <script>
-import Header from '@/components/Header';
-import Main from '@/components/Main';
-import Footer from '@/components/Footer';
+import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
 
 export default {
-
-  components : {
-    Header, 
-    Main,
-    Footer,
+  name: 'App',
+  components: {
+    "header-top":Header,
+    "footer-bottom":Footer,
+    
   }
 }
 </script>
 
+<style>
 
-<style lang="scss">
 </style>
-
-

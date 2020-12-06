@@ -1,41 +1,35 @@
 <template>
-<header>
-   <div class="header_logo">
-     <img id="logo" class="img_header" v-bind:src="image" alt="logo Groupomania">
-     </div>
- </header>
+    <div class="header-top">
+        <a href="./">
+        <img class="logo-header" src="../assets/icon-header.png" alt="logo Groupomania">
+        </a>
+    </div>
 </template>
-
 
 <script>
 export default {
-  setup() {
-  
-  }
+    name: 'Header',
+    data() {
+    return {
+   
+    }
+  },
 }
 </script>
 
-<style scoped lang="scss">
-
-      header { 
-      background-color: rgb(17,37,65);
-      text-align: center;
-      height: 200px;   
-      }
-      .img_header{
-          width : 600px;
-          height: 133px;
-          padding-top: 40px;
-      }
-      @media screen and (max-width: 600px){
-          header { 
-          height: 100px;   
-          }
-
-          .img_header{
-          width : 300px;
-          height: 67px;
-          padding-top: 15px;
-          }
-          }
+<style>
+.header-top {
+    position: fixed;
+    top: 0;
+    height: 60px;
+    background:  rgb(17,37,65);
+    color: #f1f1f1;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 25px;
+}
+.logo-header {
+    height: 45px;
+}
 </style>

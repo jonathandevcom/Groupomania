@@ -1,4 +1,4 @@
-# groupomania
+# backend
 
 ## Project setup
 ```

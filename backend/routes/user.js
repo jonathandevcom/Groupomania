@@ -13,4 +13,12 @@ const limiter = rateLimit({
   
 router.post('/login', limiter, userCtrl.login);
 
+// test get
+// router.get('/', (req, res) => {
+//   User.find((err, docs) => {
+//     console.log(docs);
+//   })
+// })
+
+
 module.exports = router;
