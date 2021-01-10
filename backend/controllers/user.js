@@ -1,59 +1,151 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken') 
-const User = require('../models/user');  
-const passwordValidator = require('password-validator');
-const schema = new passwordValidator();
+const mysql = require("mysql")
+require('dotenv').config()
 
-schema
-.is().min(8)
-.has().uppercase()
-.has().lowercase()
-.symbols([1])
+///// Connexion à la base de donnée
+const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    database: process.env.DATABASE,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD
+})
 
-exports.signup = (req, res, next) => {
-if (schema.validate(req.body.password)){
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        username: req.body.username,
-        password: hash,
-        bio: req.body.bio,
-        isAdmin: 0,
-        photo: image.Url
-      });
-      user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
-} else {
-  res.status(401).json({
-    error: new Error('Invalid request!')
-  });
-}};
+const {success, error} = require('../functions')
 
-exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-      }
-      bcrypt.compare(req.body.password, user.password)
-        .then(valid => {
-          if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
-          }
-          res.status(200).json({
-            userId: user._id,
-            token: jwt.sign(
-              { userId: user._id },
-              'RANDOM_TOKEN_SECRET',
-              { expiresIn: '24h' }
-            )
-          });
+// Récupation tous les utilisateurs
+exports.selectAllUsers = (req, res) => {
+    if (req.query.max != undefined && req.query.max > 0) {
+
+        db.query('SELECT * FROM users LIMIT 0, ?', [req.query.max], (err, result) => {
+            if (err) {
+                res.json(error(err.message))
+            } else {
+                res.json(success(result))
+            }
         })
-        .catch(error => res.status(500).json({ error }));
+
+    } else if (req.query.max != undefined) {
+        res.json(error('Wrong max value'))
+    } else {
+
+        db.query('SELECT * FROM users', (err, result) => {
+            if (err) {
+                res.json(error(err.message))
+            } else {
+                res.json(success(result))
+            }
+        })
+
+    }
+}
+
+// Récupération d'un utilisateur avec son id
+exports.selectOneUser = (req, res) => {
+    db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
+        if (err) {
+                res.json(error(err.message))
+            }
+            else {
+
+                if (result[0] != undefined) {
+                res.json(success(result[0]))
+            } else {
+                res.json(error('Wrong id'))
+            }}
+    })}
+
+// Création d'un nouvel utilisateur
+exports.createOneUser = (req, res) => {
+    if (req.body.userName) {
+         db.query('SELECT * FROM users WHERE userName = ? OR email = ?', [req.body.userName, req.body.email], (err, result) => {
+             if (err) {
+                 res.json(error(err.message))
+             } else {
+                 if (result[0] != undefined) {
+                     res.json(error('User name or email already taken'))
+                 } else {
+         db.query(`INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`, [req.body.email, req.body.userName, req.body.password, req.body.bio, req.body.photo], (err, result) => {
+         if (err) {
+         res.json(error(err.message))
+          } else {
+         db.query('SELECT * FROM users WHERE userName = ?', [req.body.id, req.body.email, req.body.userName, req.body.password, req.body.bio, req.body.isAdmin, req.body.photo], (err, result) => {
+             if (err) {
+                 res.json(error(err.message))
+             } else {
+                 res.json(success("User added"))
+             }
+         })
+     }
+ })
+}
+}
+})
+} else {
+res.json(error('no name value'))
+}}
+
+// suppression d'un utilisateur
+exports.deleteOneUser = (req, res) => {
+    db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
+        if (err) {
+            res.json(error(err.message))
+        } else {
+
+            if (result[0] != undefined) {
+
+                db.query('DELETE FROM users WHERE id = ?', [req.params.id], (err, result) => {
+                    if (err) {
+                        res.json(error(err.message))
+                    } else {
+                        res.json(success(true))
+                    }
+                })
+
+            } else {
+                res.json(error('Wrong id'))
+            }
+
+        }
     })
-    .catch(error => res.status(500).json({ error }));
-};
+}
+
+// modification d'un utilisateur
+exports.editOneUser = (req, res) => {
+    if (req.body.userName) {
+
+   db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
+       if (err) {
+           res.json(error(err.message))
+       } else {
+
+           if (result[0] != undefined) {
+               db.query('SELECT * FROM users WHERE userName= ? AND id != ?', [req.body.email, req.body.userName, req.body.password, req.body.bio, req.body.photo], (err, result) => {
+                   if (err) {
+                       res.json(error("ici  " + err.message))
+                   } else {
+
+                       if (result[0] != undefined) {
+                           res.json(error('same name'))
+                       } else {
+                           db.query('UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?', [req.body.email, req.body.userName, req.body.password, req.body.bio, req.body.photo, req.params.id], (err, result) => {
+                               if (err) {
+                                   res.json(error("la   " + err.message))
+                               } else {
+                                   res.json(success(true))
+                               }
+                           })
+
+                       }
+
+                   }
+               })
+           } else {
+               res.json(error('Wrong id'))
+           }
+       }
+   })
+} else {
+   res.json(error('no name value'))
+}
+}
+
+

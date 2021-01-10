@@ -30,7 +30,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
-                        <input v-model="formData.password" type="text" id="password" name="password" placeholder="Mot de passe" class="form-control" required minlength="8" />
+                        <input v-model="formData.password" type="password" id="password" name="password" placeholder="Mot de passe" class="form-control" required minlength="8" />
                         <div class="invalid-feedback">
                             Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.
                         </div>
@@ -76,14 +76,12 @@ export default {
          password: "",
          bio: "",
          isAdmin: false,
-         photo: "",        
+         photo: "immage.png",        
       }}
     },
     methods: {
       postForm() {
-        axios.post('/', 
-          `${this.formData}`
-        )
+        axios.post('/', this.formData)
         .then(function(response) {
           console.log(response);
         })
@@ -99,4 +97,5 @@ export default {
 body{
     margin-top: 70px;
 }
+
 </style>

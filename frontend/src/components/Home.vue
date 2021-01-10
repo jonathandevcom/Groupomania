@@ -42,7 +42,7 @@
                                                 type="submit">Connexion</button>
                                         </div>
                                         <div class="float-left">
-                                            <button value="signUp" id="signUp" class="btn btn-primary rounded-0"
+                                            <button v-on:click.prevent="connection()" value="signUp" id="signUp" class="btn btn-primary rounded-0"
                                                 type="submit"><router-link to="/SignUpForm">Inscription</router-link></button>
                                         </div>
                                     </div>
@@ -51,20 +51,32 @@
                         </div>
                     </div>
                 </div>
-                <img src="../assets/web.png" alt="image web">
+                <img id="imgWebHome" src="../assets/web.png" alt="image web">
                 </div>
         </section>
-
-
 
  </div>
 </template>
 
 
 <script>
+// import axios from 'axios'
+
 export default {
     name:"Home",
+    data() {
+        return{
+            dataConnect: {
+        username: "",
+        password: "",
+        }}
+    },
+methods: {
+    connection() {
+       console.log(this.dataConnect)
+}}
 }
+
 </script>
 
 <style>
@@ -105,5 +117,14 @@ body{
     margin-right: 150px;
 
 }
+@media screen and (max-width: 1200px){
+.place-form {
+    margin: 0;
+}    
+#imgWebHome {
+    display:none;
+}
+}
+
 
 </style>
