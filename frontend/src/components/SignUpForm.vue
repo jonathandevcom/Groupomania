@@ -7,7 +7,7 @@
             <h4 class="card-title text-uppercase">Inscription</h4>
         </div>
           <div class="card-body">
-            <form id="needs-validation" novalidate>
+            <form @submit="postForm" action="/Forum" method="post" id="needs-validation" novalidate>
              <div class="row">                  
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -42,18 +42,21 @@
                     <input v-model="formData.bio" type="text" class="form-control" id="bio" name="bio" placeholder="Décrivez-vous en quelques mots">
                     </div>
                 </div>
+
+              <!--
                 <div class="form-group">
-                                <!-- <input type="file" accept="image/*" #imageInput (change)="onFileAdded($event)"> -->
-                                <!-- <button class="btn-danger rounded-0" mat-raised-button (click)="imageInput.click()">Ajouter une image</button> -->
-                                <!-- <img [src]="imagePreview" *ngIf="imagePreview"
-                                    style="max-height: 100px;display:block;margin-top:10px"> -->
-                  <input type="file" accept="image">
+                                
+                  <input type="file"   accept="image" id="photo" name="photo" ref="myFiles" @change="previewFiles" multiple>
                 </div>          
                 <div class="col-sm-12">
                  <div class="float-right">
-                    <button v-on:click.prevent="postForm()" value="valider" id="validation" class="btn btn-danger rounded-0" type="submit">Valider</button>
+                    
                  </div>
-               </div>
+              </div>-->
+
+                    <button  value="valider" id="validation" class="btn btn-danger rounded-0" type="submit" >Valider</button>
+                 
+               
              </div>                   
            </form>
          </div>
@@ -71,23 +74,24 @@ export default {
     data(){
       return {
        formData: {
-         email: "",
-         userName: "",
-         password: "",
-         bio: "",
+         email: null,
+         userName: null,
+         password: null,
+         bio: null,
          isAdmin: false,
-         photo: "immage.png",        
+         photo: "avatar.png",        
       }}
     },
     methods: {
-      postForm() {
-        axios.post('/', this.formData)
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
+      postForm(e) {
+        axios.post('http://localhost:3000/api/users', this.formData)
+        .then((response) => {
+          console.log(response)
+        });
+        e.preventDefault();
+      },
+      validate(){
+        this.response.data.status = "success"
       }
     }
 }
