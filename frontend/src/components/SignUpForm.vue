@@ -7,7 +7,7 @@
             <h4 class="card-title text-uppercase">Inscription</h4>
         </div>
           <div class="card-body">
-            <form @submit="postForm" action="/Forum" method="post" id="needs-validation" novalidate>
+            <form @submit="postForm" method="post" id="needs-validation" novalidate>
              <div class="row">                  
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -30,7 +30,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
-                        <input v-model="formData.password" type="password" id="password" name="password" placeholder="Mot de passe" class="form-control" required minlength="8" />
+                        <input v-model="formData.password" type="password" id="password" name="password" placeholder="Mot de passe" class="form-control" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" />
                         <div class="invalid-feedback">
                             Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.
                         </div>
@@ -84,17 +84,28 @@ export default {
     },
     methods: {
       postForm(e) {
-        axios.post('http://localhost:3000/api/users', this.formData)
-        .then((response) => {
-          console.log(response)
-        });
-        e.preventDefault();
+      e.preventDefault(); 
+      axios.post('http://localhost:3000/api/users', this.formData)
+      .then(function (response) {
+        console.log(response)
+        window.location.href = "/forum"
+      })
+      .catch(function (error) { 
+        let form = document.getElementById('needs-validation');
+        if (form.checkValidity(event) === false) {
+            event.preventDefault();
+            event.stopPropagation();
+             form.classList.add('was-validated');
+          } else {
+            alert(`Nom d'utilisateur ou mail déjà utilisé`)
+          }
+      console.log(error)
+      })
       },
-      validate(){
-        this.response.data.status = "success"
-      }
+
     }
-}
+    }
+
 </script>
 
 <style>

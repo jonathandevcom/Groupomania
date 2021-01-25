@@ -11,14 +11,14 @@
                             <h4 class="card-title text-uppercase text-center">Connexion</h4>
                         </div>
                         <div class="card-body">
-                            <form id="needs-validation" novalidate>
+                            <form action="*" @submit.prevent="login" method="post" id="needs-validation" novalidate>
                                 <div class="row">
 
                                     <div class="col-sm-12 col-md-12 col-xs-12">
                                         <div class="form-group">
                                             <label for="username">Nom d'utilisateur</label>
                                             <input type="text" id="username" name="username" placeholder="Nom d'utilisateur"
-                                                class="form-control" required minlength="3"/>
+                                                class="form-control" v-model="userName" required minlength="3"/>
                                             <div class="invalid-feedback">
                                                 Merci de saisir votre nom d'utilisateur.
                                             </div>
@@ -27,8 +27,8 @@
                                     <div class="col-sm-12 col-md-12 col-xs-12">
                                         <div class="form-group">
                                             <label for="password">Mot de passe</label>
-                                            <input type="text" id="password" name="password" placeholder="Mot de passe"
-                                                class="form-control" required minlength="3"/>
+                                            <input v-model="password" type="password" id="password" name="password" placeholder="Mot de passe"
+                                                class="form-control"  required minlength="8"/>
                                             <div class="invalid-feedback">
                                                 Merci de saisir votre mot de passe.
                                             </div>
@@ -37,13 +37,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
-                                        <div class="float-right">
-                                            <button value="valider" id="validation" class="btn btn-primary rounded-0"
+                                        <div class="float-left">
+                                            <button  value="signIn" id="signIn" class="btn btn-primary rounded-0" action="/Forum"
                                                 type="submit">Connexion</button>
                                         </div>
-                                        <div class="float-left">
-                                            <button v-on:click.prevent="connection()" value="signUp" id="signUp" class="btn btn-primary rounded-0"
-                                                type="submit"><router-link to="/SignUpForm">Inscription</router-link></button>
+                                        <div class="float-right">
+                                            <router-link to="/SignUpForm">Inscription</router-link>
                                         </div>
                                     </div>
                                 </div>
@@ -60,26 +59,39 @@
 
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
     name:"Home",
     data() {
         return{
-            dataConnect: {
-        username: "",
+
+        userName: "",
         password: "",
-        }}
+    }
     },
 methods: {
-    connection() {
-       console.log(this.dataConnect)
-}}
+    async login() {
+        const response = await axios.post('http://localhost:3000/api/users/:id', {
+            userName: this.userName,
+            password: this.password,
+        })
+
+
+        console.log(response)
+    
+
+       
+},
+   // connection(){
+ //       this.response.data.status = "success"
+ //     }
+      }
 }
 
 </script>
 
-<style>
+<style scoped>
 body{
     margin-top: 70px;
     font-family: 'Brawler', serif;

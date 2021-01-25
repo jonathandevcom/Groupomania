@@ -11,8 +11,9 @@ router.route('/')
     .post(multer, userCtrl.createOneUser)
 
 router.route('/:id')
+    .post(userCtrl.selectOneUser)
+  //  .get(limiter, userCtrl.login)
     .get(userCtrl.selectOneUser)
-    .get(limiter, userCtrl.login)
     .delete(userCtrl.deleteOneUser)
     .put(multer, userCtrl.editOneUser)
 

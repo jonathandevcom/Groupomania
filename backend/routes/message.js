@@ -4,8 +4,11 @@ const messageCtrl = require('../controllers/message')
 const auth = require('../middleware/auth');
 
 router.route('/')
-    .get(auth, messageCtrl.postAllMessages)
-    .post(auth, messageCtrl.createOneMessage)
+    .get(messageCtrl.postAllMessages)
+  //   à modifier après avoir MAJ authentification
+  //  .get(auth, messageCtrl.postAllMessages)
+    .post(messageCtrl.createOneMessage)
+   // .post(auth, messageCtrl.createOneMessage)
 
 router.route('/:id')
     .get(auth, messageCtrl.postOneMessage)
