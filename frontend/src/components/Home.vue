@@ -1,139 +1,187 @@
 <template>
 
- <div>
-<h1 id="title">Bienvenue sur votre réseau social</h1>
+ <main class="animation">
+<svg
+      id="logo"
+      width="955"
+      height="99"
+      viewBox="0 0 955 99"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M75.65 30.65C73.1367 25.3633 69.4967 21.29 64.73 18.43C59.9633 15.4833 54.4167 14.01 48.09 14.01C41.7633 14.01 36.0433 15.4833 30.93 18.43C25.9033 21.29 21.9167 25.45 18.97 30.91C16.11 36.2833 14.68 42.5233 14.68 49.63C14.68 56.7367 16.11 62.9767 18.97 68.35C21.9167 73.7233 25.9033 77.8834 30.93 80.83C36.0433 83.69 41.7633 85.12 48.09 85.12C56.93 85.12 64.21 82.4767 69.93 77.19C75.65 71.9034 78.9867 64.7533 79.94 55.74H43.8V46.12H92.55V55.22C91.8567 62.6733 89.5167 69.52 85.53 75.76C81.5433 81.9133 76.3 86.81 69.8 90.45C63.3 94.0033 56.0633 95.78 48.09 95.78C39.6833 95.78 32.0133 93.83 25.08 89.93C18.1467 85.9433 12.6433 80.44 8.57 73.42C4.58333 66.4 2.59 58.47 2.59 49.63C2.59 40.79 4.58333 32.86 8.57 25.84C12.6433 18.7333 18.1467 13.23 25.08 9.33001C32.0133 5.34334 39.6833 3.35001 48.09 3.35001C57.71 3.35001 66.2033 5.73334 73.57 10.5C81.0233 15.2667 86.44 21.9833 89.82 30.65H75.65Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M155.902 95L134.322 57.95H120.022V95H108.192V4.39001H137.442C144.288 4.39001 150.052 5.56001 154.732 7.90001C159.498 10.24 163.052 13.4033 165.392 17.39C167.732 21.3767 168.902 25.9267 168.902 31.04C168.902 37.28 167.082 42.7833 163.442 47.55C159.888 52.3167 154.515 55.48 147.322 57.04L170.072 95H155.902ZM120.022 48.46H137.442C143.855 48.46 148.665 46.9 151.872 43.78C155.078 40.5733 156.682 36.3267 156.682 31.04C156.682 25.6667 155.078 21.5067 151.872 18.56C148.752 15.6133 143.942 14.14 137.442 14.14H120.022V48.46Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M228.363 95.91C219.957 95.91 212.287 93.96 205.353 90.06C198.42 86.0733 192.917 80.57 188.843 73.55C184.857 66.4433 182.863 58.47 182.863 49.63C182.863 40.79 184.857 32.86 188.843 25.84C192.917 18.7333 198.42 13.23 205.353 9.33001C212.287 5.34334 219.957 3.35001 228.363 3.35001C236.857 3.35001 244.57 5.34334 251.503 9.33001C258.437 13.23 263.897 18.69 267.883 25.71C271.87 32.73 273.863 40.7033 273.863 49.63C273.863 58.5567 271.87 66.53 267.883 73.55C263.897 80.57 258.437 86.0733 251.503 90.06C244.57 93.96 236.857 95.91 228.363 95.91ZM228.363 85.64C234.69 85.64 240.367 84.1667 245.393 81.22C250.507 78.2734 254.493 74.07 257.353 68.61C260.3 63.15 261.773 56.8233 261.773 49.63C261.773 42.35 260.3 36.0233 257.353 30.65C254.493 25.19 250.55 20.9867 245.523 18.04C240.497 15.0933 234.777 13.62 228.363 13.62C221.95 13.62 216.23 15.0933 211.203 18.04C206.177 20.9867 202.19 25.19 199.243 30.65C196.383 36.0233 194.953 42.35 194.953 49.63C194.953 56.8233 196.383 63.15 199.243 68.61C202.19 74.07 206.177 78.2734 211.203 81.22C216.317 84.1667 222.037 85.64 228.363 85.64Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M301.051 4.39001V61.72C301.051 69.78 303.001 75.76 306.901 79.66C310.887 83.56 316.391 85.51 323.411 85.51C330.344 85.51 335.761 83.56 339.661 79.66C343.647 75.76 345.641 69.78 345.641 61.72V4.39001H357.471V61.59C357.471 69.13 355.954 75.5 352.921 80.7C349.887 85.8133 345.771 89.6267 340.571 92.14C335.457 94.6533 329.694 95.91 323.281 95.91C316.867 95.91 311.061 94.6533 305.861 92.14C300.747 89.6267 296.674 85.8133 293.641 80.7C290.694 75.5 289.221 69.13 289.221 61.59V4.39001H301.051Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M437.785 30.91C437.785 38.45 435.185 44.7333 429.985 49.76C424.872 54.7 417.029 57.17 406.455 57.17H389.035V95H377.205V4.39001H406.455C416.682 4.39001 424.439 6.86001 429.725 11.8C435.099 16.74 437.785 23.11 437.785 30.91ZM406.455 47.42C413.042 47.42 417.895 45.99 421.015 43.13C424.135 40.27 425.695 36.1967 425.695 30.91C425.695 19.73 419.282 14.14 406.455 14.14H389.035V47.42H406.455Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M493.569 95.91C485.162 95.91 477.492 93.96 470.559 90.06C463.625 86.0733 458.122 80.57 454.049 73.55C450.062 66.4433 448.069 58.47 448.069 49.63C448.069 40.79 450.062 32.86 454.049 25.84C458.122 18.7333 463.625 13.23 470.559 9.33001C477.492 5.34334 485.162 3.35001 493.569 3.35001C502.062 3.35001 509.775 5.34334 516.708 9.33001C523.642 13.23 529.102 18.69 533.088 25.71C537.075 32.73 539.069 40.7033 539.069 49.63C539.069 58.5567 537.075 66.53 533.088 73.55C529.102 80.57 523.642 86.0733 516.708 90.06C509.775 93.96 502.062 95.91 493.569 95.91ZM493.569 85.64C499.895 85.64 505.572 84.1667 510.599 81.22C515.712 78.2734 519.698 74.07 522.559 68.61C525.505 63.15 526.978 56.8233 526.978 49.63C526.978 42.35 525.505 36.0233 522.559 30.65C519.698 25.19 515.755 20.9867 510.729 18.04C505.702 15.0933 499.982 13.62 493.569 13.62C487.155 13.62 481.435 15.0933 476.409 18.04C471.382 20.9867 467.395 25.19 464.449 30.65C461.589 36.0233 460.159 42.35 460.159 49.63C460.159 56.8233 461.589 63.15 464.449 68.61C467.395 74.07 471.382 78.2734 476.409 81.22C481.522 84.1667 487.242 85.64 493.569 85.64Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M646.596 5.04001V95H634.766V27.92L604.866 95H596.546L566.516 27.79V95H554.686V5.04001H567.426L600.706 79.4L633.986 5.04001H646.596Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M720.218 74.85H680.698L673.418 95H660.938L693.698 4.91001H707.348L739.978 95H727.498L720.218 74.85ZM716.838 65.23L700.458 19.47L684.078 65.23H716.838Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M825.496 95H813.666L766.086 22.85V95H754.256V4.26001H766.086L813.666 76.28V4.26001H825.496V95Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M857.492 4.39001V95H845.662V4.39001H857.492Z"
+        stroke="white"
+        stroke-width="5"
+      />
+      <path
+        d="M931.215 74.85H891.694L884.415 95H871.934L904.694 4.91001H918.345L950.975 95H938.494L931.215 74.85ZM927.835 65.23L911.454 19.47L895.074 65.23H927.835Z"
+        stroke="white"
+        stroke-width="5"
+      />
+    </svg>
 
-<section class="container py-5">
-            <div class="row">
-                <div class="mx-auto">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h4 class="card-title text-uppercase text-center">Connexion</h4>
-                        </div>
-                        <div class="card-body">
-                            <form action="*" @submit.prevent="login" method="post" id="needs-validation" novalidate>
-                                <div class="row">
-
-                                    <div class="col-sm-12 col-md-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="username">Nom d'utilisateur</label>
-                                            <input type="text" id="username" name="username" placeholder="Nom d'utilisateur"
-                                                class="form-control" v-model="userName" required minlength="3"/>
-                                            <div class="invalid-feedback">
-                                                Merci de saisir votre nom d'utilisateur.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="password">Mot de passe</label>
-                                            <input v-model="password" type="password" id="password" name="password" placeholder="Mot de passe"
-                                                class="form-control"  required minlength="8"/>
-                                            <div class="invalid-feedback">
-                                                Merci de saisir votre mot de passe.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
-                                        <div class="float-left">
-                                            <button  value="signIn" id="signIn" class="btn btn-primary rounded-0" action="/Forum"
-                                                type="submit">Connexion</button>
-                                        </div>
-                                        <div class="float-right">
-                                            <router-link to="/SignUpForm">Inscription</router-link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-               
-                </div>
-        </section>
-
- </div>
+ </main>
 </template>
 
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 
 export default {
     name:"Home",
-    data() {
-        return{
-
-        userName: "",
-        password: "",
-    }
-    },
-methods: {
-    async login() {
-        const response = await axios.post('http://localhost:3000/api/users/:id', {
-            userName: this.userName,
-            password: this.password,
-        })
-
-
-        console.log(response)
-    
-
-       
-},
-   // connection(){
- //       this.response.data.status = "success"
- //     }
-      }
 }
+
+const logo = document.querySelectorAll(`#logo path`);
+
+for(let i = 0; i<logo.length; i++){
+    console.log(`Letter ${i} is ${logo[i].getTotalLength()}`);
+}
+
 
 </script>
 
-<style scoped>
-body{
-    margin-top: 70px;
-    font-family: 'Brawler', serif;
-
-    align-items: center;
-    background : no-repeat center url(../assets/fond.jpg);
-    /* background-image: url("../assets/icon-above-font.png");
-    background-repeat:no-repeat;
-    background-attachment:fixed;
-    background-position: right top; */
-    /* background: rgba(17,37,65,0.1); */
-
-}
-#validation{
-    background-color:  rgb(17,37,65)!important;;
-    border:   rgb(17,37,65)!important;
-}
-#signUp{
-    background-color:  rgb(0,129,97)!important;;
-    border:   rgb(17,37,65)!important;
-}
-#title{
-    color: white;
-    margin-top: 100px;
-    text-align: center;
-}
-.card-header{
-    background-color:rgb(17,37,65)!important;
-}
-.place-form {
-    margin-top: 80px;
-    margin-right: 150px;
-
-}
-@media screen and (max-width: 1200px){
-.place-form {
+<style>
+.animation{
+    padding: 0;
     margin: 0;
-}    
-#imgWebHome {
-    display:none;
-}
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 900px;
+    background-color: rgb(32,35,48);
 }
 
+#logo{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: fill 0.5s ease forwards 5s;
+}
 
+#logo path:nth-child(1){
+    stroke-dasharray: 573;
+    stroke-dashoffset: 573;
+    animation: line-anim 2s ease forwards;
+}
+
+#logo path:nth-child(2){
+    stroke-dasharray: 495;
+    stroke-dashoffset: 495;  
+    animation: line-anim 2s ease forwards 0.3s;
+}
+
+#logo path:nth-child(3){
+    stroke-dasharray: 510;
+    stroke-dashoffset: 510;
+    animation: line-anim 2s ease forwards 0.6s;
+}
+
+#logo path:nth-child(4){
+    stroke-dasharray: 436;
+    stroke-dashoffset: 436;
+    animation: line-anim 2s ease forwards 0.9s;
+}
+
+#logo path:nth-child(5){
+    stroke-dasharray: 406;
+    stroke-dashoffset: 406;
+    animation: line-anim 2s ease forwards 1.2s;
+}
+
+#logo path:nth-child(6){
+    stroke-dasharray: 510;
+    stroke-dashoffset: 510;
+    animation: line-anim 2s ease forwards 1.5s;
+}
+
+#logo path:nth-child(7){
+    stroke-dasharray: 681;
+    stroke-dashoffset: 681;
+    animation: line-anim 2s ease forwards 1.8s;
+}
+
+#logo path:nth-child(8){
+    stroke-dasharray: 442;
+    stroke-dashoffset: 442;
+    animation: line-anim 2s ease forwards 2.1s;
+}
+
+#logo path:nth-child(9){
+    stroke-dasharray: 545;
+    stroke-dashoffset: 545;
+    animation: line-anim 2s ease forwards 2.4s;
+}
+
+#logo path:nth-child(10){
+    stroke-dasharray: 204;
+    stroke-dashoffset: 204;
+    animation: line-anim 2s ease forwards 2.7s;
+}
+
+#logo path:nth-child(11){
+    stroke-dasharray: 442;
+    stroke-dashoffset: 442;
+    animation: line-anim 2s ease forwards 3s;
+}
+
+@keyframes line-anim {
+    to {
+    stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fill {
+    from {
+        fill: transparent;
+    } 
+    to {
+        fill: white;
+    }
+}
 </style>

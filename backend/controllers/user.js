@@ -237,6 +237,26 @@ exports.login = async (req, res) => {
 // Récupération d'un utilisateur avec son id
 exports.selectOneUser = (req, res) => {
   db.query(
+    "SELECT * FROM users WHERE userName = ?",
+    [req.params.userName],
+    (err, result) => {
+      if (err) {
+        res.status(400).json(error(err.message));
+      } else {
+        if (result[0] != undefined) {
+          res.status(200).json(success(result[0]));
+        } else {
+          res.status(404).json(error("Wrong id"));
+        }
+      }
+    }
+  );
+
+};
+
+/*// Récupération d'un utilisateur avec son id
+exports.selectOneUser = (req, res) => {
+  db.query(
     "SELECT * FROM users WHERE id = ?",
     [req.params.id],
     (err, result) => {
@@ -252,3 +272,44 @@ exports.selectOneUser = (req, res) => {
     }
   );
 };
+*/
+
+exports.login = async (req, res) => {
+  try {
+      const { userName, password } = req.body
+          if (!userName || !password) {
+              return res.status(400)
+          }
+          db.query(
+              "SELECT * FROM users WHERE userName = ?",
+          [userName],
+          async (error, results) => {
+              console.log(results);
+              if ( 
+                  !results || 
+                  !(await bcrypt.compare(password, results[0].password))
+              ) { 
+                res.status(400).json(error(err.message));
+
+              } else {
+                  const id = results[0].id;
+
+                  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+                    expiresIn: process.env.JWT_EXPIRES_IN,
+                  });
+                  console.log("The token is : " + token);
+                  const cookieOptions = {
+                    expires: new Date(
+                      Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                    ),
+                    httpOnly: true,
+                  };
+                  res.cookie("jwt", token, cookieOptions);
+                  res.status(200).json(success(results[0]));
+              }
+          } )
+  } catch (error) {
+      console.log(error);
+  }
+  
+}

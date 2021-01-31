@@ -1,24 +1,36 @@
 <template>
   <div class="footer-bottom">
+    <nav>
+      <ul>
+        <li>
+          <a href="/LegalNotice">Mentions légales</a>
+        </li>
+        <li>
+          <a href="mailto:contact@groupomania.com">Contactez-nous</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'Footer'
-}
+  name: "Footer",
+};
 </script>
 
-<style>
-.footer-bottom{
-    position: fixed;
-    bottom: 0;
-    height: 60px;
-    background:  rgb(17,37,65);
-    color: #f1f1f1;
-    width: 100%;
-    text-align: center;
-    line-height: 50px;
-    font-size: 25px;
+<style scoped>
+.footer-bottom {
+  position: fixed;
+  bottom: 15px;
+  height: 60px;
+  width: 100%;
+  display: inline-block;
 }
+
+.footer-bottom nav  {
+  display:flex;
+  justify-content: space-between;
+}
+
 </style>
