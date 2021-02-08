@@ -1,17 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
 const userCtrl = require('../controllers/user');
 const multer = require('../middleware/multer-config')
 const limiter = require('../middleware/limiter')
-const authController = require('../controllers/auth')
 
-router.post('/register', authController.register);
-router.post('/login', userCtrl.login, (req, res) => {
-    res.render('login')
+router.post('/login', userCtrl.login);
 
-});
-// tester par la page login pour voir le fonctionnement 
 
 router.route('/')
     .get(userCtrl.selectAllUsers)
@@ -25,6 +19,6 @@ router.route('/:id')
     .delete(userCtrl.deleteOneUser)
     .put(multer, userCtrl.editOneUser)
 
-
+    
 
 module.exports = router;

@@ -1,11 +1,11 @@
 <template>
-  <div class="footer-bottom">
+  <div>
     <nav>
       <ul>
         <li>
           <a href="/LegalNotice">Mentions légales</a>
         </li>
-        <li>
+        <li class="right_place">
           <a href="mailto:contact@groupomania.com">Contactez-nous</a>
         </li>
       </ul>
@@ -20,15 +20,15 @@ export default {
 </script>
 
 <style scoped>
-.footer-bottom {
-  position: fixed;
-  bottom: 15px;
+.footer {
+  position: static;
+  bottom: 0;
   height: 60px;
   width: 100%;
   display: inline-block;
 }
 
-.footer-bottom nav  {
+.footer nav  {
   display:flex;
   justify-content: space-between;
 }

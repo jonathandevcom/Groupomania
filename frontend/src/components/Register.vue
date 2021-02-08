@@ -1,7 +1,8 @@
 <template>
   <section class="container">
-    <div class="row top-register">
+    <div class="row top-register m-5">
       <div class="offset-md-2 col-md-8 offset-md-2">
+         <h4 v-if="messageError" class="alert alert-danger mt-4">  {{ messageError }} </h4>
         <div class="card">
           <div class="card-header bg-danger text-white">
             <h4 class="card-title text-uppercase">Inscription</h4>
@@ -114,10 +115,17 @@
                 </div>
               
             </form>
+            
           </div>
+
+
         </div>
+       
       </div>
+      
     </div>
+
+
   </section>
 </template>
 
@@ -136,11 +144,14 @@ export default {
         isAdmin: false,
         photo: "avatar.png",
       },
+      messageError: "",
     };
+    
   },
   methods: {
     postForm(e) {
       e.preventDefault();
+      var vm = this;
       axios
         .post("http://localhost:3000/api/users", this.formData)
         .then(function(response) {
@@ -154,7 +165,7 @@ export default {
             event.stopPropagation();
             form.classList.add("was-validated");
           } else {
-            alert(`Nom d'utilisateur ou mail déjà utilisé`);
+            vm.messageError = "Nom d'utilisateur ou mot de passe déjà utilisé"
           }
           console.log(error);
         });
@@ -164,12 +175,5 @@ export default {
 </script>
 
 <style>
-.top-register {
-  margin-top: 150px;
-}
-@media screen and (max-width: 600px) {
-  .top-register {
-    margin-top: 100px;
-  }
-}
+
 </style>

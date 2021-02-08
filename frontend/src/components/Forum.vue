@@ -2,6 +2,8 @@
   <section>
     <div class="container">
       <div class="row">
+        <!-- User xxxxxxxxxxxxxxxxxx   -->
+
         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 user">
           <img
             src="patron.jpg"
@@ -23,13 +25,55 @@
 
         <!-- post  xxxxxxxxxxxxxxxxxx   -->
 
-        <div :key="index" v-for="(message, index) in message" 
-        class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication">
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication">
+          <div class="card mb-3 mt-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-8">
+                  <h5 class="card-title col-8">Publier votre gif</h5>
+                  <form @submit="postGif" action="post">
+                    <input
+                      :value="formMessage.gif"
+                      @change="formMessage.gif = $event.target.value"
+                      type="file"
+                      id="file"
+                      name="file"
+                      class="mb-3 mt-1"
+                      required
+                    />
+                    <input
+                      v-model="formMessage.text"
+                      type="text"
+                      id="text"
+                      name="text"
+                      class="form-control"
+                      placeholder="Votre commentaire"
+                      required
+                    />
+
+                    <button
+                      type="submit"
+                      class="btn btn-warning d-flex justify-content-end mt-2"
+                    >
+                      Publier
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          :key="index"
+          v-for="(message, index) in message"
+          class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication"
+        >
           <div class="card mb-3 mt-3">
             <img src="message.gif" class="card-img-top gif" alt="message.gif" />
             <div class="card-body">
               <p class="card-text">
-               {{ message.text }}
+                {{ message.text }}
               </p>
               <div class="row">
                 <div class="col-8">
@@ -39,7 +83,7 @@
                 <div class="col-4">
                   <button
                     type="button"
-                    class=" btn btn-warning d-flex justify-content-end mt-2 "
+                    class="btn btn-warning d-flex justify-content-end mt-2"
                   >
                     Commenter
                   </button>
@@ -70,21 +114,34 @@ export default {
   name: "Forum",
   data() {
     return {
+      formMessage: {
+        gif: null,
+        text: null,
+      },
       message: [],
     };
   },
   created() {
-    axios
-    .get("http://localhost:3000/api/forum")
-    .then((reponse) => {
-      this.message = reponse.data.result;
+    axios.get("http://localhost:3000/api/forum").then((response) => {
+      this.message = response.data.result;
       console.log(this.message);
     });
-    
+  },
+  methods: {
+    postGif(e) {
+      e.preventDefault();
+      axios
+        .post("http://localhost:3000/api/forum", this.formMessage)
+        .then(function(response) {
+          console.log(response);
+         // window.location.reload(); 
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style></style>

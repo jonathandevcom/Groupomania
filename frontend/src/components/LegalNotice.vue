@@ -12,8 +12,9 @@ export default {
 
 <style>
 .bientot-disponible {
-  padding-top:250px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 72vh;
 }
 </style>

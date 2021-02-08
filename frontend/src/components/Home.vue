@@ -3,8 +3,7 @@
  <main class="animation">
 <svg
       id="logo"
-      width="955"
-      height="99"
+      
       viewBox="0 0 955 99"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -92,11 +91,13 @@ for(let i = 0; i<logo.length; i++){
     margin: 0;
     box-sizing: border-box;
     width: 100%;
-    min-height: 900px;
+    height: 72vh;
     background-color: rgb(32,35,48);
 }
 
 #logo{
+  width:955px;
+  height:99px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -184,4 +185,30 @@ for(let i = 0; i<logo.length; i++){
         fill: white;
     }
 }
+
+@media screen and (max-width: 975px) {
+#logo { 
+  width:700px;
+  height:99px;
+}
+}
+@media screen and (max-width: 740px) {
+#logo { 
+  width:500px;
+  height:99px;
+}
+}
+@media screen and (max-width: 500px) {
+#logo { 
+  width:350px;
+  height:99px;
+}
+}
+@media screen and (max-width: 360px) {
+#logo { 
+  width:250px;
+  height:99px;
+}
+}
+
 </style>

@@ -3,6 +3,8 @@ const db = require("../middleware/connect");
 
 const { success, error } = require("../middleware/functions");
 
+
+
 // Récupération de tous les messages
 exports.postAllMessages = (req, res, next) => {
   if (req.query.max != undefined && req.query.max > 0) {
@@ -32,6 +34,8 @@ exports.postAllMessages = (req, res, next) => {
 
 // Récupération d'un message avec son id
 exports.postOneMessage = (req, res) => {
+  
+  
   db.query(
     "SELECT * FROM messages WHERE id = ?",
     [req.params.id],
@@ -40,6 +44,9 @@ exports.postOneMessage = (req, res) => {
         res.json(error(err.message));
       } else {
         if (result[0] != undefined) {
+
+       
+         console.log("test");
           res.json(success(result[0]));
         } else {
           res.json(error("Wrong id"));
@@ -58,7 +65,16 @@ exports.createOneMessage = (req, res) => {
       if (err) {
         res.json(error(err.message));
       } else {
-        res.json(success("Message added"));
+        
+        const gif = req.body.gif;
+        gif.mv("./images/" + gif.name, function (err, result) {
+            if(err)
+                throw err;
+            res.json(success("Message added"));
+                
+        })   
+        //images: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        
       }
     }
   );

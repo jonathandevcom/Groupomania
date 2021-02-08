@@ -10,7 +10,7 @@
         />
       
     
-      <li class="home"><a href="/">Accueil</a></li>
+      <li class="right_place"><a href="/">Accueil</a></li>
       <!-- {{#if user }} 
             <li><a href="/profile">Profile</a></li>
             <li><a href="/auth/logout">Logout</a></li>
@@ -38,7 +38,7 @@ export default {
 
 header {
    top: 0;
-   position: fixed;
+   position: static;
    width: 100%;
 }
 nav {
@@ -58,7 +58,7 @@ nav li {
   list-style: none;
 }
 
-.home {
+.right_place {
     margin-left: auto;
 }
 
