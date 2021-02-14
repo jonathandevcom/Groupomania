@@ -2,42 +2,40 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../middleware/connect");
 const { success, error } = require("../middleware/functions");
-const schema = require('../middleware/schemaPassword.js');
+const schema = require("../middleware/schemaPassword.js");
 
 exports.login = async (req, res) => {
   try {
-      const { userName, password } = req.body
-          if (!userName || !password) {
-              return res.status(400)
-          }
-          db.query(
-              "SELECT * FROM users WHERE userName = ?",
-          [userName],
-          async (error, results) => {
-              console.log(results);
-              if ( 
-                  !results || 
-                  !(await bcrypt.compare(password, results[0].password))
-              ) { 
-                res.status(400).json(error("User name or email already taken"));
+    const { userName, password } = req.body;
+    if (!userName || !password) {
+      return res.status(400);
+    }
+    db.query(
+      "SELECT * FROM users WHERE userName = ?",
+      [userName],
+      async (error, results) => {
+        console.log(results);
+        if (
+          !results ||
+          !(await bcrypt.compare(password, results[0].password))
+        ) {
+          res.status(400).json(error("User name or email already taken"));
+        } else {
+          //console.log('The token is: ' + token);
+          res.status(200).json({
+            userId: results[0].id,
 
-              } else {
-              //console.log('The token is: ' + token);
-              res.status(200).json({
-                userId: results[0].id,
-                token: jwt.sign(
-                  { userId: results[0].id }, 
-                  process.env.JWT_SECRET, 
-                  { expiresIn : process.env.JWT_EXPIRES_IN }
-                )
-              });
-
-              }
-          })
+            token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            }),
+          });
+        }
+      }
+    );
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-}
+};
 
 // Récupation tous les utilisateurs
 exports.selectAllUsers = (req, res) => {
@@ -66,73 +64,65 @@ exports.selectAllUsers = (req, res) => {
   }
 };
 
-
-
 // Création d'un nouvel utilisateur
 exports.createOneUser = (req, res) => {
- if (schema.validate(req.body.password)){
-  if (req.body.userName) {
-    db.query(
-      "SELECT * FROM users WHERE userName = ? OR email = ?",
-      [req.body.userName, req.body.email],
-      async (err, result) => {
-        if (err) {
-          res.status(400).json(error(err.message));
-        } else {
-          if (result[0] != undefined) {
-            res.status(404).json(error("User name or email already taken"));
+  if (schema.validate(req.body.password)) {
+    if (req.body.userName) {
+      db.query(
+        "SELECT * FROM users WHERE userName = ? OR email = ?",
+        [req.body.userName, req.body.email],
+        async (err, result) => {
+          if (err) {
+            res.status(400).json(error(err.message));
           } else {
-            let hashedPassword = await bcrypt.hash(req.body.password, 8);
-            db.query(
-              `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
-              [
-                req.body.email,
-                req.body.userName,
-                hashedPassword,
-                req.body.bio,
-                req.body.photo,
-              ],
-              (err, result) => {
-                if (err) {
-                  res.status(400).json(error(err.message));
-                } else {
-                  db.query(
-                    "SELECT * FROM users WHERE userName = ?",
-                    [
-                      req.body.id,
-                      req.body.email,
-                      req.body.userName,
-                      hashedPassword,
-                      req.body.bio,
-                      req.body.isAdmin,
-                      req.body.photo,
-                    ],
-                    (err, result) => {
-                      if (err) {
-                        res.status(400).json(error(err.message));
-                      } else {
-                      /* 
-                       jwt.sign({user}, 'secretkey', { expiresIn: '24h' }, (err, token) => {
-                            res.json({
-                              token
-                            });
-                          });
-                       */ 
-                        res.status(201).json(success("User added"));
+            if (result[0] != undefined) {
+              res.status(404).json(error("User name or email already taken"));
+            } else {
+              let hashedPassword = await bcrypt.hash(req.body.password, 8);
+              db.query(
+                `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
+                [
+                  req.body.email,
+                  req.body.userName,
+                  hashedPassword,
+                  req.body.bio,
+                  req.body.photo,
+                ],
+                (err, result) => {
+                  if (err) {
+                    res.status(400).json(error(err.message));
+                  } else {
+                    db.query(
+                      "SELECT * FROM users WHERE userName = ?",
+                      [
+                        req.body.id,
+                        req.body.email,
+                        req.body.userName,
+                        hashedPassword,
+                        req.body.bio,
+                        req.body.isAdmin,
+                        req.body.photo,
+                      ],
+                      (err, result) => {
+                        if (err) {
+                          res.status(400).json(error(err.message));
+                        } else {
+                            res.status(201).json(success("User added"));
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
                 }
-              }
-            );
+              );
+            }
           }
         }
-      }
-    );
+      );
+    } else {
+      res.status(404).json(error("No name value"));
+    }
   } else {
-    res.status(404).json(error("No name value"));
-  }} else {
-    res.status(400).json(error("Password no accept"))
+    res.status(400).json(error("Password no accept"));
   }
 };
 
@@ -225,7 +215,6 @@ exports.editOneUser = (req, res) => {
   }
 };
 
-
 // Récupération d'un utilisateur avec son id
 exports.selectOneUser = (req, res) => {
   db.query(
@@ -243,28 +232,4 @@ exports.selectOneUser = (req, res) => {
       }
     }
   );
-
 };
-
-/*// Récupération d'un utilisateur avec son id
-exports.selectOneUser = (req, res) => {
-  db.query(
-    "SELECT * FROM users WHERE id = ?",
-    [req.params.id],
-    (err, result) => {
-      if (err) {
-        res.status(400).json(error(err.message));
-      } else {
-        if (result[0] != undefined) {
-          res.status(200).json(success(result[0]));
-        } else {
-          res.status(404).json(error("Wrong id"));
-        }
-      }
-    }
-  );
-};
-*/
-
-
-

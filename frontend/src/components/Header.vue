@@ -1,27 +1,24 @@
 <template>
   <header>
-  <nav>
-    <ul>
-     
+    <nav>
+      <ul>
         <img
           class="logo-header"
           src="../assets/icon-header.png"
           alt="logo Groupomania"
         />
-      
-    
-      <li class="right_place"><a href="/">Accueil</a></li>
-      <!-- {{#if user }} 
-            <li><a href="/profile">Profile</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
-             {{else}}
-              {{/if}}
-             
-             -->
-      <li><a href="/login">Connexion</a></li>
-      <li><a href="/register">Inscription</a></li>
-    </ul>
-  </nav>
+        <li v-if="token" class="right_place"><a href="/forum">Forum</a></li>
+        <li v-else class="right_place"><a href="/">Accueil</a></li>
+
+        <li v-if="token"><a href="/profil">Profil</a></li>
+        <li v-else><a href="/login">Connexion</a></li>
+
+        <li v-if="token" v-on:click="logout">
+          <a href="/login">Déconnection</a>
+        </li>
+        <li v-else><a href="/register">Inscription</a></li>
+      </ul>
+    </nav>
   </header>
 </template>
 
@@ -29,17 +26,28 @@
 export default {
   name: "Header",
   data() {
-    return {};
+    return {
+      token: "",
+    };
+  },
+  methods: {
+    logout() {
+      localStorage.clear();
+    },
+  },
+  mounted() {
+    if (localStorage.token) {
+      this.token = localStorage.token;
+    }
   },
 };
 </script>
 
 <style>
-
 header {
-   top: 0;
-   position: static;
-   width: 100%;
+  top: 0;
+  position: static;
+  width: 100%;
 }
 nav {
   background-color: rgb(17, 37, 65);
@@ -59,7 +67,7 @@ nav li {
 }
 
 .right_place {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 nav li a {
@@ -79,21 +87,17 @@ nav li a:hover {
 }
 
 @media screen and (max-width: 800px) {
-    nav {
+  nav {
     padding: 15px 0 2px 0;
-    }
+  }
 }
 
 @media screen and (max-width: 600px) {
-    img {
+  img {
     display: none;
-    }
-    li {
-   
-        margin-right: auto;
-
-    }
+  }
+  li {
+    margin-right: auto;
+  }
 }
-
-
 </style>

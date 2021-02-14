@@ -2,11 +2,11 @@
   <section class="container container-centered">
     <div class="row">
       <div class="mx-auto">
-        <h4 v-if="messageErrorLogin" class="alert alert-danger mt-4">  {{ messageErrorLogin }} </h4>
+        <h4 v-if="messageErrorLogin" class="alert alert-danger mt-4">
+          {{ messageErrorLogin }}
+        </h4>
         <div class="card">
-          
           <div class="card-header bg-primary text-white">
-             
             <h4 class="card-title text-uppercase text-center">Connexion</h4>
           </div>
           <div class="card-body">
@@ -85,7 +85,6 @@
 <script>
 import axios from "axios";
 
-
 export default {
   name: "Login",
   data() {
@@ -95,7 +94,6 @@ export default {
       messageErrorLogin: "",
     };
   },
-
 
   methods: {
     login(e) {
@@ -108,9 +106,12 @@ export default {
         })
         .then(function(response) {
           console.log(response);
-          localStorage.setItem("token", response.data.token);
-          window.location.href = "/forum";
+          localStorage.setItem("jwt", response.data.token);
+          response.headers = { Authorization: "Bearer " + response.data.token };
+          //    this.token = response.data.token;
+          //   window.location.href = "/forum";
         })
+
         .catch(function(error) {
           let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
@@ -132,7 +133,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 82vh;
+  height: 76vh;
 }
 
 .btn {

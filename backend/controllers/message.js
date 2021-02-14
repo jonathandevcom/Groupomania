@@ -1,9 +1,6 @@
 require("dotenv").config();
 const db = require("../middleware/connect");
-
 const { success, error } = require("../middleware/functions");
-
-
 
 // Récupération de tous les messages
 exports.postAllMessages = (req, res, next) => {
@@ -34,8 +31,6 @@ exports.postAllMessages = (req, res, next) => {
 
 // Récupération d'un message avec son id
 exports.postOneMessage = (req, res) => {
-  
-  
   db.query(
     "SELECT * FROM messages WHERE id = ?",
     [req.params.id],
@@ -44,9 +39,6 @@ exports.postOneMessage = (req, res) => {
         res.json(error(err.message));
       } else {
         if (result[0] != undefined) {
-
-       
-         console.log("test");
           res.json(success(result[0]));
         } else {
           res.json(error("Wrong id"));
@@ -58,27 +50,68 @@ exports.postOneMessage = (req, res) => {
 
 // Création d'un message
 exports.createOneMessage = (req, res) => {
+  console.log(req.file, req.body.text);
   db.query(
-    "INSERT INTO messages (gif, text) VALUE (?, ?)",
-    [req.body.gif, req.body.text],
+    "INSERT INTO messages (image, text) VALUE (?, ?)",
+    [req.file, req.body.text],
+
     (err, result) => {
       if (err) {
         res.json(error(err.message));
       } else {
-        
-        const gif = req.body.gif;
-        gif.mv("./images/" + gif.name, function (err, result) {
-            if(err)
-                throw err;
-            res.json(success("Message added"));
-                
-        })   
-        //images: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        
+         res.json(success("Message added"));
       }
     }
   );
 };
+
+
+//    imageUrl = `${req.protocol}:${req.get('host')}/images/${req.file}`,
+/*
+exports.createOneMessage = (req, res) => {
+  if (req.body.text) {
+    console.log(req.body.text);
+      db.query(
+    "SELECT * FROM messages WHERE image = ? OR text = ?",
+        [req.file, req.body.text],
+        async (err, result) => {
+          console.log(req.text);
+          if (err) {
+            res.status(400).json(error( "ici     " + err.message));
+          } else {
+            if (result[0] != undefined) {
+              res.status(404).json(error("Image or com already taken"));
+            } else {
+              db.query("INSERT INTO messages (image, text) VALUE (?, ?)",
+              [req.file, req.body.text],
+       //       imageUrl = `${req.protocol}:${req.get('host')}/images/${req.file}`,
+              (err, result) => {
+                if (err) {
+                  res.status(400).json(error("la     " + err.message));
+                } else {
+                  db.query (
+                    "SELECT * FROM messages WHERE id = ?",
+                    [req.body.id, 
+                      req.file, 
+                      req.body.text],
+                      (err, result) => {
+                        if (err) {
+                          res.status(400).json(error(err.message));
+                        } else {
+                      res.status(201).json(success("Message added"));
+                      }
+                      }               
+                )                  
+              }              
+            }
+            )
+          }
+        }      
+    })   
+  } else {
+      res.status(404).json(error("Not image"));
+}}
+*/
 
 // suppression d'un message
 exports.deleteOneMessage = (req, res) => {
@@ -111,7 +144,7 @@ exports.deleteOneMessage = (req, res) => {
 
 // modification un message
 exports.editOneMessage = (req, res) => {
-  if (req.body.gif) {
+  if (req.body.image) {
     db.query(
       "SELECT * FROM messages WHERE id = ?",
       [req.params.id],
@@ -121,18 +154,18 @@ exports.editOneMessage = (req, res) => {
         } else {
           if (result[0] != undefined) {
             db.query(
-              "SELECT * FROM messages WHERE gif= ? AND id != ?",
-              [req.body.gif, req.body.text],
+              "SELECT * FROM messages WHERE image= ? AND id != ?",
+              [req.body.image, req.body.text],
               (err, result) => {
                 if (err) {
                   res.json(error(err.message));
                 } else {
                   if (result[0] != undefined) {
-                    res.json(error("same GIF"));
+                    res.json(error("same image"));
                   } else {
                     db.query(
-                      "UPDATE messages SET gif = ?, text = ?",
-                      [req.body.gif, req.body.text],
+                      "UPDATE messages SET image = ?, text = ?",
+                      [req.body.image, req.body.text],
                       (err, result) => {
                         if (err) {
                           res.json(error(err.message));

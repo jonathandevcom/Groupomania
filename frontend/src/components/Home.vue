@@ -1,9 +1,7 @@
 <template>
-
- <main class="animation">
-<svg
+  <main class="animation">
+    <svg
       id="logo"
-      
       viewBox="0 0 955 99"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -64,151 +62,144 @@
         stroke-width="5"
       />
     </svg>
-
- </main>
+  </main>
 </template>
-
 
 <script>
 //import axios from 'axios'
 
 export default {
-    name:"Home",
-}
-
+  name: "Home",
+};
 const logo = document.querySelectorAll(`#logo path`);
-
-for(let i = 0; i<logo.length; i++){
-    console.log(`Letter ${i} is ${logo[i].getTotalLength()}`);
+for (let i = 0; i < logo.length; i++) {
+  console.log(`Letter ${i} is ${logo[i].getTotalLength()}`);
 }
-
-
 </script>
 
 <style>
-.animation{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    width: 100%;
-    height: 72vh;
-    background-color: rgb(32,35,48);
+.animation {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 72vh;
+  background-color: rgb(32, 35, 48);
 }
 
-#logo{
-  width:955px;
-  height:99px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: fill 0.5s ease forwards 5s;
+#logo {
+  width: 955px;
+  height: 99px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fill 0.5s ease forwards 5s;
 }
 
-#logo path:nth-child(1){
-    stroke-dasharray: 573;
-    stroke-dashoffset: 573;
-    animation: line-anim 2s ease forwards;
+#logo path:nth-child(1) {
+  stroke-dasharray: 573;
+  stroke-dashoffset: 573;
+  animation: line-anim 2s ease forwards;
 }
 
-#logo path:nth-child(2){
-    stroke-dasharray: 495;
-    stroke-dashoffset: 495;  
-    animation: line-anim 2s ease forwards 0.3s;
+#logo path:nth-child(2) {
+  stroke-dasharray: 495;
+  stroke-dashoffset: 495;
+  animation: line-anim 2s ease forwards 0.3s;
 }
 
-#logo path:nth-child(3){
-    stroke-dasharray: 510;
-    stroke-dashoffset: 510;
-    animation: line-anim 2s ease forwards 0.6s;
+#logo path:nth-child(3) {
+  stroke-dasharray: 510;
+  stroke-dashoffset: 510;
+  animation: line-anim 2s ease forwards 0.6s;
 }
 
-#logo path:nth-child(4){
-    stroke-dasharray: 436;
-    stroke-dashoffset: 436;
-    animation: line-anim 2s ease forwards 0.9s;
+#logo path:nth-child(4) {
+  stroke-dasharray: 436;
+  stroke-dashoffset: 436;
+  animation: line-anim 2s ease forwards 0.9s;
 }
 
-#logo path:nth-child(5){
-    stroke-dasharray: 406;
-    stroke-dashoffset: 406;
-    animation: line-anim 2s ease forwards 1.2s;
+#logo path:nth-child(5) {
+  stroke-dasharray: 406;
+  stroke-dashoffset: 406;
+  animation: line-anim 2s ease forwards 1.2s;
 }
 
-#logo path:nth-child(6){
-    stroke-dasharray: 510;
-    stroke-dashoffset: 510;
-    animation: line-anim 2s ease forwards 1.5s;
+#logo path:nth-child(6) {
+  stroke-dasharray: 510;
+  stroke-dashoffset: 510;
+  animation: line-anim 2s ease forwards 1.5s;
 }
 
-#logo path:nth-child(7){
-    stroke-dasharray: 681;
-    stroke-dashoffset: 681;
-    animation: line-anim 2s ease forwards 1.8s;
+#logo path:nth-child(7) {
+  stroke-dasharray: 681;
+  stroke-dashoffset: 681;
+  animation: line-anim 2s ease forwards 1.8s;
 }
 
-#logo path:nth-child(8){
-    stroke-dasharray: 442;
-    stroke-dashoffset: 442;
-    animation: line-anim 2s ease forwards 2.1s;
+#logo path:nth-child(8) {
+  stroke-dasharray: 442;
+  stroke-dashoffset: 442;
+  animation: line-anim 2s ease forwards 2.1s;
 }
 
-#logo path:nth-child(9){
-    stroke-dasharray: 545;
-    stroke-dashoffset: 545;
-    animation: line-anim 2s ease forwards 2.4s;
+#logo path:nth-child(9) {
+  stroke-dasharray: 545;
+  stroke-dashoffset: 545;
+  animation: line-anim 2s ease forwards 2.4s;
 }
 
-#logo path:nth-child(10){
-    stroke-dasharray: 204;
-    stroke-dashoffset: 204;
-    animation: line-anim 2s ease forwards 2.7s;
+#logo path:nth-child(10) {
+  stroke-dasharray: 204;
+  stroke-dashoffset: 204;
+  animation: line-anim 2s ease forwards 2.7s;
 }
 
-#logo path:nth-child(11){
-    stroke-dasharray: 442;
-    stroke-dashoffset: 442;
-    animation: line-anim 2s ease forwards 3s;
+#logo path:nth-child(11) {
+  stroke-dasharray: 442;
+  stroke-dashoffset: 442;
+  animation: line-anim 2s ease forwards 3s;
 }
 
 @keyframes line-anim {
-    to {
+  to {
     stroke-dashoffset: 0;
-    }
+  }
 }
 
 @keyframes fill {
-    from {
-        fill: transparent;
-    } 
-    to {
-        fill: white;
-    }
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: white;
+  }
 }
 
 @media screen and (max-width: 975px) {
-#logo { 
-  width:700px;
-  height:99px;
-}
+  #logo {
+    width: 700px;
+    height: 99px;
+  }
 }
 @media screen and (max-width: 740px) {
-#logo { 
-  width:500px;
-  height:99px;
-}
+  #logo {
+    width: 500px;
+    height: 99px;
+  }
 }
 @media screen and (max-width: 500px) {
-#logo { 
-  width:350px;
-  height:99px;
-}
+  #logo {
+    width: 350px;
+    height: 99px;
+  }
 }
 @media screen and (max-width: 360px) {
-#logo { 
-  width:250px;
-  height:99px;
+  #logo {
+    width: 250px;
+    height: 99px;
+  }
 }
-}
-
 </style>

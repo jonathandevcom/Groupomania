@@ -3,16 +3,13 @@
     <div class="container">
       <div class="row">
         <!-- User xxxxxxxxxxxxxxxxxx   -->
-
         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 user">
           <img
             src="patron.jpg"
             class="img-thumbnail rounded-circle my-3"
             alt="..."
           />
-
           <h3>Username</h3>
-
           <p class="my-3">
             Lorem Ipsum Lorem ipsum dolor sit amet consectetur adipisicing elit.
             At architecto animi optio ab aut officiis qui ipsa in tenetur,
@@ -22,9 +19,7 @@
             quisquam, cumque eaque! Natus!
           </p>
         </div>
-
         <!-- post  xxxxxxxxxxxxxxxxxx   -->
-
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication">
           <div class="card mb-3 mt-3">
             <div class="card-body">
@@ -63,7 +58,6 @@
             </div>
           </div>
         </div>
-
         <div
           :key="index"
           v-for="(message, index) in message"
@@ -89,9 +83,7 @@
                   </button>
                 </div>
               </div>
-
               <!-- commentaire  xxxxxxxxxxxxxxxxxx -->
-
               <div class="card-body border border-3 mt-3">
                 <h6>Commentaires</h6>
                 <p class="card-text">
@@ -134,7 +126,7 @@ export default {
         .post("http://localhost:3000/api/forum", this.formMessage)
         .then(function(response) {
           console.log(response);
-         // window.location.reload(); 
+          // window.location.reload();
         })
         .catch(function(error) {
           console.log(error);

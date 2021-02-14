@@ -2,7 +2,9 @@
   <section class="container">
     <div class="row top-register m-5">
       <div class="offset-md-2 col-md-8 offset-md-2">
-         <h4 v-if="messageError" class="alert alert-danger mt-4">  {{ messageError }} </h4>
+        <h4 v-if="messageError" class="alert alert-danger mt-4">
+          {{ messageError }}
+        </h4>
         <div class="card">
           <div class="card-header bg-danger text-white">
             <h4 class="card-title text-uppercase">Inscription</h4>
@@ -85,47 +87,28 @@
                   </div>
                 </div>
               </div>
-                <!--
-                <div class="form-group">
-                                
-                  <input type="file" accept="image" id="photo" name="photo" ref="myFiles" @change="previewFiles" multiple>
-                </div>          
-                <div class="col-sm-12">
-                 <div class="float-right">
-                    
-                 </div>
-              </div>-->
-
-                <div class="row">
-                  <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
-                    <div class="float-left">
-                      <button
-                        value="valider"
-                        id="validation"
-                        class="btn btn-danger rounded-0"
-                        type="submit"
-                      >
-                        Valider
-                      </button>
-                    </div>
-                    <div class="float-right">
-                      <router-link to="/login">Connexion</router-link>
-                    </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
+                  <div class="float-left">
+                    <button
+                      value="valider"
+                      id="validation"
+                      class="btn btn-danger rounded-0"
+                      type="submit"
+                    >
+                      Valider
+                    </button>
+                  </div>
+                  <div class="float-right">
+                    <router-link to="/login">Connexion</router-link>
                   </div>
                 </div>
-              
+              </div>
             </form>
-            
           </div>
-
-
         </div>
-       
       </div>
-      
     </div>
-
-
   </section>
 </template>
 
@@ -146,7 +129,6 @@ export default {
       },
       messageError: "",
     };
-    
   },
   methods: {
     postForm(e) {
@@ -165,7 +147,7 @@ export default {
             event.stopPropagation();
             form.classList.add("was-validated");
           } else {
-            vm.messageError = "Nom d'utilisateur ou mot de passe déjà utilisé"
+            vm.messageError = "Nom d'utilisateur ou mot de passe déjà utilisé";
           }
           console.log(error);
         });
@@ -174,6 +156,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
