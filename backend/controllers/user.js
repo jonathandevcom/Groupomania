@@ -10,6 +10,7 @@ exports.login = async (req, res) => {
     if (!userName || !password) {
       return res.status(400);
     }
+    
     db.query(
       "SELECT * FROM users WHERE userName = ?",
       [userName],
@@ -24,7 +25,6 @@ exports.login = async (req, res) => {
           //console.log('The token is: ' + token);
           res.status(200).json({
             userId: results[0].id,
-
             token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,
             }),
@@ -86,7 +86,8 @@ exports.createOneUser = (req, res) => {
                   req.body.userName,
                   hashedPassword,
                   req.body.bio,
-                  req.body.photo,
+                  req.file.filename,
+                  // req.file
                 ],
                 (err, result) => {
                   if (err) {
@@ -101,7 +102,8 @@ exports.createOneUser = (req, res) => {
                         hashedPassword,
                         req.body.bio,
                         req.body.isAdmin,
-                        req.body.photo,
+                        req.file.filename,
+                        //req.file
                       ],
                       (err, result) => {
                         if (err) {
@@ -157,9 +159,10 @@ exports.deleteOneUser = (req, res) => {
 
 // modification d'un utilisateur
 exports.editOneUser = (req, res) => {
+  if (schema.validate(req.body.password)) {
   if (req.body.userName) {
-    db.query(
-      "SELECT * FROM users WHERE id = ?",
+     db.query(
+       "SELECT * FROM users WHERE id = ?",
       [req.params.id],
       (err, result) => {
         if (err) {
@@ -175,19 +178,35 @@ exports.editOneUser = (req, res) => {
                 req.body.bio,
                 req.body.photo,
               ],
-              (err, result) => {
+              async (err, result) => {
                 if (err) {
                   res.json(error(err.message));
                 } else {
                   if (result[0] != undefined) {
                     res.json(error("same name"));
                   } else {
+                /*  
+                    db.query(
+                      "SELECT * FROM users WHERE userName = ?",
+                      [req.body.userName],
+                      async (err, result) => {
+                        if (err) {
+                          res.status(400).json(error(err.message));
+                        } else {
+                          if (result[0] != undefined) {
+                            res.status(404).json(error("User name already taken"));
+                          } else {
+
+*/
+
+
+                    let hashedPassword = await bcrypt.hash(req.body.password, 8);
                     db.query(
                       "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
                       [
                         req.body.email,
                         req.body.userName,
-                        req.body.password,
+                        hashedPassword,
                         req.body.bio,
                         req.body.photo,
                         req.params.id,
@@ -203,6 +222,9 @@ exports.editOneUser = (req, res) => {
                   }
                 }
               }
+
+      //      )}}}
+            
             );
           } else {
             res.json(error("Wrong id"));
@@ -213,13 +235,16 @@ exports.editOneUser = (req, res) => {
   } else {
     res.json(error("no name value"));
   }
+} else {
+  res.status(400).json(error("Password no accept"));
+}
 };
 
 // Récupération d'un utilisateur avec son id
 exports.selectOneUser = (req, res) => {
   db.query(
-    "SELECT * FROM users WHERE userName = ?",
-    [req.params.userName],
+    "SELECT * FROM users WHERE id = ?",
+    [req.params.id],
     (err, result) => {
       if (err) {
         res.status(400).json(error(err.message));

@@ -84,6 +84,15 @@
                       name="bio"
                       placeholder="Décrivez-vous en quelques mots"
                     />
+                 <!--   <input
+                      :value="formData.photo"
+                      @change="formData.photo = $event.target.value"
+                      type="file"
+                      id="file"
+                      name="file"
+                      class="mb-1 mt-3"
+                      required
+                    /> -->
                   </div>
                 </div>
               </div>
@@ -93,7 +102,7 @@
                     <button
                       value="valider"
                       id="validation"
-                      class="btn btn-danger rounded-0"
+                      class="btn btn-primary rounded-0"
                       type="submit"
                     >
                       Valider
@@ -125,7 +134,7 @@ export default {
         password: null,
         bio: null,
         isAdmin: false,
-        photo: "avatar.png",
+        photo: "null",
       },
       messageError: "",
     };
@@ -147,7 +156,7 @@ export default {
             event.stopPropagation();
             form.classList.add("was-validated");
           } else {
-            vm.messageError = "Nom d'utilisateur ou mot de passe déjà utilisé";
+            vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
           }
           console.log(error);
         });

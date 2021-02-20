@@ -62,7 +62,7 @@
                     <button
                       value="signIn"
                       id="signIn"
-                      class="btn btn-danger rounded-0"
+                      class="btn btn-primary rounded-0"
                       action="/Forum"
                       type="submit"
                     >
@@ -107,9 +107,10 @@ export default {
         .then(function(response) {
           console.log(response);
           localStorage.setItem("jwt", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
           response.headers = { Authorization: "Bearer " + response.data.token };
           //    this.token = response.data.token;
-          //   window.location.href = "/forum";
+             window.location.href = "/forum";
         })
 
         .catch(function(error) {
@@ -136,9 +137,10 @@ export default {
   height: 76vh;
 }
 
-.btn {
+.btn-primary {
   background-color: rgb(17, 37, 65) !important;
   border: rgb(17, 37, 65) !important;
+  color: white !important;
 }
 
 #title {

@@ -4,14 +4,13 @@ const multer = require('multer');
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png', 
-  'image/gif': 'gif'
+  'image/png': 'png'
 };
 
 ///// Sauvegarde des images dans le dossier images
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'images');
+    callback(null, 'images-profile');
   },
   ///// Modification du nom du fichier 
   filename: (req, file, callback) => {
@@ -21,4 +20,4 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({storage: storage}).single('photo');

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const db = require("../middleware/connect");
 const { success, error } = require("../middleware/functions");
+const fs = require('fs');
 
 // Récupération de tous les messages
 exports.postAllMessages = (req, res, next) => {
@@ -53,8 +54,7 @@ exports.createOneMessage = (req, res) => {
   console.log(req.file, req.body.text);
   db.query(
     "INSERT INTO messages (image, text) VALUE (?, ?)",
-    [req.file, req.body.text],
-
+    [req.file.filename, req.body.text],
     (err, result) => {
       if (err) {
         res.json(error(err.message));
@@ -64,54 +64,6 @@ exports.createOneMessage = (req, res) => {
     }
   );
 };
-
-
-//    imageUrl = `${req.protocol}:${req.get('host')}/images/${req.file}`,
-/*
-exports.createOneMessage = (req, res) => {
-  if (req.body.text) {
-    console.log(req.body.text);
-      db.query(
-    "SELECT * FROM messages WHERE image = ? OR text = ?",
-        [req.file, req.body.text],
-        async (err, result) => {
-          console.log(req.text);
-          if (err) {
-            res.status(400).json(error( "ici     " + err.message));
-          } else {
-            if (result[0] != undefined) {
-              res.status(404).json(error("Image or com already taken"));
-            } else {
-              db.query("INSERT INTO messages (image, text) VALUE (?, ?)",
-              [req.file, req.body.text],
-       //       imageUrl = `${req.protocol}:${req.get('host')}/images/${req.file}`,
-              (err, result) => {
-                if (err) {
-                  res.status(400).json(error("la     " + err.message));
-                } else {
-                  db.query (
-                    "SELECT * FROM messages WHERE id = ?",
-                    [req.body.id, 
-                      req.file, 
-                      req.body.text],
-                      (err, result) => {
-                        if (err) {
-                          res.status(400).json(error(err.message));
-                        } else {
-                      res.status(201).json(success("Message added"));
-                      }
-                      }               
-                )                  
-              }              
-            }
-            )
-          }
-        }      
-    })   
-  } else {
-      res.status(404).json(error("Not image"));
-}}
-*/
 
 // suppression d'un message
 exports.deleteOneMessage = (req, res) => {
@@ -130,6 +82,7 @@ exports.deleteOneMessage = (req, res) => {
               if (err) {
                 res.json(error(err.message));
               } else {
+              //  fs.unlink(`images/${filename}`)
                 res.json(success(true));
               }
             }

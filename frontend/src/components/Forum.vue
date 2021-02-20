@@ -1,35 +1,18 @@
 <template>
   <section>
     <div class="container">
-      <div class="row">
-        <!-- User xxxxxxxxxxxxxxxxxx   -->
-        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 user">
-          <img
-            src="patron.jpg"
-            class="img-thumbnail rounded-circle my-3"
-            alt="..."
-          />
-          <h3>Username</h3>
-          <p class="my-3">
-            Lorem Ipsum Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            At architecto animi optio ab aut officiis qui ipsa in tenetur,
-            soluta, iusto aperiam molestiae tempore! Blanditiis doloremque,
-            optio neque hic quas unde sed rem! Totam doloremque quae dolorum
-            animi corporis vitae ad perspiciatis enim, fugiat veniam, eveniet
-            quisquam, cumque eaque! Natus!
-          </p>
-        </div>
-        <!-- post  xxxxxxxxxxxxxxxxxx   -->
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication">
+      <div class="row ">
+        
+        <div class="col-12 publication">
           <div class="card mb-3 mt-3">
             <div class="card-body">
               <div class="row">
-                <div class="col-8">
+                <div class="m-auto col-lg-8 col-sm-12">
                   <h5 class="card-title col-8">Publier votre gif</h5>
-                  <form @submit="postGif" action="post">
+                  <form @submit="postImage" action="post">
                     <input
-                      :value="formMessage.gif"
-                      @change="formMessage.gif = $event.target.value"
+                      :value="formMessage.image"
+                      @change="formMessage.image = $event.target.value"
                       type="file"
                       id="file"
                       name="file"
@@ -45,10 +28,9 @@
                       placeholder="Votre commentaire"
                       required
                     />
-
                     <button
                       type="submit"
-                      class="btn btn-warning d-flex justify-content-end mt-2"
+                      class="btn btn-outline-info mt-2"
                     >
                       Publier
                     </button>
@@ -58,13 +40,18 @@
             </div>
           </div>
         </div>
+
+
+
+
+        
         <div
           :key="index"
           v-for="(message, index) in message"
-          class="col-lg-9 col-md-9 col-sm-8 col-xs-12 publication"
+          class="col-lg-12 col-sm-12 col-xs-12 publication"
         >
           <div class="card mb-3 mt-3">
-            <img src="message.gif" class="card-img-top gif" alt="message.gif" />
+            <img src="message.image" class="card-img-top image" alt="message.image" />
             <div class="card-body">
               <p class="card-text">
                 {{ message.text }}
@@ -77,7 +64,7 @@
                 <div class="col-4">
                   <button
                     type="button"
-                    class="btn btn-warning d-flex justify-content-end mt-2"
+                    class="btn btn-outline-secondary d-flex justify-content-end mt-2"
                   >
                     Commenter
                   </button>
@@ -107,20 +94,21 @@ export default {
   data() {
     return {
       formMessage: {
-        gif: null,
+        image: null,
         text: null,
       },
       message: [],
     };
   },
   created() {
-    axios.get("http://localhost:3000/api/forum").then((response) => {
+    axios.get("http://localhost:3000/api/forum")
+    .then((response) => {
       this.message = response.data.result;
       console.log(this.message);
     });
   },
   methods: {
-    postGif(e) {
+    postImage(e) {
       e.preventDefault();
       axios
         .post("http://localhost:3000/api/forum", this.formMessage)
