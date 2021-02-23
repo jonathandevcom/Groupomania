@@ -1,4 +1,5 @@
 <template>
+<main>
   <section class="container container-centered">
     <div class="row">
       <div class="mx-auto">
@@ -80,6 +81,7 @@
       </div>
     </div>
   </section>
+</main>
 </template>
 
 <script>
@@ -109,7 +111,7 @@ export default {
           localStorage.setItem("jwt", response.data.token);
           localStorage.setItem("userId", response.data.userId);
           response.headers = { Authorization: "Bearer " + response.data.token };
-          //    this.token = response.data.token;
+
              window.location.href = "/forum";
         })
 
@@ -129,7 +131,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container-centered {
   display: flex;
   justify-content: center;

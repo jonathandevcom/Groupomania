@@ -1,7 +1,7 @@
 <template>
-      <main>
-        <h1 class="bientot-disponible">🏗️ Bientôt disponible 🏗️</h1>
-     </main>
+      <div>
+        <h1 class="bientotDisponible">🏗️ Bientôt disponible 🏗️</h1>
+     </div>
 </template>
 
 <script>
@@ -10,8 +10,8 @@ export default {
 };
 </script>
 
-<style>
-.bientot-disponible {
+<style scoped>
+.bientotDisponible {
   display: flex;
   justify-content: center;
   align-items: center;

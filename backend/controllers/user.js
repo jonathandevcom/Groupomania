@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const db = require("../middleware/connect");
+const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
 const schema = require("../middleware/schemaPassword.js");
 
@@ -10,7 +10,6 @@ exports.login = async (req, res) => {
     if (!userName || !password) {
       return res.status(400);
     }
-    
     db.query(
       "SELECT * FROM users WHERE userName = ?",
       [userName],
@@ -20,7 +19,7 @@ exports.login = async (req, res) => {
           !results ||
           !(await bcrypt.compare(password, results[0].password))
         ) {
-          res.status(400).json(error("User name or email already taken"));
+          res.status(400).json(error("password"));
         } else {
           //console.log('The token is: ' + token);
           res.status(200).json({
@@ -76,7 +75,7 @@ exports.createOneUser = (req, res) => {
             res.status(400).json(error(err.message));
           } else {
             if (result[0] != undefined) {
-              res.status(404).json(error("User name or email already taken"));
+              res.status(400).json(error("User name or email already taken"));
             } else {
               let hashedPassword = await bcrypt.hash(req.body.password, 8);
               db.query(
@@ -86,34 +85,21 @@ exports.createOneUser = (req, res) => {
                   req.body.userName,
                   hashedPassword,
                   req.body.bio,
-                  req.file.filename,
-                  // req.file
+                  req.body.photo.name
+                  //req.file.name,
+                 // req.file
                 ],
                 (err, result) => {
                   if (err) {
+                    console.log(req.body.photo);
+
                     res.status(400).json(error(err.message));
-                  } else {
-                    db.query(
-                      "SELECT * FROM users WHERE userName = ?",
-                      [
-                        req.body.id,
-                        req.body.email,
-                        req.body.userName,
-                        hashedPassword,
-                        req.body.bio,
-                        req.body.isAdmin,
-                        req.file.filename,
-                        //req.file
-                      ],
-                      (err, result) => {
-                        if (err) {
-                          res.status(400).json(error(err.message));
-                        } else {
-                            res.status(201).json(success("User added"));
-                        }
+                      } else {
+                        console.log(req.body.photo);
+                        res.status(201).json(success("User added"));
                       }
-                    );
-                  }
+                   // );
+                //  }
                 }
               );
             }

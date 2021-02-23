@@ -12,6 +12,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(helmet());
 
+/* app.get('/', (req, res)=> {
+  res.redirect(304, 'http://localhost:8080');
+ }),
+*/
 ///// Accès control pour éviter les erreurs de CORS
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

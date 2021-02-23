@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
-const multer = require('../middleware/multer-profile')
-const limiter = require('../middleware/limiter')
+const multer = require('../middleware/multer-profile');
+const limiter = require('../middleware/limiter');
+const auth = require('../middleware/auth');
 
 router.post('/login', limiter, userCtrl.login);
 
@@ -13,7 +14,7 @@ router.route('/')
 router.route('/:id')
     .post(multer, userCtrl.selectOneUser)
     .get(userCtrl.selectOneUser)
-    .delete(userCtrl.deleteOneUser)
-    .put(multer, userCtrl.editOneUser)
+    .delete(auth, userCtrl.deleteOneUser)
+    .put(auth, multer, userCtrl.editOneUser)
 
 module.exports = router;

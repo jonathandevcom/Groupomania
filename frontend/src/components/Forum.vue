@@ -34,6 +34,7 @@
                     >
                       Publier
                     </button>
+                    
                   </form>
                 </div>
               </div>
@@ -68,6 +69,12 @@
                   >
                     Commenter
                   </button>
+                  <button v-if="idUser = message.id_users"
+                      type="submit"
+                      class="btn btn-outline-info mt-2"
+                    >
+                      Supprimer
+                    </button>
                 </div>
               </div>
               <!-- commentaire  xxxxxxxxxxxxxxxxxx -->
@@ -96,15 +103,17 @@ export default {
       formMessage: {
         image: null,
         text: null,
+        
       },
       message: [],
+      idUser: localStorage.getItem("userId"),
     };
   },
   created() {
     axios.get("http://localhost:3000/api/forum")
     .then((response) => {
       this.message = response.data.result;
-      console.log(this.message);
+      console.log(this.message[0].id_users);
     });
   },
   methods: {

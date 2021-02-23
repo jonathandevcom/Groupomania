@@ -21,9 +21,7 @@ export default {
 
 <style scoped>
 .footer {
-  position: static;
-  bottom: 0;
-  height: 60px;
+  height: 10vh;
   width: 100%;
   display: inline-block;
 }

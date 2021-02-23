@@ -1,5 +1,5 @@
 require("dotenv").config();
-const db = require("../middleware/connect");
+const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
 const fs = require('fs');
 

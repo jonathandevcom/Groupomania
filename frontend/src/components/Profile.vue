@@ -220,6 +220,8 @@
 <script>
 import axios from "axios";
 
+
+
 export default {
   name: "Profile",
   formData : {
@@ -230,25 +232,26 @@ export default {
   isAdmin: false,
   photo: "null",
     },
-  id: 78,
-
   data() {
     return {
       put_profile: false,
       delete_profile: false,
       profile: [],
       messageError: "",
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("jwt"),
     };
+   
   },
   created() {
     // ajouter l'id après users
     // Affichage de l'utilisateur
     axios
-      .get("http://localhost:3000/api/users/77" + this.id)
+      .get("http://localhost:3000/api/users/" + this.userId)
       .then((response) => {
         this.profile = response.data.result;
-        console.log(this.profile.photo);
-        
+     //   console.log(this.profile.photo);
+     //   console.log(this.userId);
       });
   },
   methods: {
@@ -258,7 +261,7 @@ export default {
       var vm = this;
       axios
         // ajouter id
-        .put("http://localhost:3000/api/users/77", this.profile)
+        .put("http://localhost:3000/api/users/" + this.userId, this.profile)
         .then(function(response) {
            let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
@@ -287,9 +290,18 @@ export default {
 
     deleteProfile(e) {
       e.preventDefault();
+      const config = {
+    headers: { Authorization: `Bearer ` + this.token }
+};
+
+//const bodyParameters = {
+//   key: "mysupersecretpassword"
+//};
+
       axios
         // ajouter id => ok fonctionne
-        .delete("http://localhost:3000/api/users/73")
+        .delete("http://localhost:3000/api/users/" + this.userId,//bodyParameters, 
+        config) 
         .then(function(response) {
           console.log(response);
           window.location.href = "/register";

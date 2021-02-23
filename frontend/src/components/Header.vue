@@ -10,7 +10,7 @@
         <li v-if="token" class="right_place"><a href="/forum">Forum</a></li>
         <li v-else class="right_place"><a href="/">Accueil</a></li>
 
-        <li v-if="token"><a href="/profil">Profil</a></li>
+        <li v-if="token"><a href="/profile">Profile</a></li>
         <li v-else><a href="/login">Connexion</a></li>
 
         <li v-if="token" v-on:click="logout">
@@ -36,8 +36,8 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.token) {
-      this.token = localStorage.token;
+    if (localStorage.jwt) {
+      this.token = localStorage.jwt;
     }
   },
 };
@@ -45,14 +45,13 @@ export default {
 
 <style>
 header {
-  top: 0;
-  position: static;
   width: 100%;
+  height: 10vh;
 }
 nav {
   background-color: rgb(17, 37, 65);
   color: #fff;
-  padding: 30px 60px;
+  padding: 2vh 1vh;
   display: flex;
   justify-content: space-between;
 }
@@ -88,7 +87,7 @@ nav li a:hover {
 
 @media screen and (max-width: 800px) {
   nav {
-    padding: 15px 0 2px 0;
+    padding: 2vh 0 2px 0;
   }
 }
 

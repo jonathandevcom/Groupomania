@@ -14,6 +14,7 @@
               @submit="postForm"
               method="post"
               id="needs-validation"
+              enctype="multipart/form-data"
               novalidate
             >
               <div class="row">
@@ -84,18 +85,20 @@
                       name="bio"
                       placeholder="Décrivez-vous en quelques mots"
                     />
-                 <!--   <input
+                   <input
                       :value="formData.photo"
-                      @change="formData.photo = $event.target.value"
                       type="file"
-                      id="file"
-                      name="file"
+                      ref="file"
+                      id="photo"
+                      name="photo"
+                      @change="onFileUpload"
                       class="mb-1 mt-3"
                       required
-                    /> -->
+                    /> 
                   </div>
                 </div>
               </div>
+              <img :src="formData.photo" alt="">
               <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
                   <div class="float-left">
@@ -134,22 +137,32 @@ export default {
         password: null,
         bio: null,
         isAdmin: false,
-        photo: "null",
+        photo: null,
       },
       messageError: "",
     };
   },
   methods: {
-    postForm(e) {
+    onFileUpload() {
+        this.file = this.$refs.file.files[0]
+      console.log(this.file);
+    },
+    
+    async postForm(e) {
       e.preventDefault();
       var vm = this;
-      axios
+     const formData = new FormData();
+      formData.append('images-profile', this.file)
+      this.formData.photo = this.file
+      console.log(this.formData);
+      try {
+      await axios
         .post("http://localhost:3000/api/users", this.formData)
         .then(function(response) {
           console.log(response);
-          window.location.href = "/forum";
+     //     window.location.href = "/login";
         })
-        .catch(function(error) {
+        .catch(function(error) {  
           let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
             event.preventDefault();
@@ -160,9 +173,33 @@ export default {
           }
           console.log(error);
         });
+      }catch(error){
+        console.log(error);
+      }
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.container-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 76vh;
+}
+
+.btn-primary {
+  background-color: rgb(17, 37, 65) !important;
+  border: rgb(17, 37, 65) !important;
+  color: white !important;
+}
+
+#title {
+  color: white;
+  text-align: center;
+}
+
+.card-header {
+  background-color: rgb(17, 37, 65) !important;
+}</style>

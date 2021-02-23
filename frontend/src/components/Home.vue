@@ -78,12 +78,18 @@ for (let i = 0; i < logo.length; i++) {
 </script>
 
 <style>
-.animation {
+main {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   width: 100%;
-  height: 72vh;
+/*  height: 500px; */
+min-height: calc(100vh - 20vh);
+}
+body{
+  min-height:100vh;
+}
+.animation {
   background-color: rgb(32, 35, 48);
 }
 
