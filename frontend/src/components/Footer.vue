@@ -26,8 +26,8 @@ export default {
   display: inline-block;
 }
 
-.footer nav  {
-  display:flex;
+.footer nav {
+  display: flex;
   justify-content: space-between;
 }
 </style>

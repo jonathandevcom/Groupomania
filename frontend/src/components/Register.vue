@@ -85,7 +85,7 @@
                       name="bio"
                       placeholder="Décrivez-vous en quelques mots"
                     />
-                   <input
+                    <input
                       :value="formData.photo"
                       type="file"
                       ref="file"
@@ -94,11 +94,11 @@
                       @change="onFileUpload"
                       class="mb-1 mt-3"
                       required
-                    /> 
+                    />
                   </div>
                 </div>
               </div>
-              <img :src="formData.photo" alt="">
+              <img :src="formData.photo" alt="" />
               <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
                   <div class="float-left">
@@ -126,7 +126,6 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "Register",
   data() {
@@ -136,7 +135,6 @@ export default {
         userName: null,
         password: null,
         bio: null,
-        isAdmin: false,
         photo: null,
       },
       messageError: "",
@@ -144,36 +142,36 @@ export default {
   },
   methods: {
     onFileUpload() {
-        this.file = this.$refs.file.files[0]
-      console.log(this.file);
+      this.file = this.$refs.file.files[0];
     },
-    
+
     async postForm(e) {
       e.preventDefault();
       var vm = this;
-     const formData = new FormData();
-      formData.append('images-profile', this.file)
-      this.formData.photo = this.file
-      console.log(this.formData);
+      const formData = new FormData();
+      formData.append("email", this.formData.email);
+      formData.append("userName", this.formData.userName);
+      formData.append("password", this.formData.password);
+      formData.append("bio", this.formData.bio);
+      formData.append("photo", this.file);
       try {
-      await axios
-        .post("http://localhost:3000/api/users", this.formData)
-        .then(function(response) {
-          console.log(response);
-     //     window.location.href = "/login";
-        })
-        .catch(function(error) {  
-          let form = document.getElementById("needs-validation");
-          if (form.checkValidity(event) === false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-          } else {
-            vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
-          }
-          console.log(error);
-        });
-      }catch(error){
+        await axios
+          .post("http://localhost:3000/api/users", formData)
+          .then(function(response) {
+            console.log(response);
+          })
+          .catch(function(error) {
+            let form = document.getElementById("needs-validation");
+            if (form.checkValidity(event) === false) {
+              event.preventDefault();
+              event.stopPropagation();
+              form.classList.add("was-validated");
+            } else {
+              vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
+            }
+            console.log(error);
+          });
+      } catch (error) {
         console.log(error);
       }
     },
@@ -202,4 +200,5 @@ export default {
 
 .card-header {
   background-color: rgb(17, 37, 65) !important;
-}</style>
+}
+</style>

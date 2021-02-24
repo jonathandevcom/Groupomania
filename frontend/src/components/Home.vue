@@ -66,8 +66,6 @@
 </template>
 
 <script>
-//import axios from 'axios'
-
 export default {
   name: "Home",
 };
@@ -78,17 +76,25 @@ for (let i = 0; i < logo.length; i++) {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 main {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   width: 100%;
-/*  height: 500px; */
-min-height: calc(100vh - 20vh);
+  min-height: calc(100vh - 18vh);
 }
-body{
-  min-height:100vh;
+
+body {
+  min-height: 100vh;
+  margin: 0 auto;
 }
+
 .animation {
   background-color: rgb(32, 35, 48);
 }

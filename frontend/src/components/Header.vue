@@ -48,10 +48,11 @@ header {
   width: 100%;
   height: 10vh;
 }
+
 nav {
   background-color: rgb(17, 37, 65);
   color: #fff;
-  padding: 2vh 1vh;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
 }
@@ -87,11 +88,14 @@ nav li a:hover {
 
 @media screen and (max-width: 800px) {
   nav {
-    padding: 2vh 0 2px 0;
+    padding: 10px 5px 10px 5px;
   }
 }
 
 @media screen and (max-width: 600px) {
+  nav {
+    padding: 25px 5px 25px 5px;
+  }
   img {
     display: none;
   }

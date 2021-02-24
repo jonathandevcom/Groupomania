@@ -136,7 +136,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 76vh;
+  height: 78vh;
 }
 
 .btn-primary {

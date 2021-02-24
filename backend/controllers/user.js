@@ -85,17 +85,18 @@ exports.createOneUser = (req, res) => {
                   req.body.userName,
                   hashedPassword,
                   req.body.bio,
-                  req.body.photo.name
+                  `${req.protocol}://${req.get("host")}/images-profile/${req.file.filename}`
+                  //req.body.photo.name
                   //req.file.name,
                  // req.file
                 ],
                 (err, result) => {
                   if (err) {
-                    console.log(req.body.photo);
+                    console.log(req.file);
 
                     res.status(400).json(error(err.message));
                       } else {
-                        console.log(req.body.photo);
+                        console.log(req.file);
                         res.status(201).json(success("User added"));
                       }
                    // );
