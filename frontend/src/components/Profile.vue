@@ -1,11 +1,11 @@
 <template>
-  <section>
-    <div class="container">
+  <main>
+    <section class="container">
       <div class="row">
-        <div class="card col-12 my-5">
+        <div class="card col-12 col-xl-8 mx-auto mt-5">
           <div class="card-body">
             <img
-              id="profile_photo"
+              id="profilePhoto"
               class="img-thumbnail rounded-circle my-3 mr-4"
               v-bind:src="profile.photo"
               alt="photo profil"
@@ -29,211 +29,235 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- modifier le profile  -->
 
-    <div v-show="put_profile" class="container">
-      <div class="row m-5">
-        <div class="col-md-12 col-lg-10 offset-lg-2 col-xl-8">
+    <section v-show="put_profile" class="container">
+      <div class="row my-5">
+        <div class="col-xs-12 col-md-8 col-xl-6 mx-auto mt-5">
           <h4 v-if="messageError" class="alert alert-danger mt-4">
             {{ messageError }}
           </h4>
           <div class="card">
             <div class="card-header bg-danger text-white">
-              <h4 class="card-title text-uppercase">Modifier votre profil</h4>
+              <h4 class="card-title text-uppercase">Modifier votre profile</h4>
             </div>
             <div class="card-body">
-             
-             <div class="row">
-
-
-<!--
-               <div class="col-sm-12">
-              <form
-                @submit="modifiedProfile"
-                method="post"
-                id="needs-validation"
-                novalidate
-              >
-                  <div class="input-group">
-                    
-                    <input
-                      v-model="profile.email"
-                      type="email"
-                      class="form-control"
-                      id="email"
-                      name="email"
-                      placeholder="Email"
-                      required
-                    />
-                    <div class="invalid-feedback">
-                      Merci de saisir une adresse mail valide.
+              <div class="row">
+                <div class="col-sm-12">
+                  <form
+                    @submit="modifiedEmail"
+                    method="put"
+                    id="needs-validation"
+                    novalidate
+                  >
+                    <div class="input-group">
+                      <input
+                        v-model="profile.email"
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Merci de saisir une adresse mail valide.
+                      </div>
+                      <span class="input-group-btn">
+                        <button
+                          value="valider"
+                          id="validation"
+                          class="btn btn-outline-danger ml-2"
+                          type="submit"
+                        >
+                          Modifier votre adresse mail
+                        </button>
+                      </span>
                     </div>
-                    <span class="input-group-btn">
-                      <button 
-                      value="valider"
-                      id="validation"
-                      class="btn btn-outline-danger ml-2" 
-                      type="submit">
-                        Modifier votre adresse mail
-                      </button>
-                    </span>
-                  </div>
-
-              </form>
-</div>
--->
-
-<div class="col-sm-12">
-<form
-                @submit="modifiedProfile"
-                method="put"
-                id="needs-validation"
-                novalidate
-              >
-                  <div class="input-group mt-3">
-                    <input
-                    v-model="profile.userName"
-                      type="text"
-                      id="userName"
-                      name="userName"
-                      placeholder="Nom d'utilisateur"
-                      class="form-control"
-                      required
-                      minlength="3"
-                    />
-
-                    <span class="input-group-btn">
-                      <button class="btn btn-outline-danger ml-2" type="submit">
-                        Modifier votre nom d'utilisateur
-                      </button>
-                    </span>
-                  </div>
-</form>
-</div>
-<div class="col-sm-12">
-<form
-                @submit="modifiedProfile"
-                method="post"
-                id="needs-validation"
-                novalidate
-              >
-                  <div class="input-group mt-3">
-                    <input
-                    v-model="profile.password"
-                      type="password"
-                      class="form-control"
-                      id="password"
-                      name="password"
-                      placeholder="Mot de passe"               
-                      minlength="8"
-                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                      required
-                    />
-                    <div class="invalid-feedback">
-                     Merci de saisir un mot de passe contenant au minimun 1
-                      majuscule, 1 miniscule et un symbole.
-                    </div>
-                    <span class="input-group-btn">
-                      <button 
-                      value="valider"
-                      id="validation"
-                      class="btn btn-outline-danger ml-2" 
-                      type="submit">
-                        Modifier votre mot de passe
-                      </button>
-                    </span>
-                  </div>
-</form>
-</div>
-<div class="col-sm-12">
-<form
-                @submit="modifiedProfile"
-                method="put"
-                id="needs-validation"
-                novalidate
-              >
-                  <div class="input-group mt-3">
-                    <input
-                    v-model="profile.bio"
-                      type="text"
-                      class="form-control"
-                      id="bio"
-                      name="bio"
-                      placeholder="Décrivez-vous en quelques mots"
-                    />
-
-                    <span class="input-group-btn">
-                      <button class="btn btn-outline-danger ml-2" type="submit">
-                        Modifier votre biographie
-                      </button>
-                    </span>
-                  </div>
-</form>
-</div>
-                  <!--   <input
-                      :value="formData.photo"
-                      @change="formData.photo = $event.target.value"
-                      type="file"
-                      id="file"
-                      name="file"
-                      class="mb-1 mt-3"
-                      required
-                    /> -->
+                  </form>
                 </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- supprimer le profile -->
+                <div class="col-sm-12">
+                  <form
+                    @submit="modifiedUserName"
+                    method="put"
+                    id="needs-validation"
+                    novalidate
+                  >
+                    <div class="input-group mt-3">
+                      <input
+                        v-model="profile.userName"
+                        type="text"
+                        id="userName"
+                        name="userName"
+                        placeholder="Nom d'utilisateur"
+                        class="form-control"
+                        required
+                        minlength="3"
+                      />
 
-    <form @submit="deleteProfile" method="delete">
-      <div class="row">
-        <div
-          v-show="delete_profile"
-          class="container col-lg-6 col-sm-11 publication"
-        >
-          <div class="card mb-3 mt-3">
-            <div class="card-body">
-              <div class="col-12">
-                <h5 class="card-title text-center">
-                  Attention la suppression de votre compte sera définitive
-                </h5>
-                <span class="input-group-btn d-flex justify-content-center">
-                  <button type="submit" class="btn btn-danger">
-                    Valider la suppression
-                  </button>
-                </span>
+                      <span class="input-group-btn">
+                        <button
+                          class="btn btn-outline-danger ml-2"
+                          type="submit"
+                        >
+                          Modifier votre nom d'utilisateur
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-sm-12">
+                  <form
+                    @submit="modifiedProfile"
+                    method="put"
+                    id="needs-validation"
+                    novalidate
+                  >
+                    <div class="input-group mt-3">
+                      <input
+                        v-model="profile.password"
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Mot de passe"
+                        minlength="8"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Merci de saisir un mot de passe contenant au minimun 1
+                        majuscule, 1 miniscule et un symbole.
+                      </div>
+                      <span class="input-group-btn">
+                        <button
+                          value="valider"
+                          id="validation"
+                          class="btn btn-outline-danger ml-2"
+                          type="submit"
+                        >
+                          Modifier votre mot de passe
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-sm-12">
+                  <form
+                    @submit="modifiedProfile"
+                    method="put"
+                    id="needs-validation"
+                    novalidate
+                  >
+                    <div class="input-group mt-3">
+                      <input
+                        v-model="profile.bio"
+                        type="text"
+                        class="form-control"
+                        id="bio"
+                        name="bio"
+                        placeholder="Décrivez-vous en quelques mots"
+                      />
+
+                      <span class="input-group-btn">
+                        <button
+                          class="btn btn-outline-danger ml-2"
+                          type="submit"
+                        >
+                          Modifier votre biographie
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="col-sm-12">
+                  <form
+                    @submit="modifiedFile"
+                    method="put"
+                    id="needs-validation"
+                    novalidate
+                  >
+                    <div class="input-group mt-3">
+                      <input
+                        :value="formData.photo"
+                        type="file"
+                        ref="file"
+                        id="photo"
+                        name="photo"
+                        class="form-control"
+                        @change="onFileUpload"
+                        required
+                      />
+
+                      <span class="input-group-btn">
+                        <button
+                          class="btn btn-outline-danger ml-2"
+                          type="submit"
+                        >
+                          Modifier votre photo de profile
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </form>
-  </section>
+    </section>
+
+    <!-- supprimer le profile -->
+
+    <section>
+      <form @submit="deleteProfile" method="delete">
+        <div class="row">
+          <div
+            v-show="delete_profile"
+            class="container col-lg-6 col-sm-11 publication"
+          >
+            <div class="card mb-3 mt-3">
+              <div class="card-body">
+                <div class="col-12">
+                  <h5 class="card-title text-center">
+                    Attention la suppression de votre compte sera définitive
+                  </h5>
+                  <span class="input-group-btn d-flex justify-content-center">
+                    <button type="submit" class="btn btn-danger">
+                      Valider la suppression
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
 </template>
 
 <script>
 import axios from "axios";
 
-
-
 export default {
   name: "Profile",
-  formData : {
-  email: null,
-  userName: null,
-  password: null,
-  bio: null,
-  isAdmin: false,
-  photo: "null",
-    },
+  // à retirer ???
+
   data() {
     return {
+      formData: {
+        email: null,
+        userName: null,
+        password: null,
+        bio: null,
+        photo: null,
+      },
+
       put_profile: false,
       delete_profile: false,
       profile: [],
@@ -241,69 +265,140 @@ export default {
       userId: localStorage.getItem("userId"),
       token: localStorage.getItem("jwt"),
     };
-   
   },
   created() {
-    // ajouter l'id après users
     // Affichage de l'utilisateur
     axios
       .get("http://localhost:3000/api/users/" + this.userId)
       .then((response) => {
         this.profile = response.data.result;
-     //   console.log(this.profile.photo);
-     //   console.log(this.userId);
+        console.log(this.profile);
       });
   },
+
   methods: {
-    
-    modifiedProfile(e) {
+    modifiedUserName(e) {
       e.preventDefault();
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
       var vm = this;
       axios
-        // ajouter id
-        .put("http://localhost:3000/api/users/" + this.userId, this.profile)
+        // Modification d'un profile utilisateur
+        .put(
+          "http://localhost:3000/api/users/" + this.userId + "/editUserName",
+          this.profile,
+          config
+        )
         .then(function(response) {
-           let form = document.getElementById("needs-validation");
-          if (form.checkValidity(event) === false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-          } else {
-            console.log(response);
-          }
-          
-         // window.location.reload();
+          console.log(response);
+          window.location.reload();
         })
         .catch(function(error) {
+          vm.messageError = "Nom d'utilisateur déjà utilisé";
+          console.log(error);
+        });
+    },
+
+    modifiedEmail(e) {
+      e.preventDefault();
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
+      var vm = this;
+      axios
+        // Modification d'un profile utilisateur
+        .put(
+          "http://localhost:3000/api/users/" + this.userId + "/editEmail",
+          this.profile,
+          config
+        )
+        .then(function(response) {
           let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
             event.preventDefault();
             event.stopPropagation();
             form.classList.add("was-validated");
+            console.log(response);
           } else {
-            vm.messageError = "Nom d'utilisateur déjà utilisé";
+            window.location.reload();
           }
+        })
+        .catch(function(error) {
+          vm.messageError = "Email déjà utilisé";
           console.log(error);
         });
     },
 
+    modifiedProfile(e) {
+      e.preventDefault();
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
+      var vm = this;
+      axios
+        // Modification d'un profile utilisateur
+        .put(
+          "http://localhost:3000/api/users/" + this.userId,
+          this.profile,
+          config
+        )
+        .then(function(response) {
+          console.log(response);
+          window.location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+          vm.messageError =
+            "Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.";
+        });
+    },
+
+    onFileUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+    async modifiedFile(e) {
+      e.preventDefault();
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
+      const formData = new FormData();
+      formData.append("email", this.profile.email);
+      formData.append("userName", this.profile.userName);
+      formData.append("password", this.profile.password);
+      formData.append("bio", this.profile.bio);
+      formData.append("photo", this.file);
+      try {
+        await axios
+          // Modification d'un profile utilisateur
+          .put(
+            "http://localhost:3000/api/users/" + this.userId + "/editFile",
+            formData,
+            config
+          )
+          .then(function(response) {
+            console.log(response);
+            window.location.reload();
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     deleteProfile(e) {
       e.preventDefault();
       const config = {
-    headers: { Authorization: `Bearer ` + this.token }
-};
-
-//const bodyParameters = {
-//   key: "mysupersecretpassword"
-//};
-
+        headers: { Authorization: `Bearer ` + this.token },
+      };
       axios
-        // ajouter id => ok fonctionne
-        .delete("http://localhost:3000/api/users/" + this.userId,//bodyParameters, 
-        config) 
+        // Suppression d'un utilisateur
+        .delete("http://localhost:3000/api/users/" + this.userId, config)
         .then(function(response) {
           console.log(response);
+          localStorage.clear();
           window.location.href = "/register";
         })
         .catch(function(error) {
@@ -314,10 +409,29 @@ export default {
 };
 </script>
 
-<style>
-#profile_photo {
+<style scoped>
+#profilePhoto {
   float: left;
   width: 150px;
   height: 150px;
+}
+
+.btn-primary {
+  background-color: rgb(17, 37, 65) !important;
+  border: rgb(17, 37, 65) !important;
+  color: white !important;
+}
+
+#title {
+  color: white;
+  text-align: center;
+}
+
+.card-header {
+  background-color: rgb(17, 37, 65) !important;
+}
+
+#photo {
+  border: none !important;
 }
 </style>

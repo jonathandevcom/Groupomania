@@ -2,8 +2,56 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
+const fs = require('fs');
+
 const schema = require("../middleware/schemaPassword.js");
 
+// Création d'un nouvel utilisateur
+exports.createOneUser = (req, res) => {
+  if (schema.validate(req.body.password)) {
+    if (req.body.userName) {
+      db.query(
+        "SELECT * FROM users WHERE userName = ? OR email = ?",
+        [req.body.userName, req.body.email],
+        async (err, result) => {
+          if (err) {
+            res.status(400).json(error(err.message));
+          } else {
+            if (result[0] != undefined) {
+              res.status(400).json(error("User name or email already taken"));
+            } else {
+              let hashedPassword = await bcrypt.hash(req.body.password, 8);
+              db.query(
+                `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
+                [
+                  req.body.email,
+                  req.body.userName,
+                  hashedPassword,
+                  req.body.bio,
+                  `${req.protocol}://${req.get("host")}/images-profile/${req.file.filename}`
+                ],
+                (err, result) => {
+                  if (err) {
+                    res.status(400).json(error(err.message));
+                      } else {
+                        console.log(req.file);
+                        res.status(201).json(success("User added"));
+                      }
+                }
+              );
+            }
+          }
+        }
+      );
+    } else {
+      res.status(404).json(error("No name value"));
+    }
+  } else {
+    res.status(400).json(error("Password no accept"));
+  }
+};
+
+// Connexion
 exports.login = async (req, res) => {
   try {
     const { userName, password } = req.body;
@@ -14,14 +62,13 @@ exports.login = async (req, res) => {
       "SELECT * FROM users WHERE userName = ?",
       [userName],
       async (error, results) => {
-        console.log(results);
+       // console.log(results[0].photo);
         if (
           !results ||
           !(await bcrypt.compare(password, results[0].password))
         ) {
           res.status(400).json(error("password"));
         } else {
-          //console.log('The token is: ' + token);
           res.status(200).json({
             userId: results[0].id,
             token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
@@ -34,6 +81,25 @@ exports.login = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+// Récupération d'un utilisateur avec son id
+exports.selectOneUser = (req, res) => {
+  db.query(
+    "SELECT * FROM users WHERE id = ?",
+    [req.params.id],
+    (err, result) => {
+      if (err) {
+        res.status(400).json(error(err.message));
+      } else {
+        if (result[0] != undefined) {
+          res.status(200).json(success(result[0]));
+        } else {
+          res.status(404).json(error("Wrong id"));
+        }
+      }
+    }
+  );
 };
 
 // Récupation tous les utilisateurs
@@ -63,60 +129,9 @@ exports.selectAllUsers = (req, res) => {
   }
 };
 
-// Création d'un nouvel utilisateur
-exports.createOneUser = (req, res) => {
-  if (schema.validate(req.body.password)) {
-    if (req.body.userName) {
-      db.query(
-        "SELECT * FROM users WHERE userName = ? OR email = ?",
-        [req.body.userName, req.body.email],
-        async (err, result) => {
-          if (err) {
-            res.status(400).json(error(err.message));
-          } else {
-            if (result[0] != undefined) {
-              res.status(400).json(error("User name or email already taken"));
-            } else {
-              let hashedPassword = await bcrypt.hash(req.body.password, 8);
-              db.query(
-                `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
-                [
-                  req.body.email,
-                  req.body.userName,
-                  hashedPassword,
-                  req.body.bio,
-                  `${req.protocol}://${req.get("host")}/images-profile/${req.file.filename}`
-                  //req.body.photo.name
-                  //req.file.name,
-                 // req.file
-                ],
-                (err, result) => {
-                  if (err) {
-                    console.log(req.file);
-
-                    res.status(400).json(error(err.message));
-                      } else {
-                        console.log(req.file);
-                        res.status(201).json(success("User added"));
-                      }
-                   // );
-                //  }
-                }
-              );
-            }
-          }
-        }
-      );
-    } else {
-      res.status(404).json(error("No name value"));
-    }
-  } else {
-    res.status(400).json(error("Password no accept"));
-  }
-};
-
 // suppression d'un utilisateur
 exports.deleteOneUser = (req, res) => {
+  
   db.query(
     "SELECT * FROM users WHERE id = ?",
     [req.params.id],
@@ -125,6 +140,7 @@ exports.deleteOneUser = (req, res) => {
         res.status(400).json(error(err.message));
       } else {
         if (result[0] != undefined) {
+          const filename = result[0].photo.split('http://localhost:3000/images-profile/')[1];  
           db.query(
             "DELETE FROM users WHERE id = ?",
             [req.params.id],
@@ -133,6 +149,7 @@ exports.deleteOneUser = (req, res) => {
                 res.status(400).json(error(err.message));
               } else {
                 res.status(200).json(success("User deleted"));
+                fs.unlinkSync(`images-profile/${filename}`);
               }
             }
           );
@@ -172,21 +189,6 @@ exports.editOneUser = (req, res) => {
                   if (result[0] != undefined) {
                     res.json(error("same name"));
                   } else {
-                /*  
-                    db.query(
-                      "SELECT * FROM users WHERE userName = ?",
-                      [req.body.userName],
-                      async (err, result) => {
-                        if (err) {
-                          res.status(400).json(error(err.message));
-                        } else {
-                          if (result[0] != undefined) {
-                            res.status(404).json(error("User name already taken"));
-                          } else {
-
-*/
-
-
                     let hashedPassword = await bcrypt.hash(req.body.password, 8);
                     db.query(
                       "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
@@ -209,9 +211,7 @@ exports.editOneUser = (req, res) => {
                   }
                 }
               }
-
-      //      )}}}
-            
+           
             );
           } else {
             res.json(error("Wrong id"));
@@ -227,21 +227,206 @@ exports.editOneUser = (req, res) => {
 }
 };
 
-// Récupération d'un utilisateur avec son id
-exports.selectOneUser = (req, res) => {
-  db.query(
-    "SELECT * FROM users WHERE id = ?",
-    [req.params.id],
-    (err, result) => {
-      if (err) {
-        res.status(400).json(error(err.message));
-      } else {
-        if (result[0] != undefined) {
-          res.status(200).json(success(result[0]));
+exports.editUserName = (req, res) => {
+   if (req.body.userName) {
+     db.query(
+       "SELECT * FROM users WHERE id = ?",
+      [req.params.id],
+      (err, result) => {
+        if (err) {
+          res.json(error(err.message));
         } else {
-          res.status(404).json(error("Wrong id"));
+          if (result[0] != undefined) {
+            db.query(
+              "SELECT * FROM users WHERE userName= ? AND id != ?",
+              [
+                req.body.email,
+                req.body.userName,
+                req.body.password,
+                req.body.bio,
+                req.body.photo,
+              ],
+              async (err, result) => {
+                if (err) {
+                  res.json(error(err.message));
+                } else {
+                  if (result[0] != undefined) {
+                    res.json(error("same name"));
+                  } else {
+                    db.query(
+                      "SELECT * FROM users WHERE userName = ?",
+                      [req.body.userName],
+                      async (err, result) => {
+                        if (err) {
+                          res.status(400).json(error(err.message));
+                        } else {
+                          if (result[0] != undefined) {
+                            res.status(404).json(error("User name already taken"));
+                          } else {
+                    let hashedPassword = await bcrypt.hash(req.body.password, 8);
+                    db.query(
+                      "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
+                      [
+                        req.body.email,
+                        req.body.userName,
+                        hashedPassword,
+                        req.body.bio,
+                        req.body.photo,
+                        req.params.id,
+                      ],
+                      (err, result) => {
+                        if (err) {
+                          res.json(error(err.message));
+                        } else {
+                          res.json(success(true));
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+            )}}}
+            );
+          } else {
+            res.json(error("Wrong id"));
+          }
         }
       }
-    }
-  );
+    );
+  } else {
+    res.json(error("no name value"));
+  }
 };
+
+exports.editEmail = (req, res) => {
+  if (req.body.userName) {
+    db.query(
+      "SELECT * FROM users WHERE id = ?",
+     [req.params.id],
+     (err, result) => {
+       if (err) {
+         res.json(error(err.message));
+       } else {
+         if (result[0] != undefined) {
+           db.query(
+             "SELECT * FROM users WHERE userName= ? AND id != ?",
+             [
+               req.body.email,
+               req.body.userName,
+               req.body.password,
+               req.body.bio,
+               req.body.photo,
+             ],
+             async (err, result) => {
+               if (err) {
+                 res.json(error(err.message));
+               } else {
+                 if (result[0] != undefined) {
+                   res.json(error("same name"));
+                 } else {
+                   db.query(
+                     "SELECT * FROM users WHERE email = ?",
+                     [req.body.email],
+                     async (err, result) => {
+                       if (err) {
+                         res.status(400).json(error(err.message));
+                       } else {
+                         if (result[0] != undefined) {
+                           res.status(404).json(error("Email name already taken"));
+                         } else {
+                   let hashedPassword = await bcrypt.hash(req.body.password, 8);
+                   db.query(
+                     "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
+                     [
+                       req.body.email,
+                       req.body.userName,
+                       hashedPassword,
+                       req.body.bio,
+                       req.body.photo,
+                       req.params.id,
+                     ],
+                     (err, result) => {
+                       if (err) {
+                         res.json(error(err.message));
+                       } else {
+                         res.json(success(true));
+                       }
+                     }
+                   );
+                 }
+               }
+             }
+           )}}}
+           );
+         } else {
+           res.json(error("Wrong id"));
+         }
+       }
+     }
+   );
+ } else {
+   res.json(error("no name value"));
+ }
+};
+
+
+// modification d'un utilisateur
+exports.editFile = (req, res) => {
+  if (req.body.userName) {
+     db.query(
+       "SELECT * FROM users WHERE id = ?",
+      [req.params.id],
+      (err, result) => {
+        if (err) {
+          res.json(error(err.message));
+        } else 
+        {
+          if (result[0] != undefined) {
+            const filename = result[0].photo.split('http://localhost:3000/images-profile/')[1];  
+            fs.unlinkSync(`images-profile/${filename}`);
+            db.query(
+              "SELECT * FROM users WHERE userName= ? AND id != ?",
+              [
+                req.body.email,
+                req.body.userName,
+                req.body.password,
+                req.body.bio,
+                req.body.photo,
+              ],
+              async (err, result) => {
+                if (err) {
+                  res.json(error(err.message));
+                } else {
+                  if (result[0] != undefined) {
+                    res.json(error("same name"));
+                  } else {
+
+                    db.query(
+                      "UPDATE users SET photo = ? WHERE id = ?",
+                      [
+                        `${req.protocol}://${req.get("host")}/images-profile/${req.file.filename}`, 
+                        req.params.id,
+                      ],
+                      (err, result) => {
+                        if (err) {
+                          res.json(error(err.message));
+                        } else {
+                          res.json(success(true));
+                        }
+                      }
+                    );
+                  }
+                }
+              } );
+          } else {
+            res.json(error("Wrong id"));
+          }
+        }
+      }
+    );
+  } else {
+    res.json(error("no name value"));
+  }
+} 
+
+

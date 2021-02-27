@@ -33,6 +33,7 @@ app.use((req, res, next) => {
 ///// Enregistrement des routeurs
 app.use("/api/users", userRoutes);
 app.use("/api/forum", messageRoutes);
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images-profile", express.static(path.join(__dirname, "images-profile")));
+app.use("/images-gif", express.static(path.join(__dirname, "images-gif")));
 
 module.exports = app;

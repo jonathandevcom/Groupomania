@@ -112,7 +112,7 @@ export default {
           localStorage.setItem("userId", response.data.userId);
           response.headers = { Authorization: "Bearer " + response.data.token };
 
-             window.location.href = "/forum";
+           window.location.href = "/forum";
         })
 
         .catch(function(error) {

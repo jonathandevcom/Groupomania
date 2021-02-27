@@ -1,7 +1,7 @@
 <template>
-      <div>
+      <main>
         <h1 class="bientotDisponible">🏗️ Bientôt disponible 🏗️</h1>
-     </div>
+     </main>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <main class="container">
     <div class="row top-register m-5">
       <div class="offset-md-2 col-md-8 offset-md-2">
         <h4 v-if="messageError" class="alert alert-danger mt-4">
@@ -121,7 +121,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </main>
 </template>
 
 <script>
@@ -159,6 +159,7 @@ export default {
           .post("http://localhost:3000/api/users", formData)
           .then(function(response) {
             console.log(response);
+            window.location.href = "/login";
           })
           .catch(function(error) {
             let form = document.getElementById("needs-validation");

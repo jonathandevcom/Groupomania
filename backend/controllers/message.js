@@ -51,10 +51,14 @@ exports.postOneMessage = (req, res) => {
 
 // Création d'un message
 exports.createOneMessage = (req, res) => {
-  console.log(req.file, req.body.text);
+  console.log(req.file);
   db.query(
-    "INSERT INTO messages (image, text) VALUE (?, ?)",
-    [req.file.filename, req.body.text],
+    "INSERT INTO messages (id_users, image, text) VALUES (?, ?, ?)",
+    [
+      req.body.id_users, 
+      `${req.protocol}://${req.get("host")}/images-gif/${req.file.filename}`,
+      req.body.text,
+    ],
     (err, result) => {
       if (err) {
         res.json(error(err.message));

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <main>
     <div class="container">
       <div class="row ">
         
@@ -12,10 +12,11 @@
                   <form @submit="postImage" action="post">
                     <input
                       :value="formMessage.image"
-                      @change="formMessage.image = $event.target.value"
                       type="file"
-                      id="file"
-                      name="file"
+                      ref="file"
+                      id="image"
+                      name="image"
+                      @change="OnImageUpload"
                       class="mb-3 mt-1"
                       required
                     />
@@ -52,7 +53,7 @@
           class="col-lg-12 col-sm-12 col-xs-12 publication"
         >
           <div class="card mb-3 mt-3">
-            <img src="message.image" class="card-img-top image" alt="message.image" />
+            <img v-bind:src="message.image" class="card-img-top image" alt="message.image" />
             <div class="card-body">
               <p class="card-text">
                 {{ message.text }}
@@ -90,7 +91,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </main>
 </template>
 
 <script>
@@ -100,34 +101,44 @@ export default {
   name: "Forum",
   data() {
     return {
+      message: [],
       formMessage: {
         image: null,
         text: null,
-        
       },
-      message: [],
-      idUser: localStorage.getItem("userId"),
     };
   },
   created() {
     axios.get("http://localhost:3000/api/forum")
     .then((response) => {
       this.message = response.data.result;
-      console.log(this.message[0].id_users);
+      console.log(this.message);
     });
   },
   methods: {
-    postImage(e) {
+  OnImageUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+
+   async postImage(e) {
       e.preventDefault();
-      axios
-        .post("http://localhost:3000/api/forum", this.formMessage)
+      const formData = new FormData();
+      formData.append("id_users", localStorage.getItem("userId"));
+      formData.append("image", this.file);
+      formData.append("text", this.formMessage.text);
+      try {
+       await axios
+        .post("http://localhost:3000/api/forum", formData)
         .then(function(response) {
           console.log(response);
-          // window.location.reload();
+          window.location.reload();
         })
         .catch(function(error) {
           console.log(error);
         });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
