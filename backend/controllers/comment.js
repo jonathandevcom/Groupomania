@@ -53,16 +53,16 @@ exports.createOneComment = (req, res) => {
   // Suppression d'un commentaire
   exports.deleteOneComment = (req, res) => {
     db.query(
-      "SELECT * FROM comments WHERE id = ?",
-      [req.params.id],
+      "SELECT * FROM comments WHERE id_messages = ?",
+      [req.params.id_messages],
       (err, result) => {
         if (err) {
           res.status(400).json(error(err.message));
         } else {
           if (result[0] != undefined) {
             db.query(
-              "DELETE FROM comments WHERE id = ?",
-              [req.params.id],
+              "DELETE FROM comments WHERE id_messages = ?",
+              [req.params.id_messages],
               (err, result) => {
                 if (err) {
                   res.status(400).json(error(err.message));

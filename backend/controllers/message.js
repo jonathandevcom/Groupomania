@@ -3,7 +3,7 @@ const { success, error } = require("../middleware/functions");
 const fs = require('fs');
 
 // JOINT LES TROIS TABLES
-// SELECT * FROM users LEFT JOIN messages ON users.id = messages.id_users_messages LEFT JOIN comments ON messages.id_users_messages = comments.id_users_comments
+// SELECT * FROM users LEFT JOIN messages ON users.id = messages.id_users_messages     LEFT JOIN comments ON messages.id_users_messages = comments.id_users_comments
 //LEFT JOIN comments ON messages.id = comments.id_messages
 
 
@@ -24,7 +24,8 @@ exports.getAllMessages = (req, res, next) => {
   } else if (req.query.max != undefined) {
     res.status(404).json(error("Wrong max value"));
   } else {
-    db.query("SELECT * FROM messages", (err, result) => {
+    db.query("SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id_users", (err, result) => {
+      // SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id
       if (err) {
         res.status(400).json(error(err.message));
       } else {
@@ -57,8 +58,8 @@ exports.createOneMessage = (req, res) => {
 // suppression d'un message
 exports.deleteOneMessage = (req, res) => {
   db.query(
-    "SELECT * FROM messages WHERE id = ?",
-    [req.params.id],
+    "SELECT * FROM messages WHERE id_messages = ?",
+    [req.params.id_messages],
     (err, result) => {
       if (err) {
         res.status(400).json(error(err.message));
@@ -66,8 +67,8 @@ exports.deleteOneMessage = (req, res) => {
         if (result[0] != undefined) {
           const filename = result[0].image.split('http://localhost:3000/images-gif/')[1];
           db.query(
-            "DELETE FROM messages WHERE id = ?",
-            [req.params.id],
+            "DELETE FROM messages WHERE id_messages = ?",
+            [req.params.id_messages],
             (err, result) => {
               if (err) {
                 res.status(400).json(error(err.message));

@@ -37,31 +37,20 @@
             </div>
           </div>
         </div>
-        <!-- Affichage des gifs + commentaires -->
-
-        <!--
-        <div v-for="message in messages" :key="message.id">
-        <p>    </p> <p>{{ message }}</p>
-           <div v-for="comment in message.comment" :key="comment.id">
-             <p> {{ comment }} </p>
-           </div>
-        </div>
--->
-
         <div
           v-for="message in messages.slice().reverse()"
-          :key="message.id"
+          :key="message.id_messages"
           class="col-lg-8 mx-auto col-sm-12 col-xs-12 publication"
         >
           <div class="card mb-3 mt-3">
             <div class="d-flex flex-row user-info p-3">
               <img
                 class="rounded-circle"
-                src="https://i.imgur.com/RpzrMR2.jpg"
+                v-bind:src="message.photo"
                 width="40"
               />
               <div class="d-flex flex-column justify-content-start ml-2">
-                <span class="d-block font-weight-bold name">Marry Andrews</span
+                <span class="d-block font-weight-bold name">{{ message.userName }}</span
                 ><!--<span class="date text-black-50">Shared publicly - Jan 2020</span>-->
               </div>
             </div>
@@ -83,7 +72,7 @@
                   <div class="p-2 flex-shrink-1 bd-highlight">
                     <form method="delete">
                       <button
-                        v-on:click="deleteMessage(message.id)"
+                        v-on:click="deleteMessage(message.id_messages)"
                         type="submit"
                         class="btn btn-outline-info mt-2"
                       >
@@ -133,7 +122,7 @@
                 required
               />
               <button
-                v-on:click.prevent="postComment(message.id)"
+                v-on:click.prevent="postComment(message.id_messages)"
                 type="submit"
                 class="btn btn-outline-info mt-2 ml-3"
               >
@@ -144,12 +133,10 @@
         
 
           <div v-for="comment in comments.slice().reverse()"
-          :key="comment.id_comment" 
+          :key="comment.id_comments" 
           >
-          <div v-if="comment.id_messages === message.id" >
+          <div v-if="comment.id_messages === message.id_messages" >
             <div class="card-body border border-3 mt-3">
-          
-        
               <p class="card-text">
                 {{ comment.comment }}
               </p>
