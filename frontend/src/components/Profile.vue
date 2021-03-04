@@ -6,12 +6,13 @@
           <div class="card-body">
             <img
               id="profilePhoto"
-              class="img-thumbnail rounded-circle my-3 mr-4"
+              class="img-thumbnail rounded-circle my-3 mr-4 d-block"
               v-bind:src="profile.photo"
               alt="photo profil"
             />
             <h5 class="card-title mt-4">{{ profile.userName }}</h5>
-            <p class="card-text">
+            
+            <p v-if="profile.bio != 'null'" class="card-text">
               {{ profile.bio }}
             </p>
             <button
@@ -31,10 +32,13 @@
       </div>
     </section>
 
+
+
+
     <!-- modifier le profile  -->
 
     <section v-show="put_profile" class="container">
-      <div class="row my-5">
+      <div class="row mb-5">
         <div class="col-xs-12 col-md-8 col-xl-6 mx-auto mt-5">
           <h4 v-if="messageError" class="alert alert-danger mt-4">
             {{ messageError }}
@@ -68,7 +72,7 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          id="validation"
+                          
                           class="btn btn-outline-danger ml-2"
                           type="submit"
                         >
@@ -83,7 +87,6 @@
                   <form
                     @submit="modifiedUserName"
                     method="put"
-                    id="needs-validation"
                     novalidate
                   >
                     <div class="input-group mt-3">
@@ -113,7 +116,6 @@
                   <form
                     @submit="modifiedProfile"
                     method="put"
-                    id="needs-validation"
                     novalidate
                   >
                     <div class="input-group mt-3">
@@ -135,7 +137,7 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          id="validation"
+                          
                           class="btn btn-outline-danger ml-2"
                           type="submit"
                         >
@@ -149,7 +151,6 @@
                   <form
                     @submit="modifiedProfile"
                     method="put"
-                    id="needs-validation"
                     novalidate
                   >
                     <div class="input-group mt-3">
@@ -178,7 +179,6 @@
                   <form
                     @submit="modifiedFile"
                     method="put"
-                    id="needs-validation"
                     novalidate
                   >
                     <div class="input-group mt-3">
@@ -246,9 +246,7 @@ import axios from "axios";
 
 export default {
   name: "Profile",
-  // à retirer ???
-
-  data() {
+ data() {
     return {
       formData: {
         email: null,

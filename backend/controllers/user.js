@@ -21,6 +21,27 @@ exports.createOneUser = (req, res) => {
               res.status(400).json(error("User name or email already taken"));
             } else {
               let hashedPassword = await bcrypt.hash(req.body.password, 8);
+              if (req.file === undefined) {
+                let nameAvatar = "http://localhost:3000/images-profile/avatar.png";
+                db.query(
+                  `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
+                  [
+                    req.body.email,
+                    req.body.userName,
+                    hashedPassword,
+                    req.body.bio,
+                    nameAvatar,
+                  ],
+                  (err, result) => {
+                    if (err) {
+                      res.status(400).json(error(err.message));
+                        } else {
+                          
+                          res.status(201).json(success("User added"));
+                        }
+                  }
+                )
+              } else {
               db.query(
                 `INSERT INTO users (email, userName, password, bio, photo) VALUES (?, ?, ?, ?, ?)`,
                 [
@@ -38,7 +59,7 @@ exports.createOneUser = (req, res) => {
                         res.status(201).json(success("User added"));
                       }
                 }
-              );
+              )}
             }
           }
         }
@@ -53,35 +74,44 @@ exports.createOneUser = (req, res) => {
 
 // Connexion
 exports.login = async (req, res) => {
-  try {
-    const { userName, password } = req.body;
-    if (!userName || !password) {
-      return res.status(400);
+if (req.body.userName) {
+  db.query(
+    "SELECT * FROM users WHERE userName = ?",
+    [req.body.userName],
+    async (err, results) => {
+  //    console.log(results[0].userName);
+     if (err) {
+      res.status(400).json(error(err.message));
+     } else {
+      if (
+        (!results ||
+        !(await bcrypt.compare(req.body.password, results[0].password)))
+     // || (req.body.userName != results[0].userName)
+     ) {
+        res.status(400).json(error("error password"));
+      } else {
+        res.status(200).json({
+          userId: results[0].id,
+          token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          }),
+        });
+} 
+}
+    })
+  } else {
+    res.status(404).json(error("No name value"));
     }
-    db.query(
-      "SELECT * FROM users WHERE userName = ?",
-      [userName],
-      async (error, results) => {
-       // console.log(results[0].photo);
-        if (
-          !results ||
-          !(await bcrypt.compare(password, results[0].password))
-        ) {
-          res.status(400).json(error("password"));
-        } else {
-          res.status(200).json({
-            userId: results[0].id,
-            token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            }),
-          });
-        }
-      }
-    );
-  } catch (error) {
-    console.log(error);
   }
-};
+
+
+
+
+
+
+
+
+
 
 // Récupération d'un utilisateur avec son id
 exports.selectOneUser = (req, res) => {
@@ -131,7 +161,6 @@ exports.selectAllUsers = (req, res) => {
 
 // suppression d'un utilisateur
 exports.deleteOneUser = (req, res) => {
-  
   db.query(
     "SELECT * FROM users WHERE id = ?",
     [req.params.id],
@@ -149,7 +178,9 @@ exports.deleteOneUser = (req, res) => {
                 res.status(400).json(error(err.message));
               } else {
                 res.status(200).json(success("User deleted"));
-                fs.unlinkSync(`images-profile/${filename}`);
+                if (filename != "avatar.png") {
+                  fs.unlinkSync(`images-profile/${filename}`);
+              }
               }
             }
           );
@@ -383,7 +414,9 @@ exports.editFile = (req, res) => {
         {
           if (result[0] != undefined) {
             const filename = result[0].photo.split('http://localhost:3000/images-profile/')[1];  
-            fs.unlinkSync(`images-profile/${filename}`);
+            if (filename != "avatar.png") {
+              fs.unlinkSync(`images-profile/${filename}`);
+          }
             db.query(
               "SELECT * FROM users WHERE userName= ? AND id != ?",
               [

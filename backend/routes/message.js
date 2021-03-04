@@ -6,12 +6,10 @@ const multer = require('../middleware/multer-gif');
 
 router.route('/')
 // ajouter l'auth
-    .get(messageCtrl.postAllMessages)
+    .get(messageCtrl.getAllMessages)
     .post(multer, messageCtrl.createOneMessage)
  
 router.route('/:id')
-    .get(auth, messageCtrl.postOneMessage)
-    .delete(auth, messageCtrl.deleteOneMessage)
-    .put(auth, multer, messageCtrl.editOneMessage)
+    .delete(messageCtrl.deleteOneMessage)
 
 module.exports = router;

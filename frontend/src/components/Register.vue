@@ -93,12 +93,11 @@
                       name="photo"
                       @change="onFileUpload"
                       class="mb-1 mt-3"
-                      required
+                      
                     />
                   </div>
                 </div>
               </div>
-              <img :src="formData.photo" alt="" />
               <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
                   <div class="float-left">
@@ -136,7 +135,7 @@ export default {
         password: null,
         bio: null,
         photo: null,
-      },
+         },
       messageError: "",
     };
   },
