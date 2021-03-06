@@ -4,11 +4,17 @@ const messageCtrl = require('../controllers/comment')
 const auth = require('../middleware/auth');
 
 router.route('/')
+    // afficher tous les commentaires
     .get(messageCtrl.getAllComment)
+    // ajouter un commentaire
     .post(messageCtrl.createOneComment)
 
 router.route('/:id')
-    // ajouter auth
+    // supprimer un commentaire
     .delete(messageCtrl.deleteOneComment)
 
 module.exports = router;
+
+
+
+/////////////// ajouter auth

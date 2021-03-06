@@ -20,7 +20,6 @@ exports.getAllMessages = (req, res, next) => {
     res.status(404).json(error("Wrong max value"));
   } else {
     db.query("SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id_users", (err, result) => {
-      // SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id
       if (err) {
         res.status(400).json(error(err.message));
       } else {
@@ -35,7 +34,7 @@ exports.createOneMessage = (req, res) => {
   db.query(
     "INSERT INTO messages (id_users_messages, image, text) VALUES (?, ?, ?)",
     [
-      req.body.id_users_messages, 
+      req.body.id_users_messages,
       `${req.protocol}://${req.get("host")}/images-gif/${req.file.filename}`,
       req.body.text,
     ],
@@ -43,7 +42,7 @@ exports.createOneMessage = (req, res) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
-         res.status(201).json(success("Message added"));
+        res.status(201).json(success("Message added"));
       }
     }
   );
@@ -80,10 +79,3 @@ exports.deleteOneMessage = (req, res) => {
     }
   );
 };
-
-// SELECT * 
-// FROM messages 
-// LEFT JOIN users ON messages.id_users_messages = users.id_users
-// LEFT JOIN likes ON likes.id_users_likes = users.id_users
-
-// SELECT SUM(likes) AS numberLikes FROM likes WHERE id_messages_likes
