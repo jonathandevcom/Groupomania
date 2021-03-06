@@ -37,21 +37,25 @@
             </div>
           </div>
         </div>
+
         <div
           v-for="message in messages.slice().reverse()"
           :key="message.id_messages"
           class="col-lg-8 mx-auto col-sm-12 col-xs-12 publication"
         >
           <div class="card mb-3 mt-3">
-            <div class="d-flex flex-row user-info p-3">
+            <div v-if="message.photo" class="d-flex flex-row user-info p-3">
               <img
-                class="rounded-circle"
+                class="rounded-circle d-block"
                 v-bind:src="message.photo"
-                width="40"
+                width="50"
+                height="50"
               />
               <div class="d-flex flex-column justify-content-start ml-2">
-                <span class="d-block font-weight-bold name">{{ message.userName }}</span
-                ><!--<span class="date text-black-50">Shared publicly - Jan 2020</span>-->
+                <span class="d-block font-weight-bold name mt-3 ml-3">{{
+                  message.userName
+                }}</span>
+                <!--<span class="date text-black-50">Shared publicly - Jan 2020</span>-->
               </div>
             </div>
             <img
@@ -83,7 +87,10 @@
                 </div>
               </div>
 
-              <button type="button" class="btn btn-outline-primary">
+              <button
+              v-on:click.prevent="addLikes(message.id_messages)"
+               type="submit" 
+               class="btn btn-outline-primary">
                 <div class="like cursor">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -102,20 +109,24 @@
                 </div>
               </button>
 
-              <button
-                type="button"
-                class="btn btn-outline-primary float-right mr-2"
-              >
-                0 like
-              </button>
+              <span v-for="like in likes" :key="like.id_likes">
+                <button
+                  
+                  v-if="message.id_messages === like.id_messages_likes"
+                  type="buton"
+                  class="btn btn-outline-primary float-right mr-2"
+                >
+                  <span> {{ like.numberLikes }} </span>
+                  <span v-if="like.numberLikes < 2">like</span>
+                  <span v-else>likes</span>
+                </button>
+              </span>
             </div>
-
             <div>
               <input
                 v-model="comment"
                 type="text"
                 ref="comment"
-                id="comment"
                 name="comment"
                 class="form-control"
                 placeholder="Votre commentaire"
@@ -124,32 +135,51 @@
               <button
                 v-on:click.prevent="postComment(message.id_messages)"
                 type="submit"
-                class="btn btn-outline-info mt-2 ml-3"
+                class="btn btn-outline-info my-2 ml-3"
               >
                 Publier
               </button>
             </div>
-            
-        
 
-          <div v-for="comment in comments.slice().reverse()"
-          :key="comment.id_comments" 
-          >
-          <div v-if="comment.id_messages === message.id_messages" >
-            <div class="card-body border border-3 mt-3">
-              <p class="card-text">
-                {{ comment.comment }}
-              </p>
-           
-</div>
-</div>
-</div>
+            <div
+              v-for="comment in comments.slice().reverse()"
+              :key="comment.id_comments"
+            >
+              <div v-if="comment.id_messages_comments === message.id_messages">
+                <div class="d-flex flex-row user-info p-3">
+                  <img
+                    v-if="comment.photo"
+                    class="rounded-circle mt-3 d-block"
+                    v-bind:src="comment.photo"
+                    width="50"
+                    height="50"
+                  />
 
+                  <div class="card-body border border-3 mt-3">
+                    <h5 v-if="comment.userName">{{ comment.userName }} :</h5>
+                    <p class="card-text">
+                      {{ comment.comment }}
+                    </p>
+                  </div>
+
+                  <div class="p-2 my-auto">
+                    <form method="delete">
+                      <button
+                        v-on:click="deleteComment(comment.id_comments)"
+                        type="submit"
+                        class="btn btn-outline-info mt-2"
+                      >
+                        Supprimer
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!--   <h1 v-if="this.messages[0].id === this.comments[0].id_messages">BIENVENUE</h1> -->
   </main>
 </template>
 
@@ -163,13 +193,13 @@ export default {
       profiles: [],
       messages: [],
       comments: [],
+      likes: [],
       formMessage: {
         image: null,
         text: null,
       },
-        comment: null,
-      
-      // comment: null,
+
+      comment: null,
       userId: localStorage.getItem("userId"),
     };
   },
@@ -184,12 +214,10 @@ export default {
       console.log(this.comments);
     });
 
-    axios
-      .get("http://localhost:3000/api/users/" + this.userId)
-      .then((response) => {
-        this.profiles = response.data.result;
-        console.log(this.profiles);
-      });
+    axios.get("http://localhost:3000/api/likes").then((response) => {
+      this.likes = response.data.result;
+      console.log(this.likes);
+    });
   },
   methods: {
     OnImageUpload() {
@@ -221,7 +249,6 @@ export default {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
-      //  console.log(message);
       axios
         .delete("http://localhost:3000/api/forum/" + id, config)
         .then(function(response) {
@@ -233,17 +260,16 @@ export default {
     },
 
     async postComment(id) {
-      const formData = new FormData();
-      formData.append("id_users_comments", this.userId);
-      formData.append("id_messages", id);
-      formData.append("comment", this.comment);
-      console.log(this.comment);
       try {
         await axios
-          .post("http://localhost:3000/api/comments", formData)
+          .post("http://localhost:3000/api/comments", {
+            id_users_comments: this.userId,
+            id_messages_comments: id,
+            comment: this.comment,
+          })
           .then(function(response) {
             console.log(response);
-            //       window.location.reload();
+            window.location.reload();
           })
           .catch(function(error) {
             console.log(error);
@@ -252,6 +278,42 @@ export default {
         console.log(error);
       }
     },
+
+    deleteComment(id) {
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
+      axios
+        .delete("http://localhost:3000/api/comments/" + id, config)
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+    async addLikes(id) {
+     try {
+      await axios
+        .post("http://localhost:3000/api/likes/" + id, {
+          id_users_likes: this.userId, 
+          id_messages_likes: id,
+          likes:"",
+        })
+        .then(function(response) {
+          console.log(response);
+        //  window.location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+     } catch (error) {
+        console.log(error);
+      }
+    },
+
+
   },
 };
 </script>

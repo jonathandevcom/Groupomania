@@ -2,11 +2,6 @@ const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
 const fs = require('fs');
 
-// JOINT LES TROIS TABLES
-// SELECT * FROM users LEFT JOIN messages ON users.id = messages.id_users_messages     LEFT JOIN comments ON messages.id_users_messages = comments.id_users_comments
-//LEFT JOIN comments ON messages.id = comments.id_messages
-
-
 // Récupération de tous les messages
 exports.getAllMessages = (req, res, next) => {
   if (req.query.max != undefined && req.query.max > 0) {
@@ -35,7 +30,6 @@ exports.getAllMessages = (req, res, next) => {
   }
 };
 
-
 // Création d'un message
 exports.createOneMessage = (req, res) => {
   db.query(
@@ -59,21 +53,22 @@ exports.createOneMessage = (req, res) => {
 exports.deleteOneMessage = (req, res) => {
   db.query(
     "SELECT * FROM messages WHERE id_messages = ?",
-    [req.params.id_messages],
+    [req.params.id],
     (err, result) => {
+      console.log(result[0]);
       if (err) {
         res.status(400).json(error(err.message));
       } else {
         if (result[0] != undefined) {
           const filename = result[0].image.split('http://localhost:3000/images-gif/')[1];
           db.query(
-            "DELETE FROM messages WHERE id_messages = ?",
-            [req.params.id_messages],
+            "DELETE messages, comments FROM messages LEFT JOIN comments ON messages.id_messages = comments.id_messages_comments WHERE id_messages = ? ",
+            [req.params.id],
             (err, result) => {
               if (err) {
                 res.status(400).json(error(err.message));
               } else {
-                res.status(200).json(success("User deleted"));
+                res.status(200).json(success("Message deleted"));
                 fs.unlinkSync(`images-gif/${filename}`);
               }
             }
@@ -85,3 +80,10 @@ exports.deleteOneMessage = (req, res) => {
     }
   );
 };
+
+// SELECT * 
+// FROM messages 
+// LEFT JOIN users ON messages.id_users_messages = users.id_users
+// LEFT JOIN likes ON likes.id_users_likes = users.id_users
+
+// SELECT SUM(likes) AS numberLikes FROM likes WHERE id_messages_likes

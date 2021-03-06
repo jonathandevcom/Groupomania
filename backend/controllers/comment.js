@@ -7,10 +7,10 @@ const { success, error } = require("../middleware/functions");
 // Création d'un commentaire
 exports.createOneComment = (req, res) => {
     db.query(
-      "INSERT INTO comments (id_users_comments, id_messages, comment) VALUES (?, ?, ?)",
+      "INSERT INTO comments (id_users_comments, id_messages_comments, comment) VALUES (?, ?, ?)",
       [
         req.body.id_users_comments, 
-        req.body.id_messages,
+        req.body.id_messages_comments,
         req.body.comment,
       ],
       (err, result) => {
@@ -40,7 +40,7 @@ exports.createOneComment = (req, res) => {
     } else if (req.query.max != undefined) {
       res.status(404).json(error("Wrong max value"));
     } else {
-      db.query("SELECT * FROM comments", (err, result) => {
+      db.query("SELECT * FROM comments LEFT JOIN users ON comments.id_users_comments = users.id_users", (err, result) => {
         if (err) {
           res.status(400).json(error(err.message));
         } else {
@@ -53,16 +53,16 @@ exports.createOneComment = (req, res) => {
   // Suppression d'un commentaire
   exports.deleteOneComment = (req, res) => {
     db.query(
-      "SELECT * FROM comments WHERE id_messages = ?",
-      [req.params.id_messages],
+      "SELECT * FROM comments WHERE id_comments = ?",
+      [req.params.id],
       (err, result) => {
         if (err) {
           res.status(400).json(error(err.message));
         } else {
           if (result[0] != undefined) {
             db.query(
-              "DELETE FROM comments WHERE id_messages = ?",
-              [req.params.id_messages],
+              "DELETE FROM comments WHERE id_comments = ?",
+              [req.params.id],
               (err, result) => {
                 if (err) {
                   res.status(400).json(error(err.message));

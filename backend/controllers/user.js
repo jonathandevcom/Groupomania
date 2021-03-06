@@ -91,8 +91,8 @@ if (req.body.userName) {
         res.status(400).json(error("error password"));
       } else {
         res.status(200).json({
-          userId: results[0].id,
-          token: jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, {
+          userId: results[0].id_users,
+          token: jwt.sign({ userId: results[0].id_users }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
           }),
         });
@@ -104,19 +104,10 @@ if (req.body.userName) {
     }
   }
 
-
-
-
-
-
-
-
-
-
 // Récupération d'un utilisateur avec son id
 exports.selectOneUser = (req, res) => {
   db.query(
-    "SELECT * FROM users WHERE id = ?",
+    "SELECT * FROM users WHERE id_users = ?",
     [req.params.id],
     (err, result) => {
       if (err) {
@@ -162,7 +153,7 @@ exports.selectAllUsers = (req, res) => {
 // suppression d'un utilisateur
 exports.deleteOneUser = (req, res) => {
   db.query(
-    "SELECT * FROM users WHERE id = ?",
+    "SELECT * FROM users WHERE id_users = ?",
     [req.params.id],
     (err, result) => {
       if (err) {
@@ -171,7 +162,7 @@ exports.deleteOneUser = (req, res) => {
         if (result[0] != undefined) {
           const filename = result[0].photo.split('http://localhost:3000/images-profile/')[1];  
           db.query(
-            "DELETE FROM users WHERE id = ?",
+            "DELETE FROM users WHERE id_users = ?",
             [req.params.id],
             (err, result) => {
               if (err) {
@@ -197,7 +188,7 @@ exports.editOneUser = (req, res) => {
   if (schema.validate(req.body.password)) {
   if (req.body.userName) {
      db.query(
-       "SELECT * FROM users WHERE id = ?",
+       "SELECT * FROM users WHERE id_users = ?",
       [req.params.id],
       (err, result) => {
         if (err) {
@@ -205,7 +196,7 @@ exports.editOneUser = (req, res) => {
         } else {
           if (result[0] != undefined) {
             db.query(
-              "SELECT * FROM users WHERE userName= ? AND id != ?",
+              "SELECT * FROM users WHERE userName= ? AND id_users != ?",
               [
                 req.body.email,
                 req.body.userName,
@@ -222,7 +213,7 @@ exports.editOneUser = (req, res) => {
                   } else {
                     let hashedPassword = await bcrypt.hash(req.body.password, 8);
                     db.query(
-                      "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
+                      "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id_users = ?",
                       [
                         req.body.email,
                         req.body.userName,
@@ -261,7 +252,7 @@ exports.editOneUser = (req, res) => {
 exports.editUserName = (req, res) => {
    if (req.body.userName) {
      db.query(
-       "SELECT * FROM users WHERE id = ?",
+       "SELECT * FROM users WHERE id_users = ?",
       [req.params.id],
       (err, result) => {
         if (err) {
@@ -269,7 +260,7 @@ exports.editUserName = (req, res) => {
         } else {
           if (result[0] != undefined) {
             db.query(
-              "SELECT * FROM users WHERE userName= ? AND id != ?",
+              "SELECT * FROM users WHERE userName= ? AND id_users != ?",
               [
                 req.body.email,
                 req.body.userName,
@@ -296,7 +287,7 @@ exports.editUserName = (req, res) => {
                           } else {
                     let hashedPassword = await bcrypt.hash(req.body.password, 8);
                     db.query(
-                      "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
+                      "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id_users = ?",
                       [
                         req.body.email,
                         req.body.userName,
@@ -332,7 +323,7 @@ exports.editUserName = (req, res) => {
 exports.editEmail = (req, res) => {
   if (req.body.userName) {
     db.query(
-      "SELECT * FROM users WHERE id = ?",
+      "SELECT * FROM users WHERE id_users = ?",
      [req.params.id],
      (err, result) => {
        if (err) {
@@ -340,7 +331,7 @@ exports.editEmail = (req, res) => {
        } else {
          if (result[0] != undefined) {
            db.query(
-             "SELECT * FROM users WHERE userName= ? AND id != ?",
+             "SELECT * FROM users WHERE userName= ? AND id_users != ?",
              [
                req.body.email,
                req.body.userName,
@@ -367,7 +358,7 @@ exports.editEmail = (req, res) => {
                          } else {
                    let hashedPassword = await bcrypt.hash(req.body.password, 8);
                    db.query(
-                     "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id = ?",
+                     "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id_users = ?",
                      [
                        req.body.email,
                        req.body.userName,
@@ -405,7 +396,7 @@ exports.editEmail = (req, res) => {
 exports.editFile = (req, res) => {
   if (req.body.userName) {
      db.query(
-       "SELECT * FROM users WHERE id = ?",
+       "SELECT * FROM users WHERE id_users = ?",
       [req.params.id],
       (err, result) => {
         if (err) {
@@ -418,7 +409,7 @@ exports.editFile = (req, res) => {
               fs.unlinkSync(`images-profile/${filename}`);
           }
             db.query(
-              "SELECT * FROM users WHERE userName= ? AND id != ?",
+              "SELECT * FROM users WHERE userName= ? AND id_users != ?",
               [
                 req.body.email,
                 req.body.userName,
@@ -435,7 +426,7 @@ exports.editFile = (req, res) => {
                   } else {
 
                     db.query(
-                      "UPDATE users SET photo = ? WHERE id = ?",
+                      "UPDATE users SET photo = ? WHERE id_users = ?",
                       [
                         `${req.protocol}://${req.get("host")}/images-profile/${req.file.filename}`, 
                         req.params.id,

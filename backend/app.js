@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const userRoutes = require("./routes/user");
 const messageRoutes = require("./routes/message");
 const commentsRoutes = require("./routes/comment");
+const likesRoutes = require("./routes/like");
 const helmet = require("helmet");
 const path = require("path");
 const app = express();
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 app.use("/api/users", userRoutes);
 app.use("/api/forum", messageRoutes);
 app.use("/api/comments", commentsRoutes);
+app.use("/api/likes", likesRoutes);
 app.use("/images-profile", express.static(path.join(__dirname, "images-profile")));
 app.use("/images-gif", express.static(path.join(__dirname, "images-gif")));
 
