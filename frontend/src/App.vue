@@ -1,3 +1,4 @@
+<!-- Page principale VueJs avec utilisation de router-vue pour la redirection -->
 <template>
 <div id="app">
     <header-top></header-top>

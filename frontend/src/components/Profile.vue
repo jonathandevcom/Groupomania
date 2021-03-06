@@ -11,7 +11,7 @@
               alt="photo profil"
             />
             <h5 class="card-title mt-4">{{ profile.userName }}</h5>
-            
+
             <p v-if="profile.bio != 'null'" class="card-text">
               {{ profile.bio }}
             </p>
@@ -31,9 +31,6 @@
         </div>
       </div>
     </section>
-
-
-
 
     <!-- modifier le profile  -->
 
@@ -72,7 +69,6 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          
                           class="btn btn-outline-danger ml-2"
                           type="submit"
                         >
@@ -82,13 +78,8 @@
                     </div>
                   </form>
                 </div>
-
                 <div class="col-sm-12">
-                  <form
-                    @submit="modifiedUserName"
-                    method="put"
-                    novalidate
-                  >
+                  <form @submit="modifiedUserName" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         v-model="profile.userName"
@@ -100,7 +91,6 @@
                         required
                         minlength="3"
                       />
-
                       <span class="input-group-btn">
                         <button
                           class="btn btn-outline-danger ml-2"
@@ -113,11 +103,7 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form
-                    @submit="modifiedProfile"
-                    method="put"
-                    novalidate
-                  >
+                  <form @submit="modifiedProfile" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         v-model="profile.password"
@@ -137,7 +123,6 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          
                           class="btn btn-outline-danger ml-2"
                           type="submit"
                         >
@@ -148,11 +133,7 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form
-                    @submit="modifiedProfile"
-                    method="put"
-                    novalidate
-                  >
+                  <form @submit="modifiedProfile" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         v-model="profile.bio"
@@ -162,7 +143,6 @@
                         name="bio"
                         placeholder="Décrivez-vous en quelques mots"
                       />
-
                       <span class="input-group-btn">
                         <button
                           class="btn btn-outline-danger ml-2"
@@ -174,13 +154,8 @@
                     </div>
                   </form>
                 </div>
-
                 <div class="col-sm-12">
-                  <form
-                    @submit="modifiedFile"
-                    method="put"
-                    novalidate
-                  >
+                  <form @submit="modifiedFile" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         :value="formData.photo"
@@ -192,7 +167,6 @@
                         @change="onFileUpload"
                         required
                       />
-
                       <span class="input-group-btn">
                         <button
                           class="btn btn-outline-danger ml-2"
@@ -246,7 +220,7 @@ import axios from "axios";
 
 export default {
   name: "Profile",
- data() {
+  data() {
     return {
       formData: {
         email: null,
@@ -255,7 +229,6 @@ export default {
         bio: null,
         photo: null,
       },
-
       put_profile: false,
       delete_profile: false,
       profile: [],
@@ -266,6 +239,7 @@ export default {
   },
   created() {
     // Affichage de l'utilisateur
+    // utilisation de created pour accéder au chargement avant l'ouverture de la page
     axios
       .get("http://localhost:3000/api/users/" + this.userId)
       .then((response) => {
@@ -273,7 +247,7 @@ export default {
         console.log(this.profile);
       });
   },
-
+  // Modification du nom d'utilisateur
   methods: {
     modifiedUserName(e) {
       e.preventDefault();
@@ -282,22 +256,21 @@ export default {
       };
       var vm = this;
       axios
-        // Modification d'un profile utilisateur
         .put(
           "http://localhost:3000/api/users/" + this.userId + "/editUserName",
           this.profile,
           config
         )
-        .then(function(response) {
+        .then(function (response) {
           console.log(response);
           window.location.reload();
         })
-        .catch(function(error) {
+        .catch(function (error) {
           vm.messageError = "Nom d'utilisateur déjà utilisé";
           console.log(error);
         });
     },
-
+    // Modification de l'email
     modifiedEmail(e) {
       e.preventDefault();
       const config = {
@@ -305,13 +278,12 @@ export default {
       };
       var vm = this;
       axios
-        // Modification d'un profile utilisateur
         .put(
           "http://localhost:3000/api/users/" + this.userId + "/editEmail",
           this.profile,
           config
         )
-        .then(function(response) {
+        .then(function (response) {
           let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
             event.preventDefault();
@@ -322,12 +294,12 @@ export default {
             window.location.reload();
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           vm.messageError = "Email déjà utilisé";
           console.log(error);
         });
     },
-
+    // Modification du mot de passe ou de la biographie
     modifiedProfile(e) {
       e.preventDefault();
       const config = {
@@ -335,23 +307,23 @@ export default {
       };
       var vm = this;
       axios
-        // Modification d'un profile utilisateur
         .put(
           "http://localhost:3000/api/users/" + this.userId,
           this.profile,
           config
         )
-        .then(function(response) {
+        .then(function (response) {
           console.log(response);
           window.location.reload();
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           vm.messageError =
             "Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.";
         });
     },
 
+    // Modification de la photo
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
@@ -368,17 +340,16 @@ export default {
       formData.append("photo", this.file);
       try {
         await axios
-          // Modification d'un profile utilisateur
           .put(
             "http://localhost:3000/api/users/" + this.userId + "/editFile",
             formData,
             config
           )
-          .then(function(response) {
+          .then(function (response) {
             console.log(response);
             window.location.reload();
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           });
       } catch (error) {
@@ -386,20 +357,20 @@ export default {
       }
     },
 
+    // Suppression d'un utilisateur
     deleteProfile(e) {
       e.preventDefault();
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
       axios
-        // Suppression d'un utilisateur
         .delete("http://localhost:3000/api/users/" + this.userId, config)
-        .then(function(response) {
+        .then(function (response) {
           console.log(response);
           localStorage.clear();
           window.location.href = "/register";
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },

@@ -93,7 +93,6 @@
                       name="photo"
                       @change="onFileUpload"
                       class="mb-1 mt-3"
-                      
                     />
                   </div>
                 </div>
@@ -135,15 +134,17 @@ export default {
         password: null,
         bio: null,
         photo: null,
-         },
+      },
       messageError: "",
     };
   },
   methods: {
+    // utilisation d'une méthode pour envoyer la photo de profile au backend 
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
 
+    // méthode pour enregistrer un nouvel utilisateur
     async postForm(e) {
       e.preventDefault();
       var vm = this;
@@ -156,11 +157,11 @@ export default {
       try {
         await axios
           .post("http://localhost:3000/api/users", formData)
-          .then(function(response) {
+          .then(function (response) {
             console.log(response);
             window.location.href = "/login";
           })
-          .catch(function(error) {
+          .catch(function (error) {
             let form = document.getElementById("needs-validation");
             if (form.checkValidity(event) === false) {
               event.preventDefault();

@@ -1,12 +1,12 @@
 <template>
-      <main>
-        <h1 class="bientotDisponible">🏗️ Bientôt disponible 🏗️</h1>
-     </main>
+  <main>
+    <h1 class="bientotDisponible">🏗️ Bientôt disponible 🏗️</h1>
+  </main>
 </template>
 
 <script>
 export default {
-    name: "LegalNotice",
+  name: "LegalNotice",
 };
 </script>
 

@@ -5,6 +5,7 @@ import Forum from './components/Forum'
 import Profile from './components/Profile'
 import LegalNotice from './components/LegalNotice'
 
+// Chemin disponible pour le site
 export default [
     {path: '/', component: Home},
     {path: '/Register', component: Register},
@@ -12,4 +13,5 @@ export default [
     {path: '/Forum', component: Forum},
     {path: '/Profile', component: Profile},
     {path: '/LegalNotice', component: LegalNotice},
+    {path: '*', component: Home},
 ]

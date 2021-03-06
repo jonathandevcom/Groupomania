@@ -1,3 +1,4 @@
+// import de VueJs et bootstrap
 import Vue from 'vue'
 import App from './App.vue'
 import 'bootstrap' 
