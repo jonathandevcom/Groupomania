@@ -20,8 +20,12 @@ router.route("/:id")
     .get(userCtrl.selectOneUser)
     // suppréssion d'un utilisateur par son id
     .delete(auth, userCtrl.deleteOneUser)
-    // modification d'un utilisateur
+    // modification du mot de passe
     .put(auth, multer, userCtrl.editOneUser);
+
+router.route("/:id/editBio")
+    // modification de la biographie
+    .put(auth, multer, userCtrl.editBio);    
 
 router.route("/:id/editUserName")
     // modification du nom d'utilisateur

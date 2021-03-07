@@ -103,7 +103,7 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedProfile" method="put" novalidate>
+                  <form @submit="modifiedPassword" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         v-model="profile.password"
@@ -133,7 +133,7 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedProfile" method="put" novalidate>
+                  <form @submit="modifiedBio" method="put" novalidate>
                     <div class="input-group mt-3">
                       <input
                         v-model="profile.bio"
@@ -270,6 +270,27 @@ export default {
           console.log(error);
         });
     },
+
+    modifiedBio(e) {
+      e.preventDefault();
+      const config = {
+        headers: { Authorization: `Bearer ` + this.token },
+      };
+      axios
+        .put(
+          "http://localhost:3000/api/users/" + this.userId + "/editBio",
+          this.profile,
+          config
+        )
+        .then(function (response) {
+          console.log(response);
+          window.location.reload();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     // Modification de l'email
     modifiedEmail(e) {
       e.preventDefault();
@@ -300,7 +321,7 @@ export default {
         });
     },
     // Modification du mot de passe ou de la biographie
-    modifiedProfile(e) {
+    modifiedPassword(e) {
       e.preventDefault();
       const config = {
         headers: { Authorization: `Bearer ` + this.token },

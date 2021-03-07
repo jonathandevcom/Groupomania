@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
       if (err) {
         res.status(403);
       } else {
-        req.userId = user
+        req.userId = user || (req.isAdmin = 1)
         next()
       }
     });

@@ -2,11 +2,21 @@ const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
 const fs = require('fs');
 
+// Requêtes SQL réutilisables
+let selectMessagesMax = "SELECT * FROM messages LIMIT 0, ?";
+let selectMessageId = "SELECT * FROM messages WHERE id_messages = ?"
+let selectMessagesJoinUsers = "SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id_users";
+
+let insertMessages = "INSERT INTO messages (id_users_messages, image, text) VALUES (?, ?, ?)"
+
+let deleteMessageComments = "DELETE messages, comments FROM messages LEFT JOIN comments ON messages.id_messages = comments.id_messages_comments WHERE id_messages = ? "
+
+
 // Récupération de tous les messages
 exports.getAllMessages = (req, res, next) => {
   if (req.query.max != undefined && req.query.max > 0) {
     db.query(
-      "SELECT * FROM messages LIMIT 0, ?",
+      selectMessagesMax,
       [req.query.max],
       (err, result) => {
         if (err) {
@@ -19,7 +29,7 @@ exports.getAllMessages = (req, res, next) => {
   } else if (req.query.max != undefined) {
     res.status(404).json(error("Wrong max value"));
   } else {
-    db.query("SELECT * FROM messages LEFT JOIN users ON messages.id_users_messages = users.id_users", (err, result) => {
+    db.query(selectMessagesJoinUsers, (err, result) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
@@ -32,7 +42,7 @@ exports.getAllMessages = (req, res, next) => {
 // Création d'un message
 exports.createOneMessage = (req, res) => {
   db.query(
-    "INSERT INTO messages (id_users_messages, image, text) VALUES (?, ?, ?)",
+    insertMessages,
     [
       req.body.id_users_messages,
       `${req.protocol}://${req.get("host")}/images-gif/${req.file.filename}`,
@@ -51,7 +61,7 @@ exports.createOneMessage = (req, res) => {
 // suppression d'un message
 exports.deleteOneMessage = (req, res) => {
   db.query(
-    "SELECT * FROM messages WHERE id_messages = ?",
+    selectMessageId,
     [req.params.id],
     (err, result) => {
       console.log(result[0]);
@@ -61,7 +71,7 @@ exports.deleteOneMessage = (req, res) => {
         if (result[0] != undefined) {
           const filename = result[0].image.split('http://localhost:3000/images-gif/')[1];
           db.query(
-            "DELETE messages, comments FROM messages LEFT JOIN comments ON messages.id_messages = comments.id_messages_comments WHERE id_messages = ? ",
+            deleteMessageComments,
             [req.params.id],
             (err, result) => {
               if (err) {
