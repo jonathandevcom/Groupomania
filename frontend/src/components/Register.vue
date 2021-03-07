@@ -139,7 +139,7 @@ export default {
     };
   },
   methods: {
-    // utilisation d'une méthode pour envoyer la photo de profile au backend 
+    // utilisation d'une méthode pour envoyer la photo de profile au backend
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
@@ -154,26 +154,27 @@ export default {
       formData.append("password", this.formData.password);
       formData.append("bio", this.formData.bio);
       formData.append("photo", this.file);
-      try {
-        await axios
-          .post("http://localhost:3000/api/users", formData)
-          .then(function (response) {
-            console.log(response);
-            window.location.href = "/login";
-          })
-          .catch(function (error) {
-            let form = document.getElementById("needs-validation");
-            if (form.checkValidity(event) === false) {
-              event.preventDefault();
-              event.stopPropagation();
-              form.classList.add("was-validated");
-            } else {
+
+      let form = document.getElementById("needs-validation");
+      if (form.checkValidity(event) === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add("was-validated");
+      } else {
+        try {
+          await axios
+            .post("http://localhost:3000/api/users", formData)
+            .then(function (response) {
+              console.log(response);
+              window.location.href = "/login";
+            })
+            .catch(function (error) {
               vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
-            }
-            console.log(error);
-          });
-      } catch (error) {
-        console.log(error);
+              console.log(error);
+            });
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   },
