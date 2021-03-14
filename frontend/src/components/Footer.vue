@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <footer>
     <nav>
-      <ul>
-        <li>
-          <a href="/LegalNotice">Mentions légales</a>
-        </li>
-        <li class="right_place">
-          <a href="mailto:contact@groupomania.com">Contactez-nous</a>
-        </li>
+      <ul> 
+        <li>       
+        <router-link to="/LegalNotice">Mention légales</router-link>  
+              </li> 
+         <li class="right_place">
+            <a href="mailto:contact@groupomania.com">Contactez-nous</a>
+          </li>
       </ul>
     </nav>
-  </div>
+  </footer>
 </template>
 
 <script>
@@ -20,14 +20,48 @@ export default {
 </script>
 
 <style scoped>
-.footer {
+footer {
   height: 10vh;
-  width: 100%;
-  display: inline-block;
+  width: 100%;  
 }
 
-.footer nav {
-  display: flex;
-  justify-content: space-between;
+nav {
+  background-color: rgb(17, 37, 65);
+  color: #fff;
+  padding: 15px;
 }
+
+nav ul {
+  display: flex;
+  align-items: space-between;
+}
+
+nav li {
+  list-style: none;
+}
+
+.right_place {
+  margin-left: auto;
+}
+
+nav li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 20px;
+}
+
+nav a:hover{
+  color: yellow;
+}
+
+nav .router-link-exact-active {
+  color:rgb(167, 155, 156);
+}
+
+.logo-header {
+  height: 45px;
+}
+
+
 </style>

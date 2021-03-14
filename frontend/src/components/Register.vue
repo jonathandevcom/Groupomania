@@ -1,7 +1,7 @@
 <template>
   <main class="container">
     <div class="row top-register m-5">
-      <div class="offset-md-2 col-md-8 offset-md-2">
+      <div class="col-xl-10 mx-auto">
         <h4 v-if="messageError" class="alert alert-danger mt-4">
           {{ messageError }}
         </h4>
@@ -11,7 +11,7 @@
           </div>
           <div class="card-body">
             <form
-              @submit="postForm"
+              @submit.prevent="postForm"
               method="post"
               id="needs-validation"
               enctype="multipart/form-data"
@@ -77,42 +77,39 @@
                 <div class="col-sm-12">
                   <div class="form-group">
                     <label for="bio">Biographie</label>
-                    <input
+                    <textarea
                       v-model="formData.bio"
                       type="text"
-                      class="form-control"
+                      class="form-control mb-3"
                       id="bio"
                       name="bio"
                       placeholder="Décrivez-vous en quelques mots"
+                      maxlength="500"
                     />
-                    <input
-                      :value="formData.photo"
+                     <label for="photo">Inserez votre photo</label>
+                    <input                   
                       type="file"
                       ref="file"
                       id="photo"
                       name="photo"
                       @change="onFileUpload"
-                      class="mb-1 mt-3"
+                      class="mb-1 ml-2 file-path validate"
                     />
+                   
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
-                  <div class="float-left">
+                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">                  
                     <button
                       value="valider"
                       id="validation"
-                      class="btn btn-primary rounded-0"
+                      class="btn btn-primary rounded-0 float-right"
                       type="submit"
                     >
                       Valider
                     </button>
-                  </div>
-                  <div class="float-right">
-                    <router-link to="/login">Connexion</router-link>
-                  </div>
-                </div>
+                  </div>                  
               </div>
             </form>
           </div>
@@ -132,7 +129,7 @@ export default {
         email: null,
         userName: null,
         password: null,
-        bio: null,
+        bio: "",
         photo: null,
       },
       messageError: "",
@@ -145,8 +142,7 @@ export default {
     },
 
     // méthode pour enregistrer un nouvel utilisateur
-    async postForm(e) {
-      e.preventDefault();
+   postForm() {
       var vm = this;
       const formData = new FormData();
       formData.append("email", this.formData.email);
@@ -162,11 +158,17 @@ export default {
         form.classList.add("was-validated");
       } else {
         try {
-          await axios
+          axios
             .post("http://localhost:3000/api/users", formData)
             .then(function (response) {
-              console.log(response);
-              window.location.href = "/login";
+              localStorage.setItem("jwt", response.data.token);
+              localStorage.setItem("userId", response.data.userId);
+              localStorage.setItem("isAdmin", response.data.isAdmin);
+            response.headers = {
+              Authorization: "Bearer " + response.data.token,
+            };
+           
+              window.location.href = "/forum";
             })
             .catch(function (error) {
               vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
@@ -203,4 +205,9 @@ export default {
 .card-header {
   background-color: rgb(17, 37, 65) !important;
 }
+
+.btn-connection{
+  color: rgb(17, 37, 65) !important;
+}
+
 </style>

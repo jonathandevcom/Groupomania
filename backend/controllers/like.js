@@ -1,17 +1,10 @@
 const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
-
-let selectTotalLikes = "SELECT *, SUM(likes) AS numberLikes FROM likes GROUP BY id_messages_likes HAVING SUM(id_messages_likes)";
-let selectLikesId = "SELECT * FROM likes WHERE id_users_likes = ? AND id_messages_likes = ?";
-
-let updateLike1 = "UPDATE likes SET likes = 1 WHERE id_likes = ?";
-let updateLike0 = "UPDATE likes SET likes = 0 WHERE id_likes = ?";
-
-let insertLike = "INSERT INTO likes (id_users_likes, id_messages_likes, likes) VALUE (?, ?, 1)"
+const { selectTotalLikes, selectLikesId, updateLike1, updateLike0, insertLike } = require("../models/like")
 
 // Récupération de tous les likes
 exports.getAllLikes = function (req, res) {
-    db.query(selectTotalLikes, (err, result) => {
+    db.query(selectTotalLikes(), (err, result) => {
         if (err) {
             res.status(400).json(error(err.message));
         } else {
@@ -23,7 +16,7 @@ exports.getAllLikes = function (req, res) {
 // Système de likes
 exports.createOneLike = function (req, res) {
     db.query(
-        selectLikesId,
+        selectLikesId(),
         [
             req.body.id_users_likes,
             req.body.id_messages_likes
@@ -37,7 +30,7 @@ exports.createOneLike = function (req, res) {
                     if (result[0].likes === 0) {
                         console.log(result[0].id_likes);
                         db.query(
-                            updateLike1,
+                            updateLike1(),
                             [result[0].id_likes],
                             (err, result) => {
                                 if (err) {
@@ -48,7 +41,7 @@ exports.createOneLike = function (req, res) {
                             })
                     } else if (result[0].likes === 1) {
                         db.query(
-                            updateLike0,
+                            updateLike0(),
                             [result[0].id_likes],
                             (err, result) => {
                                 if (err) {
@@ -61,7 +54,7 @@ exports.createOneLike = function (req, res) {
                     }
                 } else {
                     db.query(
-                        insertLike,
+                        insertLike(),
                         [
                             req.body.id_users_likes,
                             req.body.id_messages_likes

@@ -57,20 +57,15 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
-                  <div class="float-left">
+                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">                  
                     <button
                       value="signIn"
                       id="validation"
-                      class="btn btn-primary rounded-0"
+                      class="btn btn-primary rounded-0 float-right"
                       type="submit"
                     >
                       Connexion
-                    </button>
-                  </div>
-                  <div class="float-right">
-                    <router-link to="/register">Inscription</router-link>
-                  </div>
+                    </button>                
                 </div>
               </div>
             </form>
@@ -96,17 +91,16 @@ export default {
 
   methods: {
     // Connexion
-    async login(e) {
+     login(e) {
       e.preventDefault();
       var vm = this;
       try {
-        await axios
+         axios
           .post("http://localhost:3000/api/users/login", {
             userName: this.userName,
             password: this.password,
           })
-          .then(function(response) {
-            console.log(response.data);
+          .then((response) => {           
             localStorage.setItem("jwt", response.data.token);
             localStorage.setItem("userId", response.data.userId);
             localStorage.setItem("isAdmin", response.data.isAdmin);
@@ -115,7 +109,7 @@ export default {
             };
             window.location.href = "/forum";
           })
-          .catch(function(error) {
+          .catch((error) => {
             let form = document.getElementById("needs-validation");
             if (form.checkValidity(event) === false) {
               event.preventDefault();
@@ -156,4 +150,9 @@ export default {
 .card-header {
   background-color: rgb(17, 37, 65) !important;
 }
+
+.btn-connection{
+  color: rgb(17, 37, 65) !important;
+}
+
 </style>

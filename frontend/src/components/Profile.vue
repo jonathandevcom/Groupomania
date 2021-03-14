@@ -17,7 +17,7 @@
             </p>
             <button
               v-on:click="put_profile = !put_profile"
-              class="btn btn-outline-primary justify-content-end mt-2"
+              class="btn btn-primary justify-content-end mt-2"
             >
               Modifier votre profil
             </button>
@@ -29,7 +29,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div>      
     </section>
 
     <!-- modifier le profile  -->
@@ -41,19 +41,20 @@
             {{ messageError }}
           </h4>
           <div class="card">
-            <div class="card-header bg-danger text-white">
+            <div class="card-header bg-danger text-white">              
               <h4 class="card-title text-uppercase">Modifier votre profile</h4>
             </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-12">
                   <form
-                    @submit="modifiedEmail"
+                    @submit.prevent="modifiedEmail"
                     method="put"
                     id="needs-validation"
                     novalidate
                   >
-                    <div class="input-group">
+                  <label for="email">Modifier votre email</label>
+                    <div class="input-group mb-3">
                       <input
                         v-model="profile.email"
                         type="email"
@@ -79,8 +80,10 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedUserName" method="put" novalidate>
-                    <div class="input-group mt-3">
+                  <form @submit.prevent="modifiedUserName" method="put" novalidate>
+                    <label for="userName">Modifier votre nom d'utilisateur</label>
+                    <div class="input-group mb-3">
+                      
                       <input
                         v-model="profile.userName"
                         type="text"
@@ -103,8 +106,10 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedPassword" method="put" novalidate>
-                    <div class="input-group mt-3">
+                  <form @submit.prevent="modifiedPassword" method="put" novalidate>
+                    <label for="password">Modifier votre mot de passe</label>
+                    <div class="input-group mb-3">
+                      
                       <input
                         v-model="profile.password"
                         type="password"
@@ -133,15 +138,17 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedBio" method="put" novalidate>
-                    <div class="input-group mt-3">
-                      <input
+                  <form @submit.prevent="modifiedBio" method="put" novalidate>
+                    <label for="bio">Ajouter ou modifer votre biographie</label>
+                    <div class="input-group mb-3">
+                      <textarea
                         v-model="profile.bio"
                         type="text"
                         class="form-control"
                         id="bio"
                         name="bio"
                         placeholder="Décrivez-vous en quelques mots"
+                        maxlength="500"
                       />
                       <span class="input-group-btn">
                         <button
@@ -155,8 +162,9 @@
                   </form>
                 </div>
                 <div class="col-sm-12">
-                  <form @submit="modifiedFile" method="put" novalidate>
-                    <div class="input-group mt-3">
+                  <form @submit.prevent="modifiedFile" method="put" novalidate>
+                    <label for="photo">Ajouter ou modifier votre photo</label>
+                    <div class="input-group mb-3">
                       <input
                         :value="formData.photo"
                         type="file"
@@ -188,7 +196,7 @@
     <!-- supprimer le profile -->
 
     <section>
-      <form @submit="deleteProfile" method="delete">
+      <form @submit.prevent="deleteProfile" method="delete">
         <div class="row">
           <div
             v-show="delete_profile"
@@ -233,24 +241,34 @@ export default {
       delete_profile: false,
       profile: [],
       messageError: "",
-      userId: localStorage.getItem("userId"),
-      token: localStorage.getItem("jwt"),
+      userId: "",
+      token: "", 
     };
   },
   created() {
+    // Récupération de l'userId
+    if (localStorage.userId) {
+      this.userId = localStorage.userId;
+    }
+    // Récupération de isAdmin pour modérer les interactions
+    if (localStorage.jwt) {
+      this.token = localStorage.jwt;
+    }
+
     // Affichage de l'utilisateur
     // utilisation de created pour accéder au chargement avant l'ouverture de la page
     axios
       .get("http://localhost:3000/api/users/" + this.userId)
       .then((response) => {
         this.profile = response.data.result;
-        console.log(this.profile);
-      });
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   // Modification du nom d'utilisateur
   methods: {
-    modifiedUserName(e) {
-      e.preventDefault();
+    modifiedUserName() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
@@ -261,18 +279,16 @@ export default {
           this.profile,
           config
         )
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
           window.location.reload();
         })
-        .catch(function (error) {
+        .catch((error) => {
           vm.messageError = "Nom d'utilisateur déjà utilisé";
           console.log(error);
         });
     },
 
-    modifiedBio(e) {
-      e.preventDefault();
+    modifiedBio() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
@@ -282,18 +298,16 @@ export default {
           this.profile,
           config
         )
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
           window.location.reload();
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     },
 
     // Modification de l'email
-    modifiedEmail(e) {
-      e.preventDefault();
+    modifiedEmail() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
@@ -304,25 +318,23 @@ export default {
           this.profile,
           config
         )
-        .then(function (response) {
+        .then(() => {
           let form = document.getElementById("needs-validation");
           if (form.checkValidity(event) === false) {
             event.preventDefault();
             event.stopPropagation();
             form.classList.add("was-validated");
-            console.log(response);
           } else {
             window.location.reload();
           }
         })
-        .catch(function (error) {
+        .catch((error) => {
           vm.messageError = "Email déjà utilisé";
           console.log(error);
         });
     },
     // Modification du mot de passe ou de la biographie
-    modifiedPassword(e) {
-      e.preventDefault();
+    modifiedPassword() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
@@ -333,11 +345,10 @@ export default {
           this.profile,
           config
         )
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
           window.location.reload();
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
           vm.messageError =
             "Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.";
@@ -348,8 +359,7 @@ export default {
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
-    async modifiedFile(e) {
-      e.preventDefault();
+    modifiedFile() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
@@ -360,17 +370,16 @@ export default {
       formData.append("bio", this.profile.bio);
       formData.append("photo", this.file);
       try {
-        await axios
+        axios
           .put(
             "http://localhost:3000/api/users/" + this.userId + "/editFile",
             formData,
             config
           )
-          .then(function (response) {
-            console.log(response);
+          .then(() => {
             window.location.reload();
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {
@@ -379,19 +388,17 @@ export default {
     },
 
     // Suppression d'un utilisateur
-    deleteProfile(e) {
-      e.preventDefault();
+    deleteProfile() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
       axios
         .delete("http://localhost:3000/api/users/" + this.userId, config)
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
           localStorage.clear();
           window.location.href = "/register";
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     },

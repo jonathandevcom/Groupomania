@@ -7,18 +7,18 @@
             <div class="card-body">
               <div class="row">
                 <div class="m-auto col-lg-8 col-sm-12">
-                  <h5 class="card-title col-8">Publier votre gif</h5>
-                  <form @submit="postImage" action="post">
-                    <input
-                      :value="formMessage.image"
+                  <h5><label class="card-title col-8" for="image">Publier votre gif</label></h5>
+                  <form @submit.prevent="postImage" action="post">
+                    <input                      
                       type="file"
                       ref="file"
                       id="image"
                       name="image"
                       @change="OnImageUpload"
-                      class="mb-3 mt-1"
+                      class="form-control-file mb-3 mt-1"
                       required
                     />
+                    <label for="text">Ajouter un commentaire à votre gif</label>
                     <input
                       v-model="formMessage.text"
                       type="text"
@@ -47,8 +47,9 @@
               <img
                 class="rounded-circle d-block"
                 v-bind:src="message.photo"
-                width="50"
-                height="50"
+                width="45"
+                height="45"
+                alt="Photo de profile de :"
               />
               <div class="d-flex flex-column justify-content-start ml-2">
                 <span class="d-block font-weight-bold name mt-3 ml-3">{{
@@ -59,7 +60,7 @@
             <img
               v-bind:src="message.image"
               class="card-img-top image d-block"
-              alt="message.image"
+              alt="Gif publier par un utilisateur"
             />
             <div class="card-body">
               <div class="row">
@@ -119,11 +120,13 @@
               </span>
             </div>
             <div>
+              <label for="comment" class="ml-3" >Ajouter un commentaire</label>
               <input
                 v-model="comment"
                 type="text"
                 ref="comment"
                 name="comment"
+                id="comment"
                 class="form-control"
                 placeholder="Votre commentaire"
                 required
@@ -144,10 +147,11 @@
                 <div class="d-flex flex-row user-info p-3">
                   <img
                     v-if="comment.photo"
-                    class="rounded-circle mt-3 d-block"
+                    class="rounded-circle mt-4 mr-3 d-block"
                     v-bind:src="comment.photo"
-                    width="50"
-                    height="50"
+                    width="45"
+                    height="45"
+                    alt="Photo de profile de :"
                   />
                   <div class="card-body border border-3 mt-3">
                     <h5 v-if="comment.userName">{{ comment.userName }} :</h5>
@@ -186,7 +190,7 @@ export default {
   name: "Forum",
   data() {
     return {
-      profiles: [],
+      
       messages: [],
       comments: [],
       likes: [],
@@ -201,20 +205,29 @@ export default {
   },
   created() {
     // Récupération de tous les messages
-    axios.get("http://localhost:3000/api/forum").then((response) => {
+    axios.get("http://localhost:3000/api/forum")
+    .then((response) => {
       this.messages = response.data.result;
-      console.log(this.messages);
-    });
+    })
+    .catch((error) => {
+        console.log(error)
+      })
     // Récupération de tous les commentaires
-    axios.get("http://localhost:3000/api/comments").then((response) => {
+    axios.get("http://localhost:3000/api/comments")
+    .then((response) => {
       this.comments = response.data.result;
-      console.log(this.comments);
-    });
+    })
+    .catch((error) => {
+        console.log(error)
+      })
     // Récupération de tous les likes
-    axios.get("http://localhost:3000/api/likes").then((response) => {
+    axios.get("http://localhost:3000/api/likes")
+    .then((response) => {
       this.likes = response.data.result;
-      console.log(this.likes);
-    });
+    })
+    .catch((error) => {
+        console.log(error)
+      })
   },
   mounted() {
     // Récupération de l'userId
@@ -231,20 +244,18 @@ export default {
       this.file = this.$refs.file.files[0];
     },
     // Création d'une publication
-    async postImage(e) {
-      e.preventDefault();
+    postImage() {
       const formData = new FormData();
       formData.append("id_users_messages", this.userId);
       formData.append("image", this.file);
       formData.append("text", this.formMessage.text);
       try {
-        await axios
+        axios
           .post("http://localhost:3000/api/forum", formData)
-          .then(function (response) {
-            console.log(response);
+          .then(() => {
             window.location.reload();
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {
@@ -258,28 +269,26 @@ export default {
       };
       axios
         .delete("http://localhost:3000/api/forum/" + id, config)
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
           window.location.reload();
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     },
     // Création d'un commentaire
-    async postComment(id) {
+    postComment(id) {
       try {
-        await axios
+        axios
           .post("http://localhost:3000/api/comments", {
             id_users_comments: this.userId,
             id_messages_comments: id,
             comment: this.comment,
           })
-          .then(function (response) {
-            console.log(response);
+          .then(() => {
             window.location.reload();
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {
@@ -293,27 +302,26 @@ export default {
       };
       axios
         .delete("http://localhost:3000/api/comments/" + id, config)
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
+          window.location.reload();
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     },
     // Ajout ou suppression d'un like
-    async addLikes(id) {
+    addLikes(id) {
       try {
-        await axios
+        axios
           .post("http://localhost:3000/api/likes/" + id, {
             id_users_likes: this.userId,
             id_messages_likes: id,
             likes: "",
           })
-          .then(function (response) {
-            console.log(response);
+          .then(() => {
             window.location.reload();
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {

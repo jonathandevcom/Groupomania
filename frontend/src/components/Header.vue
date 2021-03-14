@@ -7,16 +7,27 @@
           src="../assets/icon-header.png"
           alt="logo Groupomania"
         />
-        <li v-if="token" class="right_place"><a href="/forum">Forum</a></li>
-        <li v-else class="right_place"><a href="/">Accueil</a></li>
+        
+        <li v-if="token" class="right_place"> 
+        <router-link to="/forum" exact>Forum</router-link>
+        </li>
+        <li v-else class="right_place">
+          <router-link to="/" exact>Accueil</router-link>
+        </li>
 
-        <li v-if="token"><a href="/profile">Profile</a></li>
-        <li v-else><a href="/login">Connexion</a></li>
+        <li v-if="token">
+          <router-link to="/profile" exact>Profile</router-link>
+        </li>
+        <li v-else>
+          <router-link to="/login" exact>Connexion</router-link>
+        </li>
 
         <li v-if="token" v-on:click="logout">
-          <a href="/login">Déconnection</a>
+          <router-link to="/login" exact>Déconnection</router-link>
         </li>
-        <li v-else><a href="/register">Inscription</a></li>
+        <li v-else>
+           <router-link to="/register" exact>Inscription</router-link>
+        </li>
       </ul>
     </nav>
   </header>
@@ -77,9 +88,12 @@ nav li a {
   padding: 5px 20px;
 }
 
-nav li a:hover {
+nav a:hover {
   color: yellow;
-  text-decoration: none;
+}
+
+nav .router-link-exact-active {
+  color: rgb(167, 155, 156);
 }
 
 .logo-header {

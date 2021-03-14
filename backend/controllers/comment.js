@@ -1,18 +1,11 @@
 const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
-
-let selectCommentsMax = "SELECT * FROM comments LIMIT 0, ?";
-let selectCommentsId = "SELECT * FROM comments WHERE id_comments = ?";
-let selectCommentsJoinUsers = "SELECT * FROM comments LEFT JOIN users ON comments.id_users_comments = users.id_users";
-
-let insertComment = "INSERT INTO comments (id_users_comments, id_messages_comments, comment) VALUES (?, ?, ?)"; 
-
-let deleteComment = "DELETE FROM comments WHERE id_comments = ?";
+const { selectCommentsMax, selectCommentsId, selectCommentsJoinUsers, insertComment, deleteComment } = require("../models/comment")
 
 // Création d'un commentaire
 exports.createOneComment = (req, res) => {
   db.query(
-    insertComment,
+    insertComment(),
     [
       req.body.id_users_comments,
       req.body.id_messages_comments,
@@ -32,7 +25,7 @@ exports.createOneComment = (req, res) => {
 exports.getAllComment = (req, res) => {
   if (req.query.max != undefined && req.query.max > 0) {
     db.query(
-      selectCommentsMax,
+      selectCommentsMax(),
       [req.query.max],
       (err, result) => {
         if (err) {
@@ -45,7 +38,7 @@ exports.getAllComment = (req, res) => {
   } else if (req.query.max != undefined) {
     res.status(404).json(error("Wrong max value"));
   } else {
-    db.query(selectCommentsJoinUsers, (err, result) => {
+    db.query(selectCommentsJoinUsers(), (err, result) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
@@ -58,7 +51,7 @@ exports.getAllComment = (req, res) => {
 // Suppression d'un commentaire
 exports.deleteOneComment = (req, res) => {
   db.query(
-    selectCommentsId,
+    selectCommentsId(),
     [req.params.id],
     (err, result) => {
       if (err) {
@@ -66,7 +59,7 @@ exports.deleteOneComment = (req, res) => {
       } else {
         if (result[0] != undefined) {
           db.query(
-            deleteComment,
+            deleteComment(),
             [req.params.id],
             (err, result) => {
               if (err) {
