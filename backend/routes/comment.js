@@ -11,10 +11,6 @@ router.route('/')
 
 router.route('/:id')
     // supprimer un commentaire
-    .delete(messageCtrl.deleteOneComment)
+    .delete(auth, messageCtrl.deleteOneComment)
 
 module.exports = router;
-
-
-
-/////////////// ajouter auth

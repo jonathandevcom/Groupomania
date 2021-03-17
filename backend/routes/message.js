@@ -12,12 +12,6 @@ router.route('/')
  
 router.route('/:id')
     // supprimer un utilisateur
-    .delete(messageCtrl.deleteOneMessage)
+    .delete(auth, messageCtrl.deleteOneMessage)
 
 module.exports = router;
-
-
-
-
-
-///////////////// ajouter l'auth

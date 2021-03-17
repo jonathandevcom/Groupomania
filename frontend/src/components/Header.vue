@@ -44,6 +44,7 @@ export default {
   methods: {
     logout() {
       localStorage.clear();
+      window.location.reload();
     },
   },
   mounted() {
@@ -90,10 +91,11 @@ nav li a {
 
 nav a:hover {
   color: yellow;
+  text-decoration: none;
 }
 
 nav .router-link-exact-active {
-  color: rgb(167, 155, 156);
+  color: rgb(253, 45, 1);
 }
 
 .logo-header {

@@ -250,9 +250,13 @@ export default {
     if (localStorage.userId) {
       this.userId = localStorage.userId;
     }
-    // Récupération de isAdmin pour modérer les interactions
+    // 
     if (localStorage.jwt) {
       this.token = localStorage.jwt;
+    }
+     // Récupération de isAdmin pour modérer les interactions
+    if (localStorage.isAdmin) {
+      this.isAdmin = localStorage.isAdmin;
     }
 
     // Affichage de l'utilisateur
@@ -270,7 +274,8 @@ export default {
   methods: {
     modifiedUserName() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+        headers: { Authorization: `Bearer ` + this.token},  
+          data: { idUsers : this.userId, isAdmin : this.isAdmin }
       };
       var vm = this;
       axios
@@ -289,8 +294,8 @@ export default {
     },
 
     modifiedBio() {
-      const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+     const config = {
+        headers: { Authorization: `Bearer ` + this.token}  
       };
       axios
         .put(
@@ -309,7 +314,7 @@ export default {
     // Modification de l'email
     modifiedEmail() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+        headers: { Authorization: `Bearer ` + this.token} 
       };
       var vm = this;
       axios
@@ -336,7 +341,7 @@ export default {
     // Modification du mot de passe ou de la biographie
     modifiedPassword() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+        headers: { Authorization: `Bearer ` + this.token}  
       };
       var vm = this;
       axios
@@ -355,18 +360,23 @@ export default {
         });
     },
 
-    // Modification de la photo
+
+///////////////////// auth à modifier
+    // Modification du fichier de la photo
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
     modifiedFile() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+        headers: { Authorization: `Bearer ` + this.token},  
+          data: { id_users : this.userId, isAdmin : this.isAdmin }
       };
       const formData = new FormData();
+      formData.append("id_users", this.profile.id_users);
       formData.append("email", this.profile.email);
       formData.append("userName", this.profile.userName);
       formData.append("password", this.profile.password);
+      formData.append("isAdmin", this.profile.isAdmin);
       formData.append("bio", this.profile.bio);
       formData.append("photo", this.file);
       try {
@@ -374,7 +384,7 @@ export default {
           .put(
             "http://localhost:3000/api/users/" + this.userId + "/editFile",
             formData,
-            config
+            config,            
           )
           .then(() => {
             window.location.reload();
@@ -390,7 +400,8 @@ export default {
     // Suppression d'un utilisateur
     deleteProfile() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
+        headers: { Authorization: `Bearer ` + this.token},  
+          data: { id_users : this.userId, isAdmin : this.isAdmin }
       };
       axios
         .delete("http://localhost:3000/api/users/" + this.userId, config)

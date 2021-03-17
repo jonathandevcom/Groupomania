@@ -55,7 +55,6 @@ exports.deleteOneMessage = (req, res) => {
     selectMessageId(),
     [req.params.id],
     (err, result) => {
-      console.log(result[0]);
       if (err) {
         res.status(400).json(error(err.message));
       } else {

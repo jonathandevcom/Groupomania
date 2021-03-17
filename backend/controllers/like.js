@@ -22,13 +22,11 @@ exports.createOneLike = function (req, res) {
             req.body.id_messages_likes
         ],
         (err, result) => {
-            console.log(result[0]);
             if (err) {
                 res.status(400).json(error(err.message));
             } else {
                 if (result[0] != undefined) {
                     if (result[0].likes === 0) {
-                        console.log(result[0].id_likes);
                         db.query(
                             updateLike1(),
                             [result[0].id_likes],
