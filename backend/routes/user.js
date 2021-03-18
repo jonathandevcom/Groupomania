@@ -4,6 +4,7 @@ const userCtrl = require("../controllers/user");
 const multer = require("../middleware/multer-profile");
 const limiter = require("../middleware/limiter");
 const auth = require("../middleware/auth");
+const authFile = require("../middleware/auth-modified-file");
 
 router.route("/login")
     // Connexion
@@ -37,6 +38,6 @@ router.route("/:id/editEmail")
 
 router.route("/:id/editFile")
     // modification de la photo de profile
-    .put(auth, multer, userCtrl.editFile);
+    .put(authFile, multer, userCtrl.editFile);
 
 module.exports = router;

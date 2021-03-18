@@ -275,7 +275,6 @@ export default {
     modifiedUserName() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token},  
-          data: { idUsers : this.userId, isAdmin : this.isAdmin }
       };
       var vm = this;
       axios
@@ -360,8 +359,6 @@ export default {
         });
     },
 
-
-///////////////////// auth à modifier
     // Modification du fichier de la photo
     onFileUpload() {
       this.file = this.$refs.file.files[0];
@@ -369,7 +366,6 @@ export default {
     modifiedFile() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token},  
-          data: { id_users : this.userId, isAdmin : this.isAdmin }
       };
       const formData = new FormData();
       formData.append("id_users", this.profile.id_users);
@@ -400,8 +396,7 @@ export default {
     // Suppression d'un utilisateur
     deleteProfile() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token},  
-          data: { id_users : this.userId, isAdmin : this.isAdmin }
+        headers: { Authorization: `Bearer ` + this.token}
       };
       axios
         .delete("http://localhost:3000/api/users/" + this.userId, config)

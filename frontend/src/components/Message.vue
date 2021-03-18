@@ -46,12 +46,14 @@
           </div>
         </div>
       </div>
-
+      <div></div>
+      <div></div>
       <button
         v-on:click.prevent="addLikes(message.id_messages)"
         type="submit"
         class="btn btn-outline-primary"
       >
+
         <div class="like cursor">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -198,15 +200,15 @@ export default {
     deleteMessage(id_message, id_users) {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users, isAdmin: this.isAdmin },
+        data: { id_users: id_users },
       };
       axios
         .delete("http://localhost:3000/api/forum/" + id_message, config)
         .then(() => {
           window.location.reload();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert("Vous n'avez pas les autorisations pour supprimer ce message")
         });
     },
 
@@ -234,15 +236,15 @@ export default {
     deleteComment(id_comment, id_users) {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users, isAdmin: this.isAdmin },
+        data: { id_users: id_users },
       };
       axios
         .delete("http://localhost:3000/api/comments/" + id_comment, config)
         .then(() => {
           window.location.reload();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert("Vous n'avez pas les autorisations pour supprimer ce commentaire")
         });
     },
 
