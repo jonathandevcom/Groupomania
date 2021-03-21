@@ -3,7 +3,7 @@
     <nav>
       <ul> 
         <li>       
-        <router-link to="/LegalNotice">Mention légales</router-link>  
+        <router-link to="/LegalNotice">Mentions légales</router-link>  
               </li> 
          <li class="right_place">
             <a href="mailto:contact@groupomania.com">Contactez-nous</a>

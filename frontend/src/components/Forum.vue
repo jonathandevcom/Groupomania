@@ -78,8 +78,8 @@ export default {
       .then((response) => {
         this.messages = response.data.result;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert("Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement")
       });
   },
   mounted() {
@@ -98,21 +98,18 @@ export default {
       formData.append("id_users_messages", this.userId);
       formData.append("image", this.file);
       formData.append("text", this.formMessage.text);
-      try {
-        axios
+         axios
           .post("http://localhost:3000/api/forum", formData)
           .then(() => {
             window.location.reload();
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            alert("Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement")
           });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+      } 
+    }
+  }
+
 </script>
 
 <style></style>

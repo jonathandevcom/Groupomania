@@ -1,10 +1,20 @@
 const db = require("../models/connect");
 const { success, error } = require("../middleware/functions");
-const { selectTotalLikes, selectLikesId, updateLike1, updateLike0, insertLike } = require("../models/like")
+const { selectTotalLikes, selectLikes, selectLikesId, updateLike1, updateLike0, insertLike } = require("../models/like")
 
 // Récupération de tous les likes
-exports.getAllLikes = function (req, res) {
+exports.totalAllLikes = function (req, res) {
     db.query(selectTotalLikes(), (err, result) => {
+        if (err) {
+            res.status(400).json(error(err.message));
+        } else {
+            res.status(200).json(success(result));
+        }
+    })
+}
+
+exports.getAllLikes = function (req, res){
+    db.query(selectLikes(), (err, result) => {
         if (err) {
             res.status(400).json(error(err.message));
         } else {

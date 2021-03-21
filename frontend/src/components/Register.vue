@@ -5,6 +5,9 @@
         <h4 v-if="messageError" class="alert alert-danger mt-4">
           {{ messageError }}
         </h4>
+        <h4 v-if="messageWelcome" class="alert alert-success mt-4">
+          {{ messageWelcome }}
+        </h4>
         <div class="card">
           <div class="card-header bg-danger text-white">
             <h4 class="card-title text-uppercase">Inscription</h4>
@@ -133,6 +136,7 @@ export default {
         photo: null,
       },
       messageError: "",
+      messageWelcome: "",
     };
   },
   methods: {
@@ -157,26 +161,24 @@ export default {
         event.stopPropagation();
         form.classList.add("was-validated");
       } else {
-        try {
           axios
             .post("http://localhost:3000/api/users", formData)
             .then(function (response) {
+              vm.messageWelcome = "Votre inscription a bien été enregistrée.";
               localStorage.setItem("jwt", response.data.token);
               localStorage.setItem("userId", response.data.userId);
               localStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
-            };
-           
-              window.location.href = "/forum";
+            };              
+              setTimeout(function() {
+                window.location.href = "/forum"
+              },4000)
+              
             })
-            .catch(function (error) {
+            .catch(function () {
               vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
-              console.log(error);
-            });
-        } catch (error) {
-          console.log(error);
-        }
+            });        
       }
     },
   },

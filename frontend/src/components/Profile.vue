@@ -266,8 +266,8 @@ export default {
       .then((response) => {
         this.profile = response.data.result;
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
+        alert("Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement")
       })
   },
   // Modification du nom d'utilisateur
@@ -286,9 +286,8 @@ export default {
         .then(() => {
           window.location.reload();
         })
-        .catch((error) => {
+        .catch(() => {
           vm.messageError = "Nom d'utilisateur déjà utilisé";
-          console.log(error);
         });
     },
 
@@ -296,6 +295,7 @@ export default {
      const config = {
         headers: { Authorization: `Bearer ` + this.token}  
       };
+      var vm = this;
       axios
         .put(
           "http://localhost:3000/api/users/" + this.userId + "/editBio",
@@ -305,8 +305,8 @@ export default {
         .then(() => {
           window.location.reload();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          vm.messageError = "Vous n'êtes pas autoriser à modifier cette biographie";
         });
     },
 
@@ -332,9 +332,8 @@ export default {
             window.location.reload();
           }
         })
-        .catch((error) => {
+        .catch(() => {
           vm.messageError = "Email déjà utilisé";
-          console.log(error);
         });
     },
     // Modification du mot de passe ou de la biographie
@@ -352,8 +351,7 @@ export default {
         .then(() => {
           window.location.reload();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           vm.messageError =
             "Merci de saisir un mot de passe contenant au minimun 1 majuscule, 1 miniscule et un symbole.";
         });
@@ -375,7 +373,7 @@ export default {
       formData.append("isAdmin", this.profile.isAdmin);
       formData.append("bio", this.profile.bio);
       formData.append("photo", this.file);
-      try {
+         var vm = this;
         axios
           .put(
             "http://localhost:3000/api/users/" + this.userId + "/editFile",
@@ -385,12 +383,9 @@ export default {
           .then(() => {
             window.location.reload();
           })
-          .catch((error) => {
-            console.log(error);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+          .catch(() => {
+            vm.messageError = "Vous n'êtes pas autoriser à modifier la photo de profile";
+          });      
     },
 
     // Suppression d'un utilisateur
@@ -398,14 +393,15 @@ export default {
       const config = {
         headers: { Authorization: `Bearer ` + this.token}
       };
-      axios
+       var vm = this;
+      axios     
         .delete("http://localhost:3000/api/users/" + this.userId, config)
         .then(() => {
           localStorage.clear();
           window.location.href = "/register";
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          vm.messageError = "Vous n'êtes pas autoriser à supprimer ce profile";
         });
     },
   },

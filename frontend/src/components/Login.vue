@@ -94,7 +94,6 @@ export default {
      login(e) {
       e.preventDefault();
       var vm = this;
-      try {
          axios
           .post("http://localhost:3000/api/users/login", {
             userName: this.userName,
@@ -109,7 +108,7 @@ export default {
             };
             window.location.href = "/forum";
           })
-          .catch((error) => {
+          .catch(() => {
             let form = document.getElementById("needs-validation");
             if (form.checkValidity(event) === false) {
               event.preventDefault();
@@ -118,11 +117,7 @@ export default {
             } else {
               vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
             }
-            console.log(error);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+          });      
     },
   },
 };
