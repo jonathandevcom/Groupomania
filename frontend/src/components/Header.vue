@@ -23,7 +23,7 @@
         </li>
 
         <li v-if="token" v-on:click="logout">
-          <router-link to="/login" exact>Déconnection</router-link>
+          <router-link to="/login" exact>Déconnexion</router-link>
         </li>
         <li v-else>
            <router-link to="/register" exact>Inscription</router-link>

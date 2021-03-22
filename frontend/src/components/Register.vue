@@ -68,7 +68,7 @@
                       class="form-control"
                       required
                       minlength="8"
-                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-!$%^*()_+|~=`{}\[\]:'<>?,.\/]).{8,}"
                     />
                     <div class="invalid-feedback">
                       Merci de saisir un mot de passe contenant au minimun 1
@@ -173,7 +173,7 @@ export default {
             };              
               setTimeout(function() {
                 window.location.href = "/forum"
-              },4000)
+              },2000)
               
             })
             .catch(function () {
