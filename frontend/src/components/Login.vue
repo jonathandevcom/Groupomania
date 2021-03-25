@@ -57,15 +57,15 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">                  
-                    <button
-                      value="signIn"
-                      id="validation"
-                      class="btn btn-primary rounded-0 float-right"
-                      type="submit"
-                    >
-                      Connexion
-                    </button>                
+                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
+                  <button
+                    value="signIn"
+                    id="validation"
+                    class="btn btn-primary rounded-0 float-right"
+                    type="submit"
+                  >
+                    Connexion
+                  </button>
                 </div>
               </div>
             </form>
@@ -91,33 +91,33 @@ export default {
 
   methods: {
     // Connexion
-     login(e) {
+    login(e) {
       e.preventDefault();
       var vm = this;
-         axios
-          .post("http://localhost:3000/api/users/login", {
-            userName: this.userName,
-            password: this.password,
-          })
-          .then((response) => {           
-            localStorage.setItem("jwt", response.data.token);
-            localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("isAdmin", response.data.isAdmin);
-            response.headers = {
-              Authorization: "Bearer " + response.data.token,
-            };
-            window.location.href = "/forum";
-          })
-          .catch(() => {
-            let form = document.getElementById("needs-validation");
-            if (form.checkValidity(event) === false) {
-              event.preventDefault();
-              event.stopPropagation();
-              form.classList.add("was-validated");
-            } else {
-              vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
-            }
-          });      
+      axios
+        .post("http://localhost:3000/api/users/login", {
+          userName: this.userName,
+          password: this.password,
+        })
+        .then((response) => {
+          localStorage.setItem("jwt", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
+          localStorage.setItem("isAdmin", response.data.isAdmin);
+          response.headers = {
+            Authorization: "Bearer " + response.data.token,
+          };
+          window.location.href = "/forum";
+        })
+        .catch(() => {
+          let form = document.getElementById("needs-validation");
+          if (form.checkValidity(event) === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add("was-validated");
+          } else {
+            vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
+          }
+        });
     },
   },
 };
@@ -146,8 +146,7 @@ export default {
   background-color: rgb(17, 37, 65) !important;
 }
 
-.btn-connection{
+.btn-connection {
   color: rgb(17, 37, 65) !important;
 }
-
 </style>

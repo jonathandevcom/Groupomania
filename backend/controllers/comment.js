@@ -13,7 +13,7 @@ exports.createOneComment = (req, res) => {
     ],
     (err, result) => {
       if (err) {
-        res.json(error(err.message));
+        res.status(400).json(error(err.message));
       } else {
         res.status(201).json(success("Comment added"));
       }

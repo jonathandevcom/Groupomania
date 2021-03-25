@@ -7,9 +7,9 @@
           src="../assets/icon-header.png"
           alt="logo Groupomania"
         />
-        
-        <li v-if="token" class="right_place"> 
-        <router-link to="/forum" exact>Forum</router-link>
+
+        <li v-if="token" class="right_place">
+          <router-link to="/forum" exact>Forum</router-link>
         </li>
         <li v-else class="right_place">
           <router-link to="/" exact>Accueil</router-link>
@@ -26,7 +26,7 @@
           <router-link to="/login" exact>Déconnexion</router-link>
         </li>
         <li v-else>
-           <router-link to="/register" exact>Inscription</router-link>
+          <router-link to="/register" exact>Inscription</router-link>
         </li>
       </ul>
     </nav>

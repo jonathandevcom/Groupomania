@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const morgan = require("morgan");
 const helmet = require("helmet");
 const path = require("path");
 const app = express();
@@ -11,7 +10,6 @@ const likesRoutes = require("./routes/like");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan("dev"));
 app.use(helmet());
 
 ///// Accès controle pour éviter les erreurs de CORS

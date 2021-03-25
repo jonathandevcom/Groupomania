@@ -1,13 +1,13 @@
 <template>
   <footer>
     <nav>
-      <ul> 
-        <li>       
-        <router-link to="/LegalNotice">Mentions légales</router-link>  
-              </li> 
-         <li class="right_place">
-            <a href="mailto:contact@groupomania.com">Contactez-nous</a>
-          </li>
+      <ul>
+        <li>
+          <router-link to="/LegalNotice">Mentions légales</router-link>
+        </li>
+        <li class="right_place">
+          <a href="mailto:contact@groupomania.com">Contactez-nous</a>
+        </li>
       </ul>
     </nav>
   </footer>
@@ -22,7 +22,7 @@ export default {
 <style scoped>
 footer {
   height: 10vh;
-  width: 100%;  
+  width: 100%;
 }
 
 nav {
@@ -51,18 +51,16 @@ nav li a {
   padding: 5px 20px;
 }
 
-nav a:hover{
+nav a:hover {
   color: yellow;
   text-decoration: none;
 }
 
 nav .router-link-exact-active {
-  color:rgb(253, 45, 1);
+  color: rgb(253, 45, 1);
 }
 
 .logo-header {
   height: 45px;
 }
-
-
 </style>

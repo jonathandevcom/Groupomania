@@ -23,14 +23,14 @@ module.exports = (req, res, next) => {
             if (req.body.id_users == user.userId || result[0].isAdmin == 1) {
               next();
             } else {
-              res.status(403);
+              res.status(401).json(error("authentication refused"));
             }
           }
         });
       }
     });
   } else {
-    res.status(401);
+    res.status(403).json(error("No authentication"));
   }
 };
 

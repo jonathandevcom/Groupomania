@@ -11,7 +11,6 @@
               alt="photo profil"
             />
             <h5 class="card-title mt-5">{{ profile.userName }}</h5>
-
             <p v-if="profile.bio != 'null'" class="card-text">
               {{ profile.bio }}
             </p>
@@ -121,14 +120,13 @@
                     <label for="password">Modifier votre mot de passe</label>
                     <div class="input-group mb-3">
                       <input
-                        v-model="profile.password"
                         type="password"
                         class="form-control"
                         id="password"
                         name="password"
                         placeholder="Mot de passe"
                         minlength="8"
-                        maxlength="30"
+                        maxlength="20"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-!$%^*()_+|~=`{}\[\]:'<>?,.\/]).{8,}"
                         required
                       />
@@ -258,10 +256,7 @@ export default {
   data() {
     return {
       formData: {
-        email: null,
         userName: null,
-        password: null,
-        bio: null,
         photo: null,
       },
       put_profile: false,
@@ -350,7 +345,7 @@ export default {
           })
           .catch(() => {
             vm.messageError =
-              "Vous n'êtes pas autoriser à modifier cette biographie";
+              "Vous n'êtes pas autorisé à modifier cette biographie";
           });
       }
     },
@@ -413,17 +408,13 @@ export default {
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
-    modifiedFile() {
+    modifiedFile(id_users) {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
+        data: { id_users: id_users },
       };
       const formData = new FormData();
-      formData.append("id_users", this.profile.id_users);
-      formData.append("email", this.profile.email);
       formData.append("userName", this.profile.userName);
-      formData.append("password", this.profile.password);
-      formData.append("isAdmin", this.profile.isAdmin);
-      formData.append("bio", this.profile.bio);
       formData.append("photo", this.file);
       var vm = this;
       let form = document.getElementById("validationPhoto");

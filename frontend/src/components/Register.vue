@@ -89,8 +89,8 @@
                       placeholder="Décrivez-vous en quelques mots"
                       maxlength="500"
                     />
-                     <label for="photo">Inserez votre photo</label>
-                    <input                   
+                    <label for="photo">Inserez votre photo</label>
+                    <input
                       type="file"
                       ref="file"
                       id="photo"
@@ -98,21 +98,20 @@
                       @change="onFileUpload"
                       class="mb-1 ml-2 file-path validate"
                     />
-                   
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">                  
-                    <button
-                      value="valider"
-                      id="validation"
-                      class="btn btn-primary rounded-0 float-right"
-                      type="submit"
-                    >
-                      Valider
-                    </button>
-                  </div>                  
+                <div class="col-sm-12 col-md-12 col-xs-12 mt-2">
+                  <button
+                    value="valider"
+                    id="validation"
+                    class="btn btn-primary rounded-0 float-right"
+                    type="submit"
+                  >
+                    Valider
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -146,7 +145,7 @@ export default {
     },
 
     // méthode pour enregistrer un nouvel utilisateur
-   postForm() {
+    postForm() {
       var vm = this;
       const formData = new FormData();
       formData.append("email", this.formData.email);
@@ -161,24 +160,23 @@ export default {
         event.stopPropagation();
         form.classList.add("was-validated");
       } else {
-          axios
-            .post("http://localhost:3000/api/users", formData)
-            .then(function (response) {
-              vm.messageWelcome = "Votre inscription a bien été enregistrée.";
-              localStorage.setItem("jwt", response.data.token);
-              localStorage.setItem("userId", response.data.userId);
-              localStorage.setItem("isAdmin", response.data.isAdmin);
+        axios
+          .post("http://localhost:3000/api/users", formData)
+          .then(function (response) {
+            vm.messageWelcome = "Votre inscription a bien été enregistrée.";
+            localStorage.setItem("jwt", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
-            };              
-              setTimeout(function() {
-                window.location.href = "/forum"
-              },2000)
-              
-            })
-            .catch(function () {
-              vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
-            });        
+            };
+            setTimeout(function () {
+              window.location.href = "/forum";
+            }, 2000);
+          })
+          .catch(function () {
+            vm.messageError = "Nom d'utilisateur ou email déjà utilisé";
+          });
       }
     },
   },
@@ -208,8 +206,7 @@ export default {
   background-color: rgb(17, 37, 65) !important;
 }
 
-.btn-connection{
+.btn-connection {
   color: rgb(17, 37, 65) !important;
 }
-
 </style>

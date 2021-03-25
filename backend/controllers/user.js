@@ -20,7 +20,7 @@ exports.createOneUser = (req, res) => {
             res.status(400).json(error(err.message));
           } else {
             if (result[0] != undefined) {
-              res.status(400).json(error("User name or email already taken"));
+              res.status(401).json(error("User name or email already taken"));
             } else {
               let hashedPassword = await bcrypt.hash(req.body.password, 8);
               if (req.file === undefined) {
@@ -78,7 +78,7 @@ exports.createOneUser = (req, res) => {
                     `${req.protocol}://${req.get(
                       "host"
                     )}/assets/images-profile/${req.file.filename}`,
-                  ],
+                  ],                  
                   (err, result) => {
                     if (err) {
                       res.status(400).json(error(err.message));
@@ -120,7 +120,7 @@ exports.createOneUser = (req, res) => {
       res.status(404).json(error("No name value"));
     }
   } else {
-    res.status(400).json(error("Password no accept"));
+    res.status(401).json(error("Password no accept"));
   }
 };
 
@@ -129,13 +129,13 @@ exports.login = async (req, res) => {
   if (req.body.userName) {
     db.query(selectUserUserName(), [req.body.userName], async (err, results) => {
       if (err) {
-        res.status(400).json(error("Username unknown"));
+        res.status(404).json(error("Username unknown"));
       } else {
         if (
           !results[0] ||
           !(await bcrypt.compare(req.body.password, results[0].password))
         ) {
-          res.status(400).json(error("error password"));
+          res.status(401).json(error("error password"));
         } else {
           res.status(200).json({
             isAdmin: results[0].isAdmin,
@@ -227,7 +227,7 @@ exports.editOneUser = (req, res) => {
     if (req.body.userName) {
       db.query(selectUserId(), [req.params.id], (err, result) => {
         if (err) {
-          res.json(error(err.message));
+          res.status(400).json(error(err.message));
         } else {
           if (result[0] != undefined) {
             db.query(
@@ -241,7 +241,7 @@ exports.editOneUser = (req, res) => {
               ],
               async (err, result) => {
                 if (err) {
-                  res.json(error(err.message));
+                  res.status(400).json(error(err.message));
                 } else {
                   if (result[0] != undefined) {
                     res.json(error("same name"));
@@ -262,9 +262,9 @@ exports.editOneUser = (req, res) => {
                       ],
                       (err, result) => {
                         if (err) {
-                          res.json(error(err.message));
+                          res.status(400).json(error(err.message));
                         } else {
-                          res.json(success(result));
+                          res.status(200).json(success(result));
                         }
                       }
                     );
@@ -273,15 +273,15 @@ exports.editOneUser = (req, res) => {
               }
             );
           } else {
-            res.json(error("Wrong id"));
+            res.status(404).json(error("Wrong id"));
           }
         }
       });
     } else {
-      res.json(error("no name value"));
+      res.status(404).json(error("No name value"));
     }
   } else {
-    res.status(400).json(error("Password no accept"));
+    res.status(401).json(error("Password no accept"));
   }
 };
 
@@ -290,7 +290,7 @@ exports.editUserName = (req, res) => {
   if (req.body.userName) {
     db.query(selectUserId(), [req.params.id], (err, result) => {
       if (err) {
-        res.json(error(err.message));
+        res.status(400).json(error(err.message));
       } else {
         db.query(
           selectUserUserName(),
@@ -307,9 +307,9 @@ exports.editUserName = (req, res) => {
                   [req.body.userName, req.params.id],
                   (err, result) => {
                     if (err) {
-                      res.json(error(err.message));
+                      res.status(400).json(error(err.message));
                     } else {
-                      res.json(success(true));
+                      res.status(200).json(success(result))
                     }
                   }
                 );
@@ -320,7 +320,7 @@ exports.editUserName = (req, res) => {
       }
     });
   } else {
-    res.json(error("no name value"));
+    res.status(404).json(error("No name value"));
   }
 };
 
@@ -329,23 +329,23 @@ exports.editEmail = (req, res) => {
   if (req.body.email) {
     db.query(selectUserId(), [req.params.id], (err, result) => {
       if (err) {
-        res.json(error(err.message));
+        res.status(400).json(error(err.message));
       } else {
         db.query(selectUserEmail(), [req.body.email], async (err, result) => {
           if (err) {
             res.status(400).json(error(err.message));
           } else {
             if (result[0] != undefined) {
-              res.status(404).json(error("Email name already taken"));
+              res.status(401).json(error("Email name already taken"));
             } else {
               db.query(
                 updateUserEmail(),
                 [req.body.email, req.params.id],
                 (err, result) => {
                   if (err) {
-                    res.json(error(err.message));
+                    res.status(400).json(error(err.message));
                   } else {
-                    res.json(success(true));
+                    res.status(200).json(success(result));
                   }
                 }
               );
@@ -355,7 +355,7 @@ exports.editEmail = (req, res) => {
       }
     });
   } else {
-    res.json(error("no email value"));
+    res.status(404).json(error("No name value"));
   }
 };
 
@@ -364,7 +364,7 @@ exports.editFile = (req, res) => {
   if (req.body.userName) {
     db.query(selectUserId(), [req.params.id], (err, result) => {
       if (err) {
-        res.json(error(err.message));
+        res.status(400).json(error(err.message));
       } else {
         if (result[0] != undefined) {
           const filename = result[0].photo.split(
@@ -383,19 +383,19 @@ exports.editFile = (req, res) => {
             ],
             (err, result) => {
               if (err) {
-                res.json(error(err.message));
+                res.status(400).json(error(err.message));
               } else {
-                res.json(success(true));
+                res.status(200).json(success(result));
               }
             }
           );
         } else {
-          res.json(error("Wrong id"));
+          res.status(404).json(error("Wrong id"));
         }
       }
     });
   } else {
-    res.json(error("no name value"));
+    res.status(404).json(error("No name value"));
   }
 };
 
@@ -404,7 +404,7 @@ exports.editBio = (req, res) => {
   if (req.body.userName) {
     db.query(selectUserId(), [req.params.id], (err, result) => {
       if (err) {
-        res.json(error(err.message));
+        res.status(400).json(error(err.message));
       } else {
         db.query(selectUserBio(), [req.body.bio], async (err, result) => {
           if (err) {
@@ -418,9 +418,9 @@ exports.editBio = (req, res) => {
                 [req.body.bio, req.params.id],
                 (err, result) => {
                   if (err) {
-                    res.json(error(err.message));
+                    res.status(400).json(error(err.message));
                   } else {
-                    res.json(success(true));
+                    res.status(200).json(success(result));
                   }
                 }
               );
@@ -430,6 +430,6 @@ exports.editBio = (req, res) => {
       }
     });
   } else {
-    res.json(error("no name value"));
+    res.status(404).json(error("No name value"));
   }
 };

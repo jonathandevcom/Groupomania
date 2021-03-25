@@ -15,7 +15,6 @@
         >
       </div>
     </div>
-
     <img
       v-bind:src="message.image"
       class="card-img-top image d-block"
@@ -103,8 +102,7 @@
           </button>
         </span>
       </span>
-
-      <span v-for="likesTotal in likesTotals" :key="likesTotal.id_users_likes">
+      <span v-for="likesTotal in likesTotals" :key="likesTotal.idlikes">
         <button
           v-if="
             (message.id_messages === likesTotal.id_messages_likes) &
@@ -296,7 +294,7 @@ export default {
       axios
         .delete("http://localhost:3000/api/comments/" + id_comment, config)
         .then(() => {
-          window.location.reload();
+          this.comments.slice(id_comment);
         })
         .catch(() => {
           alert(
@@ -327,7 +325,7 @@ export default {
 </script>
 
 <style>
-.rounded-circle{
-  object-fit: cover
+.rounded-circle {
+  object-fit: cover;
 }
 </style>
