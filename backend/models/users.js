@@ -29,7 +29,7 @@ exports.deleteUser = () => {
     return "DELETE FROM users WHERE id_users = ?";
 };
 exports.updateUser = () => {
-    return "UPDATE users SET email = ?, userName = ?, password = ?, bio = ?, photo = ? WHERE id_users = ?";
+    return "UPDATE users SET userName = ?, password = ? WHERE id_users = ?";
 };
 exports.updateUserUserName = () => {
     return "UPDATE users SET userName = ? WHERE id_users = ?";

@@ -120,6 +120,7 @@
                     <label for="password">Modifier votre mot de passe</label>
                     <div class="input-group mb-3">
                       <input
+                      v-model="formData.password"
                         type="password"
                         class="form-control"
                         id="password"
@@ -257,6 +258,7 @@ export default {
     return {
       formData: {
         userName: null,
+        password: null,
         photo: null,
       },
       put_profile: false,
@@ -276,10 +278,6 @@ export default {
     //
     if (localStorage.jwt) {
       this.token = localStorage.jwt;
-    }
-    // Récupération de isAdmin pour modérer les interactions
-    if (localStorage.isAdmin) {
-      this.isAdmin = localStorage.isAdmin;
     }
 
     // Affichage de l'utilisateur
@@ -381,6 +379,9 @@ export default {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
+       const formData = new FormData();
+      formData.append("userName", this.profile.userName);
+      formData.append("password", this.formData.password);
       var vm = this;
       let form = document.getElementById("validationPassword");
       if (form.checkValidity(event) === false) {
@@ -391,7 +392,7 @@ export default {
         axios
           .put(
             "http://localhost:3000/api/users/" + this.userId,
-            this.profile,
+            formData,
             config
           )
           .then(() => {
@@ -408,10 +409,9 @@ export default {
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
-    modifiedFile(id_users) {
+    modifiedFile() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users },
+        headers: { Authorization: `Bearer ` + this.token }
       };
       const formData = new FormData();
       formData.append("userName", this.profile.userName);
@@ -440,10 +440,9 @@ export default {
     },
 
     // Suppression d'un utilisateur
-    deleteProfile(id_users) {
+    deleteProfile() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users },
       };
       var vm = this;
       axios

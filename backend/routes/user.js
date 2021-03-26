@@ -4,7 +4,6 @@ const userCtrl = require("../controllers/user");
 const multer = require("../middleware/multer-profile");
 const limiter = require("../middleware/limiter");
 const auth = require("../middleware/auth");
-const authFile = require("../middleware/auth-modified-file");
 
 router.route("/login")
     // Connexion
@@ -20,24 +19,24 @@ router.route("/:id")
     // afficher un utilisateur
     .get(userCtrl.selectOneUser)
     // suppréssion d'un utilisateur par son id
-    .delete(auth, userCtrl.deleteOneUser)
+    .delete(auth, userCtrl.deleteOneUser)               
     // modification du mot de passe
-    .put(auth, multer, userCtrl.editOneUser);
-
+    .put(auth, multer, userCtrl.editOneUser);         
+    
 router.route("/:id/editBio")
     // modification de la biographie
     .put(auth, multer, userCtrl.editBio);    
 
 router.route("/:id/editUserName")
     // modification du nom d'utilisateur
-    .put(auth, multer, userCtrl.editUserName);
+    .put(auth, multer, userCtrl.editUserName);          
 
 router.route("/:id/editEmail")
     // modification de l'email
-    .put(auth, multer, userCtrl.editEmail);
+    .put(auth, multer, userCtrl.editEmail);            
 
 router.route("/:id/editFile")
     // modification de la photo de profile
-    .put(authFile, multer, userCtrl.editFile);
+    .put(auth, multer, userCtrl.editFile);              
 
 module.exports = router;

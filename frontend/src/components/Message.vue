@@ -35,7 +35,7 @@
             >
               <button
                 v-on:click.prevent="
-                  deleteMessage(message.id_messages, message.id_users_messages)
+                  deleteMessage(message.id_messages)
                 "
                 type="submit"
                 class="btn btn-outline-info mt-2"
@@ -252,10 +252,9 @@ export default {
   },
   methods: {
     // Suppression d'un message
-    deleteMessage(id_message, id_users) {
+    deleteMessage(id_message) {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users },
       };
       axios
         .delete("http://localhost:3000/api/forum/" + id_message, config)
@@ -286,10 +285,9 @@ export default {
     },
 
     // Suppression d'un commentaire
-    deleteComment(id_comment, id_users) {
+    deleteComment(id_comment) {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token },
-        data: { id_users: id_users },
+        headers: { Authorization: `Bearer ` + this.token }
       };
       axios
         .delete("http://localhost:3000/api/comments/" + id_comment, config)

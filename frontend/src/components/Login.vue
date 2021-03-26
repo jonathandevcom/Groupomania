@@ -85,6 +85,7 @@ export default {
     return {
       userName: null,
       password: null,
+      limiter: 0,
       messageErrorLogin: "",
     };
   },
@@ -115,8 +116,12 @@ export default {
             event.stopPropagation();
             form.classList.add("was-validated");
           } else {
+            if (this.limiter == 5) {
+            vm.messageErrorLogin = `Vous avez dépassé le nombre de requête autorisé. Merci de patienter 1 minute avant de recommencer`;
+            } else {
             vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
-          }
+            this.limiter ++
+          }}
         });
     },
   },

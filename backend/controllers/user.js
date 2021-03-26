@@ -6,7 +6,23 @@ const fs = require("fs");
 
 const schema = require("../middleware/schemaPassword.js");
 const { success, error } = require("../middleware/functions");
-const { selectUserUserNameOrEmail, selectUserId, selectUserUserName, selectUserBio, selectUserMax, selectAllUsers, selectUserUserNameId, selectUserEmail, insertUser, deleteUser, updateUser, updateUserUserName, updateUserEmail, updateUserPhoto, updateUserBio } = require("../models/users")
+const {
+  selectUserUserNameOrEmail,
+  selectUserId,
+  selectUserUserName,
+  selectUserBio,
+  selectUserMax,
+  selectAllUsers,
+  selectUserUserNameId,
+  selectUserEmail,
+  insertUser,
+  deleteUser,
+  updateUser,
+  updateUserUserName,
+  updateUserEmail,
+  updateUserPhoto,
+  updateUserBio,
+} = require("../models/users");
 
 // Création d'un nouvel utilisateur
 exports.createOneUser = (req, res) => {
@@ -78,7 +94,7 @@ exports.createOneUser = (req, res) => {
                     `${req.protocol}://${req.get(
                       "host"
                     )}/assets/images-profile/${req.file.filename}`,
-                  ],                  
+                  ],
                   (err, result) => {
                     if (err) {
                       res.status(400).json(error(err.message));
@@ -127,30 +143,34 @@ exports.createOneUser = (req, res) => {
 // Connexion
 exports.login = async (req, res) => {
   if (req.body.userName) {
-    db.query(selectUserUserName(), [req.body.userName], async (err, results) => {
-      if (err) {
-        res.status(404).json(error("Username unknown"));
-      } else {
-        if (
-          !results[0] ||
-          !(await bcrypt.compare(req.body.password, results[0].password))
-        ) {
-          res.status(401).json(error("error password"));
+    db.query(
+      selectUserUserName(),
+      [req.body.userName],
+      async (err, results) => {
+        if (err) {
+          res.status(404).json(error("Username unknown"));
         } else {
-          res.status(200).json({
-            isAdmin: results[0].isAdmin,
-            userId: results[0].id_users,
-            token: jwt.sign(
-              { userId: results[0].id_users },
-              process.env.JWT_SECRET,
-              {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-              }
-            ),
-          });
+          if (
+            !results[0] ||
+            !(await bcrypt.compare(req.body.password, results[0].password))
+          ) {
+            res.status(401).json(error("error password"));
+          } else {
+            res.status(200).json({
+              isAdmin: results[0].isAdmin,
+              userId: results[0].id_users,
+              token: jwt.sign(
+                { userId: results[0].id_users },
+                process.env.JWT_SECRET,
+                {
+                  expiresIn: process.env.JWT_EXPIRES_IN,
+                }
+              ),
+            });
+          }
         }
       }
-    });
+    );
   } else {
     res.status(404).json(error("No name value"));
   }
@@ -196,24 +216,29 @@ exports.selectAllUsers = (req, res) => {
 
 // suppression d'un utilisateur
 exports.deleteOneUser = (req, res) => {
-  db.query(selectUserId(), [req.params.id], (err, result) => {
+  db.query(selectUserId(), [req.userId.userId], (err, result) => {
     if (err) {
       res.status(400).json(error(err.message));
     } else {
       if (result[0] != undefined) {
-        const filename = result[0].photo.split(
-          "http://localhost:3000/assets/images-profile/"
-        )[1];
-        db.query(deleteUser(), [req.params.id], (err, result) => {
-          if (err) {
-            res.status(400).json(error(err.message));
-          } else {
-            res.status(200).json(success("User deleted"));
-            if (filename != "avatar.png") {
-              fs.unlinkSync(`assets/images-profile/${filename}`);
+        const user = result[0];
+        if (req.userId.userId == result[0].id_users || user.isAdmin == 1) {
+          const filename = result[0].photo.split(
+            "http://localhost:3000/assets/images-profile/"
+          )[1];
+          db.query(deleteUser(), [req.params.id], (err, result) => {
+            if (err) {
+              res.status(400).json(error(err.message));
+            } else {
+              res.status(200).json(success("User deleted"));
+              if (filename != "avatar.png") {
+                fs.unlinkSync(`assets/images-profile/${filename}`);
+              }
             }
-          }
-        });
+          });
+        } else {
+          res.status(403).json(error("No authentication"));
+        }
       } else {
         res.status(404).json(error("Wrong id"));
       }
@@ -221,45 +246,35 @@ exports.deleteOneUser = (req, res) => {
   });
 };
 
-// modification d'un utilisateur
+////////////// ne fonctionne pas !!!!!
+
+// modification du mot de passe
 exports.editOneUser = (req, res) => {
   if (schema.validate(req.body.password)) {
-    if (req.body.userName) {
-      db.query(selectUserId(), [req.params.id], (err, result) => {
-        if (err) {
-          res.status(400).json(error(err.message));
-        } else {
-          if (result[0] != undefined) {
-            db.query(
-              selectUserUserNameId(),
-              [
-                req.body.email,
-                req.body.userName,
-                req.body.password,
-                req.body.bio,
-                req.body.photo,
-              ],
-              async (err, result) => {
-                if (err) {
-                  res.status(400).json(error(err.message));
+    db.query(selectUserId(), [req.userId.userId], (err, result) => {
+      if (err) {
+        res.status(400).json(error(err.message));
+      } else {
+        if (result[0] != undefined) {
+          const user = result[0];
+          db.query(
+            selectUserUserNameId(),
+            [req.body.userName, req.params.id],
+            async (err, result) => {
+              if (err) {
+                res.status(400).json(error(err.message));
+              } else {
+                if (result[0] != undefined) {
+                  res.json(error("same name"));
                 } else {
-                  if (result[0] != undefined) {
-                    res.json(error("same name"));
-                  } else {
+                  if (req.userId.userId == user.id_users || user.isAdmin == 1) {
                     let hashedPassword = await bcrypt.hash(
                       req.body.password,
                       8
                     );
                     db.query(
                       updateUser(),
-                      [
-                        req.body.email,
-                        req.body.userName,
-                        hashedPassword,
-                        req.body.bio,
-                        req.body.photo,
-                        req.params.id,
-                      ],
+                      [req.body.userName, hashedPassword, req.userId.userId],
                       (err, result) => {
                         if (err) {
                           res.status(400).json(error(err.message));
@@ -268,18 +283,18 @@ exports.editOneUser = (req, res) => {
                         }
                       }
                     );
+                  } else {
+                    res.status(403).json(error("No authentication"));
                   }
                 }
               }
-            );
-          } else {
-            res.status(404).json(error("Wrong id"));
-          }
+            }
+          );
+        } else {
+          res.status(404).json(error("Wrong id"));
         }
-      });
-    } else {
-      res.status(404).json(error("No name value"));
-    }
+      }
+    });
   } else {
     res.status(401).json(error("Password no accept"));
   }
@@ -288,10 +303,11 @@ exports.editOneUser = (req, res) => {
 // Modification du nom d'utilisateur
 exports.editUserName = (req, res) => {
   if (req.body.userName) {
-    db.query(selectUserId(), [req.params.id], (err, result) => {
+    db.query(selectUserId(), [req.userId.userId], (err, result) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
+        const user = result[0];
         db.query(
           selectUserUserName(),
           [req.body.userName],
@@ -302,17 +318,21 @@ exports.editUserName = (req, res) => {
               if (result[0] != undefined) {
                 res.status(404).json(error("User name already taken"));
               } else {
-                db.query(
-                  updateUserUserName(),
-                  [req.body.userName, req.params.id],
-                  (err, result) => {
-                    if (err) {
-                      res.status(400).json(error(err.message));
-                    } else {
-                      res.status(200).json(success(result))
+                if (req.userId.userId == user.id_users || user.isAdmin == 1) {
+                  db.query(
+                    updateUserUserName(),
+                    [req.body.userName, req.params.id],
+                    (err, result) => {
+                      if (err) {
+                        res.status(400).json(error(err.message));
+                      } else {
+                        res.status(200).json(success(result));
+                      }
                     }
-                  }
-                );
+                  );
+                } else {
+                  res.status(403).json(error("No authentication"));
+                }
               }
             }
           }
@@ -331,6 +351,7 @@ exports.editEmail = (req, res) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
+        const user = result[0];
         db.query(selectUserEmail(), [req.body.email], async (err, result) => {
           if (err) {
             res.status(400).json(error(err.message));
@@ -338,17 +359,21 @@ exports.editEmail = (req, res) => {
             if (result[0] != undefined) {
               res.status(401).json(error("Email name already taken"));
             } else {
-              db.query(
-                updateUserEmail(),
-                [req.body.email, req.params.id],
-                (err, result) => {
-                  if (err) {
-                    res.status(400).json(error(err.message));
-                  } else {
-                    res.status(200).json(success(result));
+              if (req.userId.userId == user.id_users || user.isAdmin == 1) {
+                db.query(
+                  updateUserEmail(),
+                  [req.body.email, req.params.id],
+                  (err, result) => {
+                    if (err) {
+                      res.status(400).json(error(err.message));
+                    } else {
+                      res.status(200).json(success(result));
+                    }
                   }
-                }
-              );
+                );
+              } else {
+                res.status(403).json(error("No authentication"));
+              }
             }
           }
         });
@@ -367,28 +392,33 @@ exports.editFile = (req, res) => {
         res.status(400).json(error(err.message));
       } else {
         if (result[0] != undefined) {
+          const user = result[0];
           const filename = result[0].photo.split(
             "http://localhost:3000/assets/images-profile/"
           )[1];
           if (filename != "avatar.png") {
             fs.unlinkSync(`assets/images-profile/${filename}`);
           }
-          db.query(
-            updateUserPhoto(),
-            [
-              `${req.protocol}://${req.get("host")}/assets/images-profile/${
-                req.file.filename
-              }`,
-              req.params.id,
-            ],
-            (err, result) => {
-              if (err) {
-                res.status(400).json(error(err.message));
-              } else {
-                res.status(200).json(success(result));
+          if (req.userId.userId == user.id_users || user.isAdmin == 1) {
+            db.query(
+              updateUserPhoto(),
+              [
+                `${req.protocol}://${req.get("host")}/assets/images-profile/${
+                  req.file.filename
+                }`,
+                req.params.id,
+              ],
+              (err, result) => {
+                if (err) {
+                  res.status(400).json(error(err.message));
+                } else {
+                  res.status(200).json(success(result));
+                }
               }
-            }
-          );
+            );
+          } else {
+            res.status(403).json(error("No authentication"));
+          }
         } else {
           res.status(404).json(error("Wrong id"));
         }
@@ -406,6 +436,7 @@ exports.editBio = (req, res) => {
       if (err) {
         res.status(400).json(error(err.message));
       } else {
+        const user = result[0];
         db.query(selectUserBio(), [req.body.bio], async (err, result) => {
           if (err) {
             res.status(400).json(error(err.message));
@@ -413,17 +444,21 @@ exports.editBio = (req, res) => {
             if (result[0] != undefined) {
               res.status(404).json(error(err.message));
             } else {
-              db.query(
-                updateUserBio(),
-                [req.body.bio, req.params.id],
-                (err, result) => {
-                  if (err) {
-                    res.status(400).json(error(err.message));
-                  } else {
-                    res.status(200).json(success(result));
+              if (req.userId.userId == user.id_users || user.isAdmin == 1) {
+                db.query(
+                  updateUserBio(),
+                  [req.body.bio, req.params.id],
+                  (err, result) => {
+                    if (err) {
+                      res.status(400).json(error(err.message));
+                    } else {
+                      res.status(200).json(success(result));
+                    }
                   }
-                }
-              );
+                );
+              } else {
+                res.status(403).json(error("No authentication"));
+              }
             }
           }
         });
