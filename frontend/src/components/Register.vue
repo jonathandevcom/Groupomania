@@ -10,7 +10,7 @@
         </h4>
         <div class="card">
           <div class="card-header bg-danger text-white">
-            <h4 class="card-title text-uppercase">Inscription</h4>
+            <h1 class="card-title text-uppercase">Inscription</h1>
           </div>
           <div class="card-body">
             <form
@@ -72,7 +72,7 @@
                     />
                     <div class="invalid-feedback">
                       Merci de saisir un mot de passe contenant au minimun 1
-                      majuscule, 1 miniscule et un symbole.
+                      majuscule, 1 miniscule et 1 symbole (minimun 8 charactères).
                     </div>
                   </div>
                 </div>

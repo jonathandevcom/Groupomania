@@ -57,7 +57,7 @@ nav a:hover {
 }
 
 nav .router-link-exact-active {
-  color: rgb(253, 45, 1);
+  color: #FF4924;
 }
 
 .logo-header {

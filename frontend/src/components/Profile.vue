@@ -10,7 +10,7 @@
               v-bind:src="profile.photo"
               alt="photo profil"
             />
-            <h5 class="card-title mt-5">{{ profile.userName }}</h5>
+            <h1 class="card-title mt-5">{{ profile.userName }}</h1>
             <p v-if="profile.bio != 'null'" class="card-text">
               {{ profile.bio }}
             </p>
@@ -41,7 +41,7 @@
           </h4>
           <div class="card">
             <div class="card-header bg-danger text-white">
-              <h4 class="card-title text-uppercase">Modifier votre profile</h4>
+              <h2 class="card-title text-uppercase">Modifier votre profil</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -228,12 +228,12 @@
             <div class="card mb-3 mt-3">
               <div class="card-body">
                 <div class="col-12">
-                  <h4 v-if="messageErrorDelete" class="alert alert-danger mt-4">
+                  <h3 v-if="messageErrorDelete" class="alert alert-danger mt-4">
                     {{ messageErrorDelete }}
-                  </h4>
-                  <h5 class="card-title text-center">
+                  </h3>
+                  <h3 class="card-title text-center">
                     Attention la suppression de votre compte sera définitive
-                  </h5>
+                  </h3>
                   <span class="input-group-btn d-flex justify-content-center">
                     <button type="submit" class="btn btn-danger">
                       Valider la suppression
@@ -279,7 +279,6 @@ export default {
     if (localStorage.jwt) {
       this.token = localStorage.jwt;
     }
-
     // Affichage de l'utilisateur
     // utilisation de created pour accéder au chargement avant l'ouverture de la page
     axios

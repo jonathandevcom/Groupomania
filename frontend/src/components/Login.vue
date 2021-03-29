@@ -7,7 +7,7 @@
         </h4>
         <div class="card">
           <div class="card-header bg-primary text-white">
-            <h4 class="card-title text-uppercase text-center">Connexion</h4>
+            <h1 class="card-title text-uppercase text-center">Connexion</h1>
           </div>
           <div class="card-body">
             <form
@@ -48,10 +48,11 @@
                       class="form-control"
                       required
                       minlength="8"
-                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-!$%^*()_+|~=`{}\[\]:'<>?,.\/]).{8,}"
                     />
                     <div class="invalid-feedback">
-                      Merci de saisir votre mot de passe.
+                      Le mot de passe contient au minimun 1 majuscule, 1
+                      miniscule et 1 symbole (minimun 8 charactères).
                     </div>
                   </div>
                 </div>
@@ -95,34 +96,35 @@ export default {
     login(e) {
       e.preventDefault();
       var vm = this;
-      axios
-        .post("http://localhost:3000/api/users/login", {
-          userName: this.userName,
-          password: this.password,
-        })
-        .then((response) => {
-          localStorage.setItem("jwt", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          localStorage.setItem("isAdmin", response.data.isAdmin);
-          response.headers = {
-            Authorization: "Bearer " + response.data.token,
-          };
-          window.location.href = "/forum";
-        })
-        .catch(() => {
-          let form = document.getElementById("needs-validation");
-          if (form.checkValidity(event) === false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-          } else {
-            if (this.limiter == 5) {
-            vm.messageErrorLogin = `Vous avez dépassé le nombre de requête autorisé. Merci de patienter 1 minute avant de recommencer`;
+      let form = document.getElementById("needs-validation");
+      if (form.checkValidity(event) === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add("was-validated");
+      } else {
+        axios
+          .post("http://localhost:3000/api/users/login", {
+            userName: this.userName,
+            password: this.password,
+          })
+          .then((response) => {
+            localStorage.setItem("jwt", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("isAdmin", response.data.isAdmin);
+            response.headers = {
+              Authorization: "Bearer " + response.data.token,
+            };
+            window.location.href = "/forum";
+          })
+          .catch(() => {
+            if (this.limiter == 4) {
+              vm.messageErrorLogin = `Vous avez dépassé le nombre de requête autorisé. Merci de patienter 1 minute avant de recommencer`;
             } else {
-            vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
-            this.limiter ++
-          }}
-        });
+              vm.messageErrorLogin = `Nom d'utilisateur ou mot de passe incorrect`;
+              this.limiter++;
+            }
+          });
+      }
     },
   },
 };

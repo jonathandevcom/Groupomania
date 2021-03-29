@@ -7,16 +7,13 @@
             <div class="card-body">
               <div class="row">
                 <div class="m-auto col-lg-8 col-sm-12">
-                  <h5>
-                    <label class="card-title" for="image"
-                      >Publier un gif ou une image</label
-                    >
-                  </h5>
                   <form @submit.prevent="postImage" action="post">
+                    <h1><label for="image">Publier un gif ou une image</label></h1>
                     <input
                       type="file"
                       ref="file"
                       name="image"
+                      id="image"
                       @change="OnImageUpload"
                       class="form-control-file mb-3 mt-1"
                       required
@@ -26,6 +23,7 @@
                       v-model="formMessage.text"
                       type="text"
                       name="text"
+                      id="text"
                       class="form-control"
                       placeholder="Votre commentaire"
                       required
@@ -115,4 +113,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+h1{
+  font-size:1.9em
+}
+.btn-outline-info{
+color:#19616E;
+}
+</style>

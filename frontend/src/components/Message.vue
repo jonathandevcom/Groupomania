@@ -6,7 +6,7 @@
         v-bind:src="message.photo"
         width="45"
         height="45"
-        alt="Photo de profile de :"
+        alt="Photo de profile"
       />
       <div class="d-flex flex-column justify-content-start ml-2">
         <span class="d-block font-weight-bold name mt-3 ml-3"
@@ -24,9 +24,9 @@
       <div class="row">
         <div class="col-12 d-flex bd-highlight">
           <div class="p-2 w-100 bd-highlight">
-            <h5 class="card-title mt-2">
+            <h2 class="card-title mt-2">
               {{ message.text }}
-            </h5>
+            </h2>
           </div>
           <div class="p-2 flex-shrink-1 bd-highlight">
             <form
@@ -51,7 +51,7 @@
         v-on:click.prevent="addLikes(message.id_messages)"
         type="submit"
         v-show="likeShow"
-        class="btn btn-outline-primary"
+        class="btn btn-outline-info"
       >
         <div class="like cursor">
           <svg
@@ -109,7 +109,7 @@
             (likesTotal.likes != 0)
           "
           type="buton"
-          class="btn btn-outline-primary float-right mr-2"
+          class="btn btn-outline-info float-right mr-2"
         >
           <span> {{ likesTotal.numberLikes }} </span>
           <span v-if="likesTotal.numberLikes < 2">like</span>
@@ -118,25 +118,30 @@
       </span>
     </div>
 
-    <div class="mx-3">
-      <label for="comment" class="ml-1">Ajouter un commentaire</label>
+    <form v-on:submit.prevent="postComment(message.id_messages)" class="mx-3">
+      <label :for="message.id_messages" class="ml-1">Ajouter un commentaire</label>
       <input
         v-model="comment"
         type="text"
         ref="comment"
         name="comment"
+        :id="message.id_messages"
         class="form-control"
         placeholder="Votre commentaire"
+        minlength="3"
         required
       />
+      <div class="invalid-feedback">
+                      Merci de saisir votre commentaire.
+                    </div>
       <button
-        v-on:click.prevent="postComment(message.id_messages)"
+        
         type="submit"
         class="btn btn-outline-info my-2"
       >
         Publier
       </button>
-    </div>
+    </form>
 
     <div
       v-for="comment in comments.slice().reverse()"
@@ -150,10 +155,10 @@
             v-bind:src="comment.photo"
             width="45"
             height="45"
-            alt="Photo de profile de :"
+            :alt="comment.userName + comment.id_comments"
           />
-          <div class="card-body border border-3 mt-3">
-            <h5 v-if="comment.userName">{{ comment.userName }} :</h5>
+          <div class="card-body border border-3 mt-3 col-sm-8 col-9">
+            <h3 v-if="comment.userName">{{ comment.userName }} :</h3>
             <p class="card-text">
               {{ comment.comment }}
             </p>
@@ -282,6 +287,7 @@ export default {
             "Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement"
           );
         });
+        
     },
 
     // Suppression d'un commentaire
@@ -322,7 +328,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+h2{
+    font-size:1.7em;
+}
+h3{
+  font-size:1.5em;
+}
+
+.btn-outline-info{
+color:#19616E;
+}
+
 .rounded-circle {
   object-fit: cover;
 }

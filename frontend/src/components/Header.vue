@@ -59,6 +59,7 @@ export default {
 header {
   width: 100%;
   height: 10vh;
+  
 }
 
 nav {
@@ -95,7 +96,7 @@ nav a:hover {
 }
 
 nav .router-link-exact-active {
-  color: rgb(253, 45, 1);
+  color: #FF4924;
 }
 
 .logo-header {
