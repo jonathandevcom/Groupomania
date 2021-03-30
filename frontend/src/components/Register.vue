@@ -72,7 +72,8 @@
                     />
                     <div class="invalid-feedback">
                       Merci de saisir un mot de passe contenant au minimun 1
-                      majuscule, 1 miniscule et 1 symbole (minimun 8 charactères).
+                      majuscule, 1 miniscule et 1 symbole (minimun 8
+                      charactères).
                     </div>
                   </div>
                 </div>
@@ -163,16 +164,17 @@ export default {
         axios
           .post("http://localhost:3000/api/users", formData)
           .then(function (response) {
+            vm.messageError = "";
             vm.messageWelcome = "Votre inscription a bien été enregistrée.";
             localStorage.setItem("jwt", response.data.token);
             localStorage.setItem("userId", response.data.userId);
             localStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
-            };
+            };            
             setTimeout(function () {
               window.location.href = "/forum";
-            }, 2000);
+            }, 4000);
           })
           .catch(function () {
             vm.messageError = "Nom d'utilisateur ou email déjà utilisé";

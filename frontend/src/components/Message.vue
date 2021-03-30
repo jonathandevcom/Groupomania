@@ -34,9 +34,7 @@
               v-if="message.id_users_messages == userId || isAdmin == 1"
             >
               <button
-                v-on:click.prevent="
-                  deleteMessage(message.id_messages)
-                "
+                v-on:click.prevent="deleteMessage(message.id_messages)"
                 type="submit"
                 class="btn btn-outline-info mt-2"
               >
@@ -119,7 +117,9 @@
     </div>
 
     <form v-on:submit.prevent="postComment(message.id_messages)" class="mx-3">
-      <label :for="message.id_messages" class="ml-1">Ajouter un commentaire</label>
+      <label :for="message.id_messages" class="ml-1"
+        >Ajouter un commentaire</label
+      >
       <input
         v-model="comment"
         type="text"
@@ -131,16 +131,8 @@
         minlength="3"
         required
       />
-      <div class="invalid-feedback">
-                      Merci de saisir votre commentaire.
-                    </div>
-      <button
-        
-        type="submit"
-        class="btn btn-outline-info my-2"
-      >
-        Publier
-      </button>
+      <div class="invalid-feedback">Merci de saisir votre commentaire.</div>
+      <button type="submit" class="btn btn-outline-info my-2">Publier</button>
     </form>
 
     <div
@@ -227,6 +219,7 @@ export default {
           "Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement"
         );
       });
+    // Récupération de tous les likes par commentaires
     axios
       .get("http://localhost:3000/api/likes/totalLikes")
       .then((response) => {
@@ -287,13 +280,12 @@ export default {
             "Nous rencontrons un problème sur le serveur. Merci de rafraichir votre page ou revenir ultérieurement"
           );
         });
-        
     },
 
     // Suppression d'un commentaire
     deleteComment(id_comment) {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token }
+        headers: { Authorization: `Bearer ` + this.token },
       };
       axios
         .delete("http://localhost:3000/api/comments/" + id_comment, config)
@@ -329,15 +321,15 @@ export default {
 </script>
 
 <style scoped>
-h2{
-    font-size:1.7em;
+h2 {
+  font-size: 1.7em;
 }
-h3{
-  font-size:1.5em;
+h3 {
+  font-size: 1.5em;
 }
 
-.btn-outline-info{
-color:#19616E;
+.btn-outline-info {
+  color: #19616e;
 }
 
 .rounded-circle {

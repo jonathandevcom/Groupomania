@@ -37,6 +37,7 @@
             </div>
           </div>
         </div>
+        <!-- Utilisation d'un components Message pour gérer les messages indépendamments -->
         <message
           v-for="message in messages.slice().reverse()"
           :key="message.id_messages"

@@ -69,7 +69,7 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          class="btn btn-outline-danger ml-2"
+                          class="btn btn-primary ml-2"
                           type="submit"
                         >
                           Modifier votre adresse mail
@@ -100,10 +100,7 @@
                         minlength="3"
                       />
                       <span class="input-group-btn">
-                        <button
-                          class="btn btn-outline-danger ml-2"
-                          type="submit"
-                        >
+                        <button class="btn btn-primary ml-2" type="submit">
                           Modifier votre nom d'utilisateur
                         </button>
                       </span>
@@ -120,7 +117,7 @@
                     <label for="password">Modifier votre mot de passe</label>
                     <div class="input-group mb-3">
                       <input
-                      v-model="formData.password"
+                        v-model="formData.password"
                         type="password"
                         class="form-control"
                         id="password"
@@ -138,7 +135,7 @@
                       <span class="input-group-btn">
                         <button
                           value="valider"
-                          class="btn btn-outline-danger ml-2"
+                          class="btn btn-primary ml-2"
                           type="submit"
                         >
                           Modifier votre mot de passe
@@ -167,11 +164,11 @@
                         minlength="3"
                         required
                       />
+                      <div class="invalid-feedback">
+                        Merci de saisir votre nouvelle biographie.
+                      </div>
                       <span class="input-group-btn">
-                        <button
-                          class="btn btn-outline-danger ml-2"
-                          type="submit"
-                        >
+                        <button class="btn btn-primary ml-2" type="submit">
                           Modifier votre biographie
                         </button>
                       </span>
@@ -199,10 +196,7 @@
                         required
                       />
                       <span class="input-group-btn">
-                        <button
-                          class="btn btn-outline-danger ml-2"
-                          type="submit"
-                        >
+                        <button class="btn btn-primary ml-2" type="submit">
                           Modifier votre photo de profile
                         </button>
                       </span>
@@ -320,6 +314,7 @@ export default {
       }
     },
 
+  // Modification du nom d'utilisateur
     modifiedBio() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
@@ -373,12 +368,12 @@ export default {
           });
       }
     },
-    // Modification du mot de passe ou de la biographie
+    // Modification du mot de passe
     modifiedPassword() {
       const config = {
         headers: { Authorization: `Bearer ` + this.token },
       };
-       const formData = new FormData();
+      const formData = new FormData();
       formData.append("userName", this.profile.userName);
       formData.append("password", this.formData.password);
       var vm = this;
@@ -404,13 +399,13 @@ export default {
       }
     },
 
-    // Modification du fichier de la photo
+    // Modification de la photo
     onFileUpload() {
       this.file = this.$refs.file.files[0];
     },
     modifiedFile() {
       const config = {
-        headers: { Authorization: `Bearer ` + this.token }
+        headers: { Authorization: `Bearer ` + this.token },
       };
       const formData = new FormData();
       formData.append("userName", this.profile.userName);

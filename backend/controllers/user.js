@@ -246,8 +246,6 @@ exports.deleteOneUser = (req, res) => {
   });
 };
 
-////////////// ne fonctionne pas !!!!!
-
 // modification du mot de passe
 exports.editOneUser = (req, res) => {
   if (schema.validate(req.body.password)) {

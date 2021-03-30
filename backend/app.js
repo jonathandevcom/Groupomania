@@ -31,8 +31,13 @@ app.use("/api/users", userRoutes);
 app.use("/api/forum", messageRoutes);
 app.use("/api/comments", commentsRoutes);
 app.use("/api/likes", likesRoutes);
-app.use("/assets/images-profile", express.static(path.join(__dirname, "assets/images-profile"))
+app.use(
+  "/assets/images-profile",
+  express.static(path.join(__dirname, "assets/images-profile"))
 );
-app.use("/assets/images-gif", express.static(path.join(__dirname, "assets/images-gif")));
+app.use(
+  "/assets/images-gif",
+  express.static(path.join(__dirname, "assets/images-gif"))
+);
 
 module.exports = app;
